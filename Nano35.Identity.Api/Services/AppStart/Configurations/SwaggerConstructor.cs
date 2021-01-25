@@ -19,7 +19,7 @@ namespace Nano35.Identity.Api.Services.AppStart.Configurations
                     {
                         Name = "Guihub folder",
                         Email = string.Empty,
-                        Url = new Uri("https://github.com/candychips/nano35/"),
+                        Url = new Uri("https://github.com/CandyChips/Nano35.Identity"),
                     }
                 });
             });

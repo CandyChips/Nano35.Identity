@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +34,15 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
                 });
                 return;
             }
+
+            if (_userManager.Users.Select(a => a.Id).Contains(message.NewUserId.ToString()))
+            {
+                await context.RespondAsync<IRegisterErrorResultContract>(new 
+                {
+                
+                });
+                return;
+            }
             var isUsersPhoneExist = await _userManager.FindByNameAsync(message.Phone).ConfigureAwait(false);
             if (isUsersPhoneExist != null)
             {
@@ -53,6 +63,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
             }
             var worker = new User()
             {
+                Id = message.NewUserId.ToString(),
                 UserName = message.Phone,
                 Email = message.Email,
                 Name = "Оператор системы",
