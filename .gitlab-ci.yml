@@ -1,0 +1,4 @@
+﻿pack:
+  script:
+    - dotnet pack ./Nano35.Contracts.csproj
+    - dotnet nuget push ./bin/Debug/Nano35.Contracts.2.0.0.nupkg --source http://192.168.100.120:81/v3/index.json --api-key Cerber666
