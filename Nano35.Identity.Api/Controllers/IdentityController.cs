@@ -28,68 +28,64 @@ namespace Nano35.Identity.Api.Controllers
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
-            try
+            var result = await this._mediator.Send(new GetAllUsersQuery());
+            if (result is IGetAllUsersSuccessResultContract)
             {
-                var query = new GetAllUsersQuery();
-                var result = await this._mediator.Send(query);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IGetAllUsersErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("GetAllRoles")]
         public async Task<IActionResult> GetAllRoles()
         {
-            try
+            var result = await this._mediator.Send(new GetAllRolesQuery());
+            if (result is IGetAllRolesSuccessResultContract)
             {
-                var query = new GetAllRolesQuery();
-                var result = await this._mediator.Send(query);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IGetAllRolesErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("GetUserById")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
-            try
+            var result = await this._mediator.Send(new GetUserByIdQuery() { UserId = id });
+            if (result is IGetUserByIdSuccessResultContract)
             {
-                var query = new GetUserByIdQuery() { UserId = id };
-                var result = await this._mediator.Send(query);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IGetUserByIdErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("GetRoleById")]
         public async Task<IActionResult> GetRoleById(Guid id)
         {
-            try
+            var result = await this._mediator.Send(new GetRoleByIdQuery() { RoleId = id });
+            if (result is IGetRoleByIdSuccessResultContract)
             {
-                var query = new GetRoleByIdQuery() { RoleId = id };
-                var result = await this._mediator.Send(query);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IGetRoleByIdErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
         
         [HttpPost]
@@ -97,17 +93,16 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> Register(
             [FromBody] RegisterCommand message)
         {
-            try
+            var result = await this._mediator.Send(message);
+            if (result is IRegisterSuccessResultContract)
             {
-                if (message == null) return BadRequest();
-                var result = await this._mediator.Send(message);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IRegisterErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
 
         [HttpPost]
@@ -132,17 +127,16 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdatePhone(
             [FromBody] UpdatePhoneQuery message)
         {
-            try
+            var result = await this._mediator.Send(message);
+            if (result is IUpdatePhoneSuccessResultContract)
             {
-                if (message == null) return BadRequest();
-                var result = await this._mediator.Send(message);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IUpdatePhoneErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
 
         [HttpPut]
@@ -150,17 +144,16 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdatePassword(
             [FromBody] UpdatePasswordQuery message)
         {
-            try
+            var result = await this._mediator.Send(message);
+            if (result is IUpdatePasswordSuccessResultContract)
             {
-                if (message == null) return BadRequest();
-                var result = await this._mediator.Send(message);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IUpdatePasswordErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
     }
 }
