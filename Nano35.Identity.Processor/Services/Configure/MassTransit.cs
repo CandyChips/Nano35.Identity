@@ -2,10 +2,9 @@ using System;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts;
-using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Consumers.Services.MassTransit.Consumers;
+using Nano35.Identity.Processor.Services.MassTransit.Consumers;
 
-namespace Nano35.Identity.Consumers.Services.Configure
+namespace Nano35.Identity.Processor.Services.Configure
 {
     public static class MassTransitServiceConstructor
     {

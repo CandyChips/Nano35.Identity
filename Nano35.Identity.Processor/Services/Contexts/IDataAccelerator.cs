@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Nano35.Identity.Consumers.Services.Contexts
+namespace Nano35.Identity.Processor.Services.Contexts
 {
     public interface IDataAccelerator
     {

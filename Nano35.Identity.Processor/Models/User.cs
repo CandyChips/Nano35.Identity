@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
-namespace Nano35.Identity.Consumers.Models
+namespace Nano35.Identity.Processor.Models
 {
     public class User : IdentityUser
     {

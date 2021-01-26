@@ -11,54 +11,37 @@ using Nano35.Contracts.Identity.Models;
 
 namespace Nano35.Identity.Api.Services.Requests
 {
-    public class GetUsersByRoleIdResultViewModel :
-        IGetUsersByRoleIdSuccessResultContract,
-        IGetUsersByRoleIdNotFoundResultContract
-    {
-        public string Error { get; set; }
-        public IEnumerable<IUserViewModel> Data { get; set; }
-    }
     public class GetUsersByRoleIdQuery : 
         IGetUsersByRoleIdRequestContract, 
-        IRequest<GetUsersByRoleIdResultViewModel>
+        IRequest<IGetUsersByRoleIdResultContract>
     {
         public Guid Id { get; set; }
     }
 
     public class GetUsersByRoleIdHandler 
-        : IRequestHandler<GetUsersByRoleIdQuery, GetUsersByRoleIdResultViewModel>
+        : IRequestHandler<GetUsersByRoleIdQuery, IGetUsersByRoleIdResultContract>
     {
-        private readonly ILogger<GetUsersByRoleIdHandler> _logger;
         private readonly IBus _bus;
-        public GetUsersByRoleIdHandler(
-            IBus bus, 
-            ILogger<GetUsersByRoleIdHandler> logger)
+        public GetUsersByRoleIdHandler(IBus bus)
         {
             _bus = bus;
-            _logger = logger;
         }
 
-        public async Task<GetUsersByRoleIdResultViewModel> Handle(
+        public async Task<IGetUsersByRoleIdResultContract> Handle(
             GetUsersByRoleIdQuery message,
             CancellationToken cancellationToken)
         {
-            var result = new GetUsersByRoleIdResultViewModel();
             var client = _bus.CreateRequestClient<IGetUsersByRoleIdRequestContract>(TimeSpan.FromSeconds(10));
             var response = await client
                 .GetResponse<IGetUsersByRoleIdSuccessResultContract, IGetUsersByRoleIdNotFoundResultContract>(message, cancellationToken);
-
             if (response.Is(out Response<IGetUsersByRoleIdSuccessResultContract> successResponse))
             {
-                result.Data = successResponse.Message.Data;
-                return result;
+                return successResponse.Message;
             }
-            
             if (response.Is(out Response<IGetUsersByRoleIdNotFoundResultContract> errorResponse))
             {
-                result.Error = "Не найдено";
-                return result;
+                return errorResponse.Message;
             }
-            
             throw new InvalidOperationException();
         }
     }

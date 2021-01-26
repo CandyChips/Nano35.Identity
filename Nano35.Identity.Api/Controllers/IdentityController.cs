@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Api.Services.Requests;
 
 namespace Nano35.Identity.Api.Controllers
@@ -114,17 +115,16 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GenerateUserToken(
             [FromBody] GenerateTokenQuery message)
         {
-            try
+            var result = await this._mediator.Send(message);
+            if (result is IGenerateTokenSuccessResultContract)
             {
-                if (message == null) return BadRequest();
-                var result = await this._mediator.Send(message);
                 return Ok(result);
             }
-            catch(Exception ex)
+            if (result is IGenerateTokenErrorResultContract)
             {
-                this._logger.LogError(ex.ToString());
-                return BadRequest();
+                return BadRequest(result);
             }
+            return BadRequest();
         }
 
         [HttpPut]

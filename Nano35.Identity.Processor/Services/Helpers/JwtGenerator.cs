@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +5,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Nano35.Identity.Consumers.Services.Contexts
+namespace Nano35.Identity.Processor.Services.Helpers
 {
     public interface IJwtGenerator
     {

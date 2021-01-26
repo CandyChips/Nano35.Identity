@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nano35.Identity.Consumers.Services.Configure;
-using Nano35.Identity.Consumers.Services.Contexts;
+using Nano35.Identity.Processor.Services.Configure;
+using Nano35.Identity.Processor.Services.Helpers;
 
-namespace Nano35.Identity.Consumers
+namespace Nano35.Identity.Processor
 {
     public class Startup
     {

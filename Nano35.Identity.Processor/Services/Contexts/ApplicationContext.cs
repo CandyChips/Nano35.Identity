@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Nano35.Identity.Consumers.Models;
+using Nano35.Identity.Processor.Models;
 
-namespace Nano35.Identity.Consumers.Services.Contexts
+namespace Nano35.Identity.Processor.Services.Contexts
 {
     public class ApplicationContext : IdentityDbContext<User>
     {

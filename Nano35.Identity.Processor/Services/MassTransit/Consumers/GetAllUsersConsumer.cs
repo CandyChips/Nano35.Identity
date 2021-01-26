@@ -2,13 +2,12 @@ using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Nano35.Contracts.Identity;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
-using Nano35.Identity.Consumers.Models;
-using Nano35.Identity.Consumers.Services.MappingProfiles;
+using Nano35.Identity.Processor.Models;
+using Nano35.Identity.Processor.Services.MappingProfiles;
 
-namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
+namespace Nano35.Identity.Processor.Services.MassTransit.Consumers
 {
     public class GetAllUsersConsumer : 
         IConsumer<IGetAllUsersRequestContract>

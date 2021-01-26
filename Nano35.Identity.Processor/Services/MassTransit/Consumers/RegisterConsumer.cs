@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Nano35.Contracts.Identity;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Consumers.Models;
+using Nano35.Identity.Processor.Models;
 
-namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
+namespace Nano35.Identity.Processor.Services.MassTransit.Consumers
 {
     public class RegisterConsumer : 
         IConsumer<IRegisterRequestContract>
@@ -43,7 +42,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
                 });
                 return;
             }
-            var isUsersPhoneExist = await _userManager.FindByNameAsync(message.Phone).ConfigureAwait(false);
+            var isUsersPhoneExist = await _userManager.FindByNameAsync(message.Phone);
             if (isUsersPhoneExist != null)
             {
                 await context.RespondAsync<IRegisterErrorResultContract>(new 
@@ -52,7 +51,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
                 });
                 return;
             }
-            var isUsersEmailExist = await _userManager.FindByEmailAsync(message.Email).ConfigureAwait(false);
+            var isUsersEmailExist = await _userManager.FindByEmailAsync(message.Email);
             if (isUsersEmailExist != null)
             {
                 await context.RespondAsync<IRegisterErrorResultContract>(new 
@@ -70,7 +69,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
                 Deleted = false,
                 EmailConfirmed = true
             };
-            var createAsyncResult = await _userManager.CreateAsync(worker, message.Password).ConfigureAwait(false);
+            var createAsyncResult = await _userManager.CreateAsync(worker, message.Password);
             if (!createAsyncResult.Succeeded)
             {
                 await context.RespondAsync<IRegisterErrorResultContract>(new 

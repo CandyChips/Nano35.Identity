@@ -13,53 +13,41 @@ using Nano35.Identity.Api.Services.Helpers;
 
 namespace Nano35.Identity.Api.Services.Requests
 {
-    public class GetAllRolesResultViewModel :
-        IGetAllRolesResultContract,
-        IGetAllRolesNotFoundResultContract
+
+    public class GetAllRolesQuery :
+        IGetAllRolesRequestContract,
+        IRequest<IGetAllRolesResultContract>
     {
-        public IEnumerable<IRoleViewModel> Data { get; set; }
-        public string Error { get; set; }
-    }
-    
-    public class GetAllRolesQuery : 
-        IGetAllRolesRequestContract, 
-        IRequest<GetAllRolesResultViewModel> {  }
-
-    public class GetAllRolesHandler 
-        : IRequestHandler<GetAllRolesQuery, GetAllRolesResultViewModel>
-    {
-        private readonly ILogger<GetAllRolesHandler> _logger;
-        private readonly IBus _bus;
-        public GetAllRolesHandler(
-            IBus bus, 
-            ILogger<GetAllRolesHandler> logger)
+        public class GetAllRolesHandler 
+            : IRequestHandler<GetAllRolesQuery, IGetAllRolesResultContract>
         {
-            _bus = bus;
-            _logger = logger;
-        }
-
-        public async Task<GetAllRolesResultViewModel> Handle(
-            GetAllRolesQuery message,
-            CancellationToken cancellationToken)
-        {
-            var result = new GetAllRolesResultViewModel();
-            var client = _bus.CreateRequestClient<IGetAllRolesRequestContract>(TimeSpan.FromSeconds(10));
-            var response = await client
-                .GetResponse<IGetAllRolesResultContract, IGetAllRolesNotFoundResultContract>(message, cancellationToken);
-
-            if (response.Is(out Response<IGetAllRolesResultContract> successResponse))
+            private readonly IBus _bus;
+            public GetAllRolesHandler(IBus bus)
             {
-                result.Data = successResponse.Message.Data;
-                return result;
+                _bus = bus;
             }
-            
-            if (response.Is(out Response<IGetAllRolesNotFoundResultContract> errorResponse))
+
+            public async Task<IGetAllRolesResultContract> Handle(
+                GetAllRolesQuery message,
+                CancellationToken cancellationToken)
             {
-                result.Error = "Не найдено";
-                return result;
-            }
+                var client = _bus.CreateRequestClient<IGetAllRolesRequestContract>(TimeSpan.FromSeconds(10));
+                var response = await client
+                    .GetResponse<IGetAllRolesResultContract, IGetAllRolesErrorResultContract>(message, cancellationToken);
+
+                if (response.Is(out Response<IGetAllRolesResultContract> successResponse))
+                {
+                    return successResponse.Message;
+                }
             
-            throw new InvalidOperationException();
+                if (response.Is(out Response<IGetAllRolesErrorResultContract> errorResponse))
+                {
+                    return errorResponse.Message;
+                }
+            
+                throw new InvalidOperationException();
+            }
         }
+        
     }
 }

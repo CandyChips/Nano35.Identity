@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace Nano35.Identity.Consumers.Services.MappingProfiles
+namespace Nano35.Identity.Processor.Services.MappingProfiles
 {
     public static class MappingPipe
     {

@@ -1,9 +1,8 @@
-
 using AutoMapper;
 using Nano35.Contracts.Identity.Models;
-using Nano35.Identity.Consumers.Models;
+using Nano35.Identity.Processor.Models;
 
-namespace Nano35.Identity.Consumers.Services.MappingProfiles
+namespace Nano35.Identity.Processor.Services.MappingProfiles
 {
     public class MappingProfile : Profile
     {

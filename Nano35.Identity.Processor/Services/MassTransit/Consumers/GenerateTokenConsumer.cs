@@ -2,12 +2,11 @@ using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Nano35.Contracts.Identity;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Consumers.Models;
-using Nano35.Identity.Consumers.Services.Contexts;
+using Nano35.Identity.Processor.Models;
+using Nano35.Identity.Processor.Services.Helpers;
 
-namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
+namespace Nano35.Identity.Processor.Services.MassTransit.Consumers
 {
     public class GenerateTokenConsumer : 
         IConsumer<IGenerateTokenRequestContract>
@@ -39,7 +38,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
             {
                 await context.RespondAsync<IGenerateTokenErrorResultContract>(new 
                 {
-                
+                    Message = "Пользователь не найден"
                 });
                 return;
             }
@@ -49,7 +48,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
             {
                 await context.RespondAsync<IGenerateTokenErrorResultContract>(new 
                 {
-                
+                    Message = "Неверный пароль"
                 });
                 return;
             }
@@ -59,7 +58,7 @@ namespace Nano35.Identity.Consumers.Services.MassTransit.Consumers
             {
                 await context.RespondAsync<IGenerateTokenErrorResultContract>(new 
                 {
-                
+                    Message = "Подтвердите почту"
                 });
                 return;
             }

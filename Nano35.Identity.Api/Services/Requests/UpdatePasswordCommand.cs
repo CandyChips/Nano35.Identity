@@ -13,16 +13,9 @@ using Nano35.Identity.Api.Services.Helpers;
 
 namespace Nano35.Identity.Api.Services.Requests
 {
-    public class UpdatePasswordResultViewModel :
-        IUpdatePasswordSuccessResultContract,
-        IUpdatePasswordErrorResultContract
-    {
-        public string Error { get; set; }
-    }
-    
     public class UpdatePasswordQuery : 
         IUpdatePasswordRequestContract, 
-        IRequest<UpdatePasswordResultViewModel>
+        IRequest<IUpdatePasswordResultContract>
     {
         public Guid UserId { get; set; }
         public string Password { get; set; }
@@ -43,41 +36,33 @@ namespace Nano35.Identity.Api.Services.Requests
     }
 
     public class UpdatePasswordHandler : 
-        IRequestHandler<UpdatePasswordQuery, UpdatePasswordResultViewModel>
+        IRequestHandler<UpdatePasswordQuery, IUpdatePasswordResultContract>
     {
         private readonly IBus _bus;
-        private readonly ILogger<UpdatePasswordHandler> _logger;
         private readonly ICustomAuthStateProvider _customAuthStateProvider;
         public UpdatePasswordHandler(
             IBus bus, 
-            ILogger<UpdatePasswordHandler> logger, 
             ICustomAuthStateProvider customAuthStateProvider)
         {
             _bus = bus;
             _customAuthStateProvider = customAuthStateProvider;
-            _logger = logger;
         }
 
-        public async Task<UpdatePasswordResultViewModel> Handle(
+        public async Task<IUpdatePasswordResultContract> Handle(
             UpdatePasswordQuery message,
             CancellationToken cancellationToken)
         {
-            var result = new UpdatePasswordResultViewModel();
             var client = _bus.CreateRequestClient<IUpdatePasswordRequestContract>(TimeSpan.FromSeconds(10));
             var response = await client
                 .GetResponse<IUpdatePasswordSuccessResultContract, IUpdatePasswordErrorResultContract>(message, cancellationToken);
-
             if (response.Is(out Response<IUpdatePasswordSuccessResultContract> successResponse))
             {
-                return result;
+                return successResponse.Message;
             }
-            
             if (response.Is(out Response<IUpdatePasswordErrorResultContract> errorResponse))
             {
-                result.Error = "Не найдено";
-                return result;
+                return errorResponse.Message;
             }
-            
             throw new InvalidOperationException();
         }
     }

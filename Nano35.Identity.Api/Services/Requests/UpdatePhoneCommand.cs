@@ -13,16 +13,9 @@ using Nano35.Identity.Api.Services.Helpers;
 
 namespace Nano35.Identity.Api.Services.Requests
 {
-    public class UpdatePhoneResultViewModel :
-        IUpdatePhoneSuccessResultContract,
-        IUpdatePhoneErrorResultContract
-    {
-        public string Error { get; set; }
-    }
-
     public class UpdatePhoneQuery :
         IUpdatePhoneRequestContract,
-        IRequest<UpdatePhoneResultViewModel>
+        IRequest<IUpdatePhoneResultContract>
     {
         public Guid UserId { get; set; }
         public string Phone { get; set; }
@@ -44,41 +37,33 @@ namespace Nano35.Identity.Api.Services.Requests
 
 
     public class UpdatePhoneHandler :
-        IRequestHandler<UpdatePhoneQuery, UpdatePhoneResultViewModel>
+        IRequestHandler<UpdatePhoneQuery, IUpdatePhoneResultContract>
     {
         private readonly IBus _bus;
-        private readonly ILogger<UpdatePhoneHandler> _logger;
         private readonly ICustomAuthStateProvider _customAuthStateProvider;
         public UpdatePhoneHandler(
             IBus bus, 
-            ICustomAuthStateProvider customAuthStateProvider,
-            ILogger<UpdatePhoneHandler> logger)
+            ICustomAuthStateProvider customAuthStateProvider)
         {
             _bus = bus;
             _customAuthStateProvider = customAuthStateProvider;
-            _logger = logger;
         }
 
-        public async Task<UpdatePhoneResultViewModel> Handle(
+        public async Task<IUpdatePhoneResultContract> Handle(
             UpdatePhoneQuery message,
             CancellationToken cancellationToken)
         {
-            var result = new UpdatePhoneResultViewModel();
             var client = _bus.CreateRequestClient<IUpdatePhoneRequestContract>(TimeSpan.FromSeconds(10));
             var response = await client
                 .GetResponse<IUpdatePhoneSuccessResultContract, IUpdatePhoneErrorResultContract>(message, cancellationToken);
-
             if (response.Is(out Response<IUpdatePhoneSuccessResultContract> successResponse))
             {
-                return result;
+                return successResponse.Message;
             }
-            
             if (response.Is(out Response<IUpdatePhoneErrorResultContract> errorResponse))
             {
-                result.Error = "Не найдено";
-                return result;
+                return errorResponse.Message;
             }
-            
             throw new InvalidOperationException();
         }
     }

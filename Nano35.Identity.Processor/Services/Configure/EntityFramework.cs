@@ -1,11 +1,8 @@
-
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nano35.Identity.Consumers.Services.Contexts;
+using Nano35.Identity.Processor.Services.Contexts;
 
-namespace Nano35.Identity.Consumers
+namespace Nano35.Identity.Processor.Services.Configure
 {
     public static class EntityFrameworkServiceConstructor 
     {

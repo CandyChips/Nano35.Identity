@@ -1,11 +1,8 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nano35.Identity.Consumers.Services.Contexts;
-using Nano35.Identity.Consumers.Services.MappingProfiles;
+using Nano35.Identity.Processor.Services.MappingProfiles;
 
-namespace Nano35.Identity.Consumers.Services.Configure
+namespace Nano35.Identity.Processor.Services.Configure
 {
     public static class AutoMapperServiceConstructor 
     {
