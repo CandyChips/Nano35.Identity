@@ -73,6 +73,22 @@ namespace Nano35.Identity.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetUserFromToken")]
+        public async Task<IActionResult> GetUserFromToken(Guid id)
+        {
+            var result = await this._mediator.Send(new GetUserFromTokenQuery());
+            if (result is IGetUserByIdSuccessResultContract)
+            {
+                return Ok(result);
+            }
+            if (result is IGetUserByIdErrorResultContract)
+            {
+                return BadRequest(result);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet]
         [Route("GetRoleById")]
         public async Task<IActionResult> GetRoleById(Guid id)
         {
