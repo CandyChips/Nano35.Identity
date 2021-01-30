@@ -9,7 +9,6 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Services.Requests
 {
-
     public class GenerateTokenQuery : 
         IGenerateTokenRequestContract, 
         IRequest<IGenerateTokenResultContract>
@@ -20,10 +19,14 @@ namespace Nano35.Identity.Api.Services.Requests
         public class GenerateTokenHandler : 
             IRequestHandler<GenerateTokenQuery, IGenerateTokenResultContract>
         {
+            private readonly ILogger<GenerateTokenHandler> _logger;
             private readonly IBus _bus;
-            public GenerateTokenHandler(IBus bus)
+            public GenerateTokenHandler(
+                IBus bus, 
+                ILogger<GenerateTokenHandler> logger)
             {
                 _bus = bus;
+                _logger = logger;
             }
 
             public async Task<IGenerateTokenResultContract> Handle(
@@ -31,16 +34,16 @@ namespace Nano35.Identity.Api.Services.Requests
                 CancellationToken cancellationToken)
             {
                 var client = _bus.CreateRequestClient<IGenerateTokenRequestContract>(TimeSpan.FromSeconds(10));
+                
                 var response = await client
                     .GetResponse<IGenerateTokenSuccessResultContract, IGenerateTokenErrorResultContract>(message, cancellationToken);
+                
                 if (response.Is(out Response<IGenerateTokenSuccessResultContract> successResponse))
-                {
                     return successResponse.Message;
-                }
+                
                 if (response.Is(out Response<IGenerateTokenErrorResultContract> errorResponse))
-                {
                     return errorResponse.Message;
-                }
+                
                 throw new InvalidOperationException();
             }
         }

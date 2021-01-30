@@ -7,10 +7,7 @@ using Microsoft.Extensions.Logging;
 using Nano35.Contracts;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
-using Nano35.Contracts.Users.Artifacts;
 using Nano35.Identity.Api.Services.Helpers;
-using IGetUserByIdRequestContract = Nano35.Contracts.Identity.Artifacts.IGetUserByIdRequestContract;
-using IGetUserByIdSuccessResultContract = Nano35.Contracts.Identity.Artifacts.IGetUserByIdSuccessResultContract;
 
 namespace Nano35.Identity.Api.Services.Requests
 {
@@ -23,14 +20,17 @@ namespace Nano35.Identity.Api.Services.Requests
         public class GetUserFromTokenHandler 
             : IRequestHandler<GetUserFromTokenQuery, IGetUserByIdResultContract>
         {
+            private readonly ILogger<GetUserFromTokenHandler> _logger;
             private readonly ICustomAuthStateProvider _auth;
             private readonly IBus _bus;
             public GetUserFromTokenHandler(
                 ICustomAuthStateProvider auth, 
-                IBus bus)
+                IBus bus,
+                ILogger<GetUserFromTokenHandler> logger)
             {
                 _auth = auth;
                 _bus = bus;
+                _logger = logger;
             }
 
             public async Task<IGetUserByIdResultContract> Handle(
@@ -38,19 +38,17 @@ namespace Nano35.Identity.Api.Services.Requests
                 CancellationToken cancellationToken)
             {
                 message.UserId = _auth.CurrentUserId;
+                
                 var client = _bus.CreateRequestClient<IGetUserByIdRequestContract>(TimeSpan.FromSeconds(10));
+                
                 var response = await client
                     .GetResponse<IGetUserByIdSuccessResultContract, IGetUserByIdErrorResultContract>(message, cancellationToken);
 
                 if (response.Is(out Response<IGetUserByIdSuccessResultContract> successResponse))
-                {
                     return successResponse.Message;
-                }
             
                 if (response.Is(out Response<IGetUserByIdErrorResultContract> errorResponse))
-                {
                     return errorResponse.Message;
-                }
             
                 throw new InvalidOperationException();
             }

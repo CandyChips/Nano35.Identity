@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nano35.Identity.Processor.Services.Configure;
+using Nano35.Identity.Processor.Services.AppStart.Configure;
 using Nano35.Identity.Processor.Services.Helpers;
 
 namespace Nano35.Identity.Processor
@@ -18,12 +18,12 @@ namespace Nano35.Identity.Processor
 
         public void ConfigureServices(IServiceCollection services)
         {
-            EntityFrameworkServiceConstructor.Construct(services);
-            IdentityServiceConstructor.Construct(services);
-            MassTransitServiceConstructor.Construct(services);
-            AutoMapperServiceConstructor.Construct(services);
-            services.AddTransient<IJwtGenerator, JwtGenerator>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            new Configurator(services, new IdentityConfiguration()).Configure();
+            new Configurator(services, new AutoMapperConfiguration()).Configure();
+            new Configurator(services, new EntityFrameworkConfiguration()).Configure();
+            new Configurator(services, new MassTransitConfiguration()).Configure();
+            new Configurator(services, new JWTGeneratorConfiguration()).Configure();
+            new Configurator(services, new HttpContextAccessorConfiguration()).Configure();
         }
 
         public void Configure(IApplicationBuilder app)

@@ -2,12 +2,13 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Identity.Processor.Services.MappingProfiles;
 
-namespace Nano35.Identity.Processor.Services.Configure
+namespace Nano35.Identity.Processor.Services.AppStart.Configure
 {
-    public static class AutoMapperServiceConstructor 
+    public class AutoMapperConfiguration : 
+        IConfigurationOfService
     {
-        public static void Construct(
-            IServiceCollection services) 
+        public void AddToServices(
+            IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             IMapper mapper = mapperConfig.CreateMapper();

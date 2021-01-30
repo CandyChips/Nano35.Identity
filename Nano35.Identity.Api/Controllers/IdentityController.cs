@@ -28,80 +28,80 @@ namespace Nano35.Identity.Api.Controllers
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var result = await this._mediator.Send(new GetAllUsersQuery());
-            if (result is IGetAllUsersSuccessResultContract)
+            var request = new GetAllUsersQuery();
+            
+            var result = await this._mediator.Send(request);
+
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IGetAllUsersErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IGetAllUsersSuccessResultContract => Ok(result),
+                IGetAllUsersErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpGet]
         [Route("GetAllRoles")]
         public async Task<IActionResult> GetAllRoles()
         {
-            var result = await this._mediator.Send(new GetAllRolesQuery());
-            if (result is IGetAllRolesSuccessResultContract)
+            var request = new GetAllRolesQuery();
+            
+            var result = await this._mediator.Send(request);
+
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IGetAllRolesErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IGetAllRolesSuccessResultContract => Ok(result),
+                IGetAllRolesErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpGet]
         [Route("GetUserById")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
-            var result = await this._mediator.Send(new GetUserByIdQuery() { UserId = id });
-            if (result is IGetUserByIdSuccessResultContract)
+            var request = new GetUserByIdQuery() {UserId = id};
+            
+            var result = await this._mediator.Send(request);
+
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IGetUserByIdErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IGetUserByIdSuccessResultContract => Ok(result),
+                IGetUserByIdErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpGet]
         [Route("GetUserFromToken")]
         public async Task<IActionResult> GetUserFromToken(Guid id)
         {
-            var result = await this._mediator.Send(new GetUserFromTokenQuery());
-            if (result is IGetUserByIdSuccessResultContract)
+            var request = new GetUserFromTokenQuery();
+            
+            var result = await this._mediator.Send(request);
+
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IGetUserByIdErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IGetUserByIdSuccessResultContract => Ok(result),
+                IGetUserByIdErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpGet]
         [Route("GetRoleById")]
         public async Task<IActionResult> GetRoleById(Guid id)
         {
-            var result = await this._mediator.Send(new GetRoleByIdQuery() { RoleId = id });
-            if (result is IGetRoleByIdSuccessResultContract)
+            var request = new GetRoleByIdQuery() {RoleId = id};
+            
+            var result = await this._mediator.Send(request);
+
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IGetRoleByIdErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IGetRoleByIdSuccessResultContract => Ok(result),
+                IGetRoleByIdErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
         
         [HttpPost]
@@ -110,15 +110,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] RegisterCommand message)
         {
             var result = await this._mediator.Send(message);
-            if (result is IRegisterSuccessResultContract)
+            
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IRegisterErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IRegisterSuccessResultContract => Ok(result),
+                IRegisterErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpPost]
@@ -127,15 +125,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] GenerateTokenQuery message)
         {
             var result = await this._mediator.Send(message);
-            if (result is IGenerateTokenSuccessResultContract)
+
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IGenerateTokenErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IGenerateTokenSuccessResultContract => Ok(result),
+                IGenerateTokenErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpPut]
@@ -144,15 +140,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] UpdatePhoneQuery message)
         {
             var result = await this._mediator.Send(message);
-            if (result is IUpdatePhoneSuccessResultContract)
+            
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IUpdatePhoneErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IUpdatePhoneSuccessResultContract => Ok(result),
+                IUpdatePhoneErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         [HttpPut]
@@ -161,15 +155,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] UpdatePasswordQuery message)
         {
             var result = await this._mediator.Send(message);
-            if (result is IUpdatePasswordSuccessResultContract)
+            
+            return result switch
             {
-                return Ok(result);
-            }
-            if (result is IUpdatePasswordErrorResultContract)
-            {
-                return BadRequest(result);
-            }
-            return BadRequest();
+                IUpdatePasswordSuccessResultContract => Ok(result),
+                IUpdatePasswordErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
     }
 }

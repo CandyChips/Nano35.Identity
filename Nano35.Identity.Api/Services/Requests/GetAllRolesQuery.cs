@@ -21,10 +21,14 @@ namespace Nano35.Identity.Api.Services.Requests
         public class GetAllRolesHandler 
             : IRequestHandler<GetAllRolesQuery, IGetAllRolesResultContract>
         {
+            private readonly ILogger<GetAllRolesHandler> _logger;
             private readonly IBus _bus;
-            public GetAllRolesHandler(IBus bus)
+            public GetAllRolesHandler(
+                IBus bus, 
+                ILogger<GetAllRolesHandler> logger)
             {
                 _bus = bus;
+                _logger = logger;
             }
 
             public async Task<IGetAllRolesResultContract> Handle(
@@ -32,18 +36,15 @@ namespace Nano35.Identity.Api.Services.Requests
                 CancellationToken cancellationToken)
             {
                 var client = _bus.CreateRequestClient<IGetAllRolesRequestContract>(TimeSpan.FromSeconds(10));
+                
                 var response = await client
                     .GetResponse<IGetAllRolesResultContract, IGetAllRolesErrorResultContract>(message, cancellationToken);
 
                 if (response.Is(out Response<IGetAllRolesResultContract> successResponse))
-                {
                     return successResponse.Message;
-                }
             
                 if (response.Is(out Response<IGetAllRolesErrorResultContract> errorResponse))
-                {
                     return errorResponse.Message;
-                }
             
                 throw new InvalidOperationException();
             }

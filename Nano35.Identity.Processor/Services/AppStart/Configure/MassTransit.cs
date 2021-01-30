@@ -4,11 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts;
 using Nano35.Identity.Processor.Services.MassTransit.Consumers;
 
-namespace Nano35.Identity.Processor.Services.Configure
+namespace Nano35.Identity.Processor.Services.AppStart.Configure
 {
-    public static class MassTransitServiceConstructor
+    public class MassTransitConfiguration : 
+        IConfigurationOfService
     {
-        public static void Construct(
+        public void AddToServices(
             IServiceCollection services)
         {
             services.AddMassTransit(x =>

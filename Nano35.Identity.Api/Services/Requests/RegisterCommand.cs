@@ -60,16 +60,16 @@ namespace Nano35.Identity.Api.Services.Requests
             CancellationToken cancellationToken)
         {
             var client = _bus.CreateRequestClient<IRegisterRequestContract>(TimeSpan.FromSeconds(10));
+            
             var response = await client
                 .GetResponse<IRegisterSuccessResultContract, IRegisterErrorResultContract>(message, cancellationToken);
+            
             if (response.Is(out Response<IRegisterSuccessResultContract> successResponse))
-            {
                 return successResponse.Message;
-            }
+            
             if (response.Is(out Response<IRegisterErrorResultContract> errorResponse))
-            {
                 return errorResponse.Message;
-            }
+            
             throw new InvalidOperationException();
         }
     }

@@ -39,13 +39,16 @@ namespace Nano35.Identity.Api.Services.Requests
         IRequestHandler<UpdatePasswordQuery, IUpdatePasswordResultContract>
     {
         private readonly IBus _bus;
+        private readonly ILogger<UpdatePasswordHandler> _logger;
         private readonly ICustomAuthStateProvider _customAuthStateProvider;
         public UpdatePasswordHandler(
             IBus bus, 
-            ICustomAuthStateProvider customAuthStateProvider)
+            ICustomAuthStateProvider customAuthStateProvider, 
+            ILogger<UpdatePasswordHandler> logger)
         {
             _bus = bus;
             _customAuthStateProvider = customAuthStateProvider;
+            _logger = logger;
         }
 
         public async Task<IUpdatePasswordResultContract> Handle(
@@ -53,16 +56,16 @@ namespace Nano35.Identity.Api.Services.Requests
             CancellationToken cancellationToken)
         {
             var client = _bus.CreateRequestClient<IUpdatePasswordRequestContract>(TimeSpan.FromSeconds(10));
+            
             var response = await client
                 .GetResponse<IUpdatePasswordSuccessResultContract, IUpdatePasswordErrorResultContract>(message, cancellationToken);
+            
             if (response.Is(out Response<IUpdatePasswordSuccessResultContract> successResponse))
-            {
                 return successResponse.Message;
-            }
+            
             if (response.Is(out Response<IUpdatePasswordErrorResultContract> errorResponse))
-            {
                 return errorResponse.Message;
-            }
+            
             throw new InvalidOperationException();
         }
     }

@@ -3,12 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Nano35.Identity.Processor.Models;
 using Nano35.Identity.Processor.Services.Contexts;
 
-namespace Nano35.Identity.Processor.Services.Configure
+namespace Nano35.Identity.Processor.Services.AppStart.Configure
 {
-    public static class IdentityServiceConstructor 
+    public class IdentityConfiguration : 
+        IConfigurationOfService
     {
-        public static void Construct(
-            IServiceCollection services) 
+        public void AddToServices(
+            IServiceCollection services)
         {
             services.AddIdentity<User, Role>(opts =>
                 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Nano35.Identity.Api.Services.Helpers;
 
-namespace Nano35.Identity.Api.Services.Constructors
+namespace Nano35.Identity.Api.Services.AppStart.Configurations
 {
     public static class AuthenticationServiceConstructor
     {

@@ -40,13 +40,17 @@ namespace Nano35.Identity.Api.Services.Requests
         IRequestHandler<UpdatePhoneQuery, IUpdatePhoneResultContract>
     {
         private readonly IBus _bus;
+        private readonly ILogger<UpdatePhoneHandler> _logger;
         private readonly ICustomAuthStateProvider _customAuthStateProvider;
+        
         public UpdatePhoneHandler(
             IBus bus, 
-            ICustomAuthStateProvider customAuthStateProvider)
+            ICustomAuthStateProvider customAuthStateProvider, 
+            ILogger<UpdatePhoneHandler> logger)
         {
             _bus = bus;
             _customAuthStateProvider = customAuthStateProvider;
+            _logger = logger;
         }
 
         public async Task<IUpdatePhoneResultContract> Handle(
@@ -54,16 +58,16 @@ namespace Nano35.Identity.Api.Services.Requests
             CancellationToken cancellationToken)
         {
             var client = _bus.CreateRequestClient<IUpdatePhoneRequestContract>(TimeSpan.FromSeconds(10));
+            
             var response = await client
                 .GetResponse<IUpdatePhoneSuccessResultContract, IUpdatePhoneErrorResultContract>(message, cancellationToken);
+            
             if (response.Is(out Response<IUpdatePhoneSuccessResultContract> successResponse))
-            {
                 return successResponse.Message;
-            }
+            
             if (response.Is(out Response<IUpdatePhoneErrorResultContract> errorResponse))
-            {
                 return errorResponse.Message;
-            }
+            
             throw new InvalidOperationException();
         }
     }

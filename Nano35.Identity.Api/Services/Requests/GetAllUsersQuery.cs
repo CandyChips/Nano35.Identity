@@ -21,11 +21,15 @@ namespace Nano35.Identity.Api.Services.Requests
         public class GetAllUsersHandler : 
             IRequestHandler<GetAllUsersQuery, IGetAllUsersResultContract>
         {
+            private readonly ILogger<GetAllUsersHandler> _logger;
             private readonly IBus _bus;
         
-            public GetAllUsersHandler(IBus bus)
+            public GetAllUsersHandler(
+                IBus bus, 
+                ILogger<GetAllUsersHandler> logger)
             {
                 _bus = bus;
+                _logger = logger;
             }
         
             public async Task<IGetAllUsersResultContract> Handle(
@@ -34,7 +38,7 @@ namespace Nano35.Identity.Api.Services.Requests
             {
                 var client = _bus.CreateRequestClient<IGetAllUsersRequestContract>(TimeSpan.FromSeconds(10));
                 var response = await client
-                    .GetResponse<IGetAllUsersSuccessResultContract, IGetAllUsersErrorResultContract>(request);
+                    .GetResponse<IGetAllUsersSuccessResultContract, IGetAllUsersErrorResultContract>(request, cancellationToken);
 
                 if (response.Is(out Response<IGetAllUsersSuccessResultContract> successResponse))
                 {
