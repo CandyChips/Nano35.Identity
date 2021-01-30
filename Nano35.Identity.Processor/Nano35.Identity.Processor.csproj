@@ -15,7 +15,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
     <PackageReference Include="Nano35.Contracts" Version="1.1.6" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\AppStart" />
-  </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Nano35.Identity.Api.Services.Helpers;
+using Nano35.Identity.Api.Helpers;
 
-namespace Nano35.Identity.Api.Services.AppStart.Configurations
+namespace Nano35.Identity.Api.Configurations
 {
     public class AuthenticationConfiguration : 
         IConfigurationOfService

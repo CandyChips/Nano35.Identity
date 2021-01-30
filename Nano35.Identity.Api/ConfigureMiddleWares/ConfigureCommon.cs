@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
-using Nano35.Identity.Api.Services.Middlewares;
 
-namespace Nano35.Identity.Api.Services.AppStart.ConfigureServices
+namespace Nano35.Identity.Api.ConfigureMiddleWares
 {
     public static partial class ConfigureCommon
     {

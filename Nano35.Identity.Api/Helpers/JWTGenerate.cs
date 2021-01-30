@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Nano35.Identity.Api.Services.Helpers
+namespace Nano35.Identity.Api.Helpers
 {
     public class AuthOptions
     {

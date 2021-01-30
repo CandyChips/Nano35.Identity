@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Nano35.Identity.Api.Services.AppStart.Configurations
+namespace Nano35.Identity.Api.Configurations
 {
     public class SwaggerConfiguration : 
         IConfigurationOfService

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Nano35.Identity.Api.Services.AppStart.Configurations
+namespace Nano35.Identity.Api.Configurations
 {
     public class CorsConfiguration : 
         IConfigurationOfService

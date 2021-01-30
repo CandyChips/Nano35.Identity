@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Nano35.Identity.Api.Services.AppStart.Configurations;
-using Nano35.Identity.Api.Services.AppStart.ConfigureServices;
-using Nano35.Identity.Api.Services.Constructors;
-using Nano35.Identity.Api.Services.Helpers;
-using Nano35.Identity.Api.Services.Middlewares;
+using Nano35.Identity.Api.Configurations;
+using Nano35.Identity.Api.ConfigureMiddleWares;
 
 namespace Nano35.Identity.Api
 {

@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Identity.Api.Requests.Behaviours;
 
-namespace Nano35.Identity.Api.Services.AppStart.Configurations
+namespace Nano35.Identity.Api.Configurations
 {
     public class MediatRConfiguration : 
         IConfigurationOfService

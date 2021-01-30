@@ -6,7 +6,7 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Api.Services.Helpers;
+using Nano35.Identity.Api.Helpers;
 
 namespace Nano35.Identity.Api.Requests
 {

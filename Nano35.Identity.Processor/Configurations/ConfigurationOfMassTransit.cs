@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts;
 using Nano35.Identity.Processor.Consumers;
 
-namespace Nano35.Identity.Processor.Services.AppStart.Configure
+namespace Nano35.Identity.Processor.Configurations
 {
     public class MassTransitConfiguration : 
         IConfigurationOfService

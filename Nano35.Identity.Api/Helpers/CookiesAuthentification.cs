@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace Nano35.Identity.Api.Services.Helpers
+namespace Nano35.Identity.Api.Helpers
 {
     public class CookiesAuthStateProvider : 
         ICustomAuthStateProvider

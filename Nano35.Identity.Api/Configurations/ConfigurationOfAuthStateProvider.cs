@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Nano35.Identity.Api.Services.Helpers;
+using Nano35.Identity.Api.Helpers;
 
-namespace Nano35.Identity.Api.Services.AppStart.Configurations
+namespace Nano35.Identity.Api.Configurations
 {
     public class ConfigurationOfAuthStateProvider : 
         IConfigurationOfService

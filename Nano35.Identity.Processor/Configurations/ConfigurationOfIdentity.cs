@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nano35.Identity.Processor.Models;
 using Nano35.Identity.Processor.Services.Contexts;
 
-namespace Nano35.Identity.Processor.Services.AppStart.Configure
+namespace Nano35.Identity.Processor.Configurations
 {
     public class IdentityConfiguration : 
         IConfigurationOfService
