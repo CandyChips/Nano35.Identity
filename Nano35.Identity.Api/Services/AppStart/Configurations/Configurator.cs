@@ -1,13 +1,6 @@
-﻿using System;
-using AutoMapper;
-using MassTransit;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Nano35.Contracts;
-using Nano35.Identity.Processor.Services.Contexts;
-using Nano35.Identity.Processor.Services.MappingProfiles;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Nano35.Identity.Processor.Services.AppStart.Configure
+namespace Nano35.Identity.Api.Services.AppStart.Configurations
 {
     public interface IConfigurationOfService
     {

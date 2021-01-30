@@ -23,7 +23,7 @@ namespace Nano35.Identity.Processor
             new Configurator(services, new EntityFrameworkConfiguration()).Configure();
             new Configurator(services, new MassTransitConfiguration()).Configure();
             new Configurator(services, new JWTGeneratorConfiguration()).Configure();
-            new Configurator(services, new HttpContextAccessorConfiguration()).Configure();
+            new Configurator(services, new MediatRConfiguration()).Configure();
         }
 
         public void Configure(IApplicationBuilder app)

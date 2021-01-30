@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Api.Services.Requests;
+using Nano35.Identity.Api.Requests;
 
 namespace Nano35.Identity.Api.Controllers
 {

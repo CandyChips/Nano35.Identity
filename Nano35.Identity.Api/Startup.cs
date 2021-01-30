@@ -23,14 +23,13 @@ namespace Nano35.Identity.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            SwaggerServiceConstructor.Construct(services);
-            CorsServiceConstructor.Construct(services);
-            MediatRServiceConstructor.Construct(services);
-            MassTransitServiceConstructor.Construct(services);
-            AuthenticationServiceConstructor.Construct(services);
-            services.AddControllers();
-            services.AddScoped<ICustomAuthStateProvider, CookiesAuthStateProvider>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            new Configurator(services, new AuthenticationConfiguration()).Configure();
+            new Configurator(services, new CorsConfiguration()).Configure();
+            new Configurator(services, new SwaggerConfiguration()).Configure();
+            new Configurator(services, new MassTransitConfiguration()).Configure();
+            new Configurator(services, new MediatRConfiguration()).Configure();
+            new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
+            new Configurator(services, new ConfigurationOfControllers()).Configure();
         }
 
         public void Configure(IApplicationBuilder app)
