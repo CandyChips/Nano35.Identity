@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,9 @@ namespace Nano35.Identity.Api
             new Configurator(services, new MediatRConfiguration()).Configure();
             new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
             new Configurator(services, new ConfigurationOfControllers()).Configure();
+            services.AddMvc().ConfigureApiBehaviorOptions(options => {
+                options.SuppressInferBindingSourcesForParameters = true;
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         public void Configure(IApplicationBuilder app)

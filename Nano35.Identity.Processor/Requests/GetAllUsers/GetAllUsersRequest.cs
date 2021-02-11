@@ -10,8 +10,7 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 namespace Nano35.Identity.Processor.Requests.GetAllUsers
 {
     public class GetAllUsersRequest :
-        IGetAllUsersRequestContract,
-        IQueryRequest<IGetAllUsersResultContract>
+        IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
         private readonly ApplicationContext _context;
 
@@ -34,7 +33,7 @@ namespace Nano35.Identity.Processor.Requests.GetAllUsers
         }
 
         public async Task<IGetAllUsersResultContract> Ask(
-            GetAllUsersQuery request,
+            IGetAllUsersRequestContract request,
             CancellationToken cancellationToken)
         {
             var result = await _context.Users.MapAllToAsync<IUserViewModel>();

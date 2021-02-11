@@ -12,8 +12,7 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 namespace Nano35.Identity.Processor.Requests.GetRoleByUserId
 {
     public class GetRoleByUserIdRequest :
-        IGetRoleByUserIdRequestContract,
-        IQueryRequest<IGetRoleByUserIdResultContract>
+        IPipelineNode<IGetRoleByUserIdRequestContract, IGetRoleByUserIdResultContract>
     {
         public Guid UserId { get; set; }
         
@@ -38,7 +37,7 @@ namespace Nano35.Identity.Processor.Requests.GetRoleByUserId
         }
 
         public async Task<IGetRoleByUserIdResultContract> Ask(
-            GetRoleByUserIdQuery request,
+            IGetRoleByUserIdRequestContract request,
             CancellationToken cancellationToken)
         {
             // ToDo fix

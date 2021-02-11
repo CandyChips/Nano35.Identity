@@ -12,8 +12,7 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 namespace Nano35.Identity.Processor.Requests.GetUserById
 {
     public class GetUserByIdRequest :
-        IGetUserByIdRequestContract,
-        IQueryRequest<IGetUserByIdResultContract>
+        IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>
     {
         public Guid UserId { get; set; }
         
@@ -38,7 +37,7 @@ namespace Nano35.Identity.Processor.Requests.GetUserById
         }
 
         public async Task<IGetUserByIdResultContract> Ask(
-            GetUserByIdQuery request,
+            IGetUserByIdRequestContract request,
             CancellationToken cancellationToken)
         {
             var result = (await _context.Users.FirstOrDefaultAsync(f => f.Id == request.UserId.ToString(), cancellationToken: cancellationToken)).MapTo<IUserViewModel>();

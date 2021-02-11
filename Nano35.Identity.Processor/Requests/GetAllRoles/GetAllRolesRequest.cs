@@ -10,8 +10,7 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 namespace Nano35.Identity.Processor.Requests.GetAllRoles
 {
     public class GetAllRolesRequest :
-        IGetAllRolesRequestContract,
-        IQueryRequest<IGetAllRolesResultContract>
+        IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
     {
         private readonly ApplicationContext _context;
 
@@ -34,7 +33,7 @@ namespace Nano35.Identity.Processor.Requests.GetAllRoles
         }
 
         public async Task<IGetAllRolesResultContract> Ask(
-            GetAllRolesQuery request,
+            IGetAllRolesRequestContract request,
             CancellationToken cancellationToken)
         {
             var result = await _context.Roles.MapAllToAsync<IRoleViewModel>();

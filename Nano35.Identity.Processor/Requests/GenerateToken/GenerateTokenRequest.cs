@@ -11,8 +11,7 @@ using Nano35.Identity.Processor.Services.Helpers;
 namespace Nano35.Identity.Processor.Requests.GenerateToken
 {
     public class GenerateTokenRequest :
-        IGenerateTokenRequestContract,
-        IQueryRequest<IGenerateTokenResultContract>
+        IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
         public string Login { get; set; }
         
@@ -45,7 +44,7 @@ namespace Nano35.Identity.Processor.Requests.GenerateToken
         }
 
         public async Task<IGenerateTokenResultContract> Ask(
-            GenerateTokenQuery request,
+            IGenerateTokenRequestContract request,
             CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByNameAsync(request.Login);
