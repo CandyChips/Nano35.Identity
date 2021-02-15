@@ -12,21 +12,12 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
     public class UpdatePhoneRequest :
         IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
-        public Guid UserId { get; set; }
-        public string Phone { get; set; }
-        
         private readonly IBus _bus;
-        private readonly ILogger<UpdatePhoneRequest> _logger;
-        private readonly ICustomAuthStateProvider _customAuthStateProvider;
 
         public UpdatePhoneRequest(
-            IBus bus, 
-            ICustomAuthStateProvider customAuthStateProvider, 
-            ILogger<UpdatePhoneRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _customAuthStateProvider = customAuthStateProvider;
-            _logger = logger;
         }
         
         public async Task<IUpdatePhoneResultContract> Ask(

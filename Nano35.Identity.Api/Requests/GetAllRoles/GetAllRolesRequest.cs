@@ -11,15 +11,12 @@ namespace Nano35.Identity.Api.Requests.GetAllRoles
     public class GetAllRolesRequest :
         IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
     {
-        private readonly ILogger<GetAllRolesRequest> _logger;
         private readonly IBus _bus;
 
         public GetAllRolesRequest(
-            IBus bus, 
-            ILogger<GetAllRolesRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _logger = logger;
         }
         
         public async Task<IGetAllRolesResultContract> Ask(

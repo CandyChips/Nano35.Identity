@@ -26,7 +26,6 @@ namespace Nano35.Identity.Api
             new Configurator(services, new CorsConfiguration()).Configure();
             new Configurator(services, new SwaggerConfiguration()).Configure();
             new Configurator(services, new MassTransitConfiguration()).Configure();
-            new Configurator(services, new MediatRConfiguration()).Configure();
             new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
             new Configurator(services, new ConfigurationOfControllers()).Configure();
             services.AddMvc().ConfigureApiBehaviorOptions(options => {

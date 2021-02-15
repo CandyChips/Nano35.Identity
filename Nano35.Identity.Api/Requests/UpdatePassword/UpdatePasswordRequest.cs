@@ -12,21 +12,12 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
     public class UpdatePasswordRequest :
         IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
-        public Guid UserId { get; set; }
-        public string Password { get; set; }
-        
         private readonly IBus _bus;
-        private readonly ILogger<UpdatePasswordRequest> _logger;
-        private readonly ICustomAuthStateProvider _customAuthStateProvider;
 
         public UpdatePasswordRequest(
-            IBus bus, 
-            ICustomAuthStateProvider customAuthStateProvider, 
-            ILogger<UpdatePasswordRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _logger = logger;
-            _customAuthStateProvider = customAuthStateProvider;
         }
         
         public async Task<IUpdatePasswordResultContract> Ask(

@@ -6,12 +6,14 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
+using Nano35.Identity.Api.Helpers;
 using Nano35.Identity.Api.Requests;
 using Nano35.Identity.Api.Requests.GenerateToken;
 using Nano35.Identity.Api.Requests.GetAllRoles;
 using Nano35.Identity.Api.Requests.GetAllUsers;
 using Nano35.Identity.Api.Requests.GetRoleById;
 using Nano35.Identity.Api.Requests.GetUserById;
+using Nano35.Identity.Api.Requests.GetUserByToken;
 using Nano35.Identity.Api.Requests.Register;
 
 namespace Nano35.Identity.Api.Controllers
@@ -20,19 +22,26 @@ namespace Nano35.Identity.Api.Controllers
     [Route("[controller]")]
     public class IdentityController : ControllerBase
     {
-        private readonly ILogger<IdentityController> _logger;
-        private readonly IMediator _mediator;
         private readonly IServiceProvider  _services;
 
-        public IdentityController(
-            ILogger<IdentityController> logger,
-            IMediator mediator, 
-            IServiceProvider services)
+        /// <summary>
+        /// Controller provide IServiceProvider from asp net core DI
+        /// for registration services to pipe nodes
+        /// </summary>
+        public IdentityController(IServiceProvider  services)
         {
-            _logger = logger;
-            _mediator = mediator;
             _services = services;
         }
+    
+        /// <summary>
+        /// Controllers accept a HttpContext type
+        /// All controllers actions works by pipelines
+        /// Implementation works with 3 steps
+        /// 1. Setup DI services from IServiceProvider;
+        /// 2. Building pipeline like a onion
+        ///     '(PipeNode1(PipeNode2(PipeNode3(...).Ask()).Ask()).Ask()).Ask()';
+        /// 3. Response pattern match of pipeline response;
+        /// </summary>
 
         public class GetAllUsersHttpContext :
             IGetAllUsersRequestContract
@@ -46,13 +55,13 @@ namespace Nano35.Identity.Api.Controllers
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
-            var requestLogger = (ILogger<GetAllUsersRequest>) _services.GetService(typeof(ILogger<GetAllUsersRequest>));
             
             var result =
                 await new LoggedGetAllUsersRequest(logger,
                         new ValidatedGetAllUsersRequest(
-                            new GetAllUsersRequest(bus, requestLogger)))
-                    .Ask(message);
+                            new GetAllUsersRequest(bus)
+                            )
+                        ).Ask(message);
 
             return result switch
             {
@@ -74,13 +83,13 @@ namespace Nano35.Identity.Api.Controllers
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetAllRolesRequest>) _services.GetService(typeof(ILogger<LoggedGetAllRolesRequest>));
-            var requestLogger = (ILogger<GetAllRolesRequest>) _services.GetService(typeof(ILogger<GetAllRolesRequest>));
             
             var result =
                 await new LoggedGetAllRolesRequest(logger,
                         new ValidatedGetAllRolesRequest(
-                            new GetAllRolesRequest(bus, requestLogger)))
-                    .Ask(message);
+                            new GetAllRolesRequest(bus)
+                            )
+                        ).Ask(message);
 
             return result switch
             {
@@ -107,8 +116,9 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedGetUserByIdRequest(logger,
                         new ValidatedGetUserByIdRequest(
-                            new GetUserByIdRequest(bus, requestLogger)))
-                    .Ask(message);
+                            new GetUserByIdRequest(bus)
+                            )
+                        ).Ask(message);
 
             return result switch
             {
@@ -118,19 +128,26 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        public class GetUserFromTokenHttpContext
+        public class GetUserFromTokenHttpContext :
+            IGetUserByIdRequestContract
         {
-            [FromHeader]
-            public string Token { get; set; }
+            public Guid UserId { get; set; }
         }
         
         [HttpGet]
         [Route("GetUserFromToken")]
-        public async Task<IActionResult> GetUserFromToken(Guid id)
+        public async Task<IActionResult> GetUserFromToken()
         {
-            var request = new GetUserFromTokenQuery();
+            var bus = (IBus) _services.GetService((typeof(IBus)));
+            var logger = (ILogger<LoggedGetUserByTokenRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByTokenRequest>));
+            var auth = (ICustomAuthStateProvider) _services.GetService(typeof(ICustomAuthStateProvider));
             
-            var result = await this._mediator.Send(request);
+            var result =
+                await new LoggedGetUserByTokenRequest(logger,
+                    new ValidatedGetUserByTokenRequest(
+                        new GetUserByTokenRequest(bus, auth)
+                    )
+                ).Ask(new GetUserFromTokenHttpContext());
 
             return result switch
             {
@@ -152,15 +169,15 @@ namespace Nano35.Identity.Api.Controllers
         {
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var requestLogger = (ILogger<GetRoleByIdRequest>) _services.GetService(typeof(ILogger<GetRoleByIdRequest>));
             var logger = (ILogger<LoggedGetRoleByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetRoleByIdRequest>));
             
             
             var result =
                 await new LoggedGetRoleByIdRequest(logger,
                         new ValidatedGetRoleByIdRequest(
-                             new GetRoleByIdRequest(bus, requestLogger)))
-                    .Ask(message);
+                             new GetRoleByIdRequest(bus)
+                             )
+                        ).Ask(message);
 
             return result switch
             {
@@ -212,14 +229,14 @@ namespace Nano35.Identity.Api.Controllers
             RegisterHttpContext message = new RegisterHttpContext(head, body);
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var requestLogger = (ILogger<RegisterRequest>) _services.GetService(typeof(ILogger<RegisterRequest>));
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
             
             var result =
                 await new LoggedRegisterRequest(logger,
                         new ValidatedRegisterRequest(
-                            new RegisterRequest(bus, requestLogger)))
-                    .Ask(message);
+                            new RegisterRequest(bus)
+                            )
+                        ).Ask(message);
             return result switch
             {
                 IRegisterSuccessResultContract => Ok(result),
@@ -254,13 +271,14 @@ namespace Nano35.Identity.Api.Controllers
             GenerateUserTokenHttpContext message = new GenerateUserTokenHttpContext(body);
 
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var requestLogger = (ILogger<GenerateTokenRequest>) _services.GetService(typeof(ILogger<GenerateTokenRequest>));
             var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
             
             var result =
                 await new LoggedGenerateTokenRequest(logger,
                         new ValidatedGenerateTokenRequest(
-                            new GenerateTokenRequest(bus, requestLogger)))
+                            new GenerateTokenRequest(bus)
+                            )
+                        )
                     .Ask(message);
             return result switch
             {

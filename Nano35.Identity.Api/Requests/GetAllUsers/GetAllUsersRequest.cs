@@ -11,15 +11,12 @@ namespace Nano35.Identity.Api.Requests.GetAllUsers
     public class GetAllUsersRequest :
         IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
-        private readonly ILogger<GetAllUsersRequest> _logger;
         private readonly IBus _bus;
 
         public GetAllUsersRequest(
-            IBus bus, 
-            ILogger<GetAllUsersRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _logger = logger;
         }
         
         public async Task<IGetAllUsersResultContract> Ask(

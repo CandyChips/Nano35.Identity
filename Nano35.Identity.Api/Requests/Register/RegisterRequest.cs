@@ -11,21 +11,12 @@ namespace Nano35.Identity.Api.Requests.Register
     public class RegisterRequest :
         IPipelineNode<IRegisterRequestContract, IRegisterResultContract>
     {
-        public Guid NewUserId { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string PasswordConfirm { get; set; }
-        
-        private readonly ILogger<RegisterRequest> _logger;
         private readonly IBus _bus;
 
         public RegisterRequest(
-            IBus bus,
-            ILogger<RegisterRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _logger = logger;
         }
 
         public async Task<IRegisterResultContract> Ask(

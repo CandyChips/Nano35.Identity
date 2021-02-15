@@ -11,17 +11,12 @@ namespace Nano35.Identity.Api.Requests.GetRoleByUserId
     public class GetRoleByUserIdRequest :
         IPipelineNode<IGetRoleByUserIdRequestContract, IGetRoleByUserIdResultContract>
     {
-        public Guid UserId { get; set; }
-        
-        private readonly ILogger<GetRoleByUserIdRequest> _logger;
         private readonly IBus _bus;
 
         public GetRoleByUserIdRequest(
-            IBus bus, 
-            ILogger<GetRoleByUserIdRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _logger = logger;
         }
         
         public async Task<IGetRoleByUserIdResultContract> Ask(

@@ -11,18 +11,12 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
     public class GenerateTokenRequest :
         IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
-        public string Login { get; set; }
-        public string Password { get; set; }
-
-        private readonly ILogger<GenerateTokenRequest> _logger;
         private readonly IBus _bus;
 
         public GenerateTokenRequest(
-            IBus bus, 
-            ILogger<GenerateTokenRequest> logger)
+            IBus bus)
         {
             _bus = bus;
-            _logger = logger;
         }
         
         public async Task<IGenerateTokenResultContract> Ask(
