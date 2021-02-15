@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -272,13 +273,14 @@ namespace Nano35.Identity.Api.Controllers
 
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
+            var validator =
+                (IValidator<IGenerateTokenRequestContract>) _services.GetService(
+                    typeof(IValidator<IGenerateTokenRequestContract>));
             
             var result =
                 await new LoggedGenerateTokenRequest(logger,
-                        new ValidatedGenerateTokenRequest(
-                            new GenerateTokenRequest(bus)
-                            )
-                        )
+                        new ValidatedGenerateTokenRequest(validator,
+                            new GenerateTokenRequest(bus)))
                     .Ask(message);
             return result switch
             {
