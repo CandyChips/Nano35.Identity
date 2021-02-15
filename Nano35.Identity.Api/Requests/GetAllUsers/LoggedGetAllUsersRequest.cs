@@ -5,14 +5,14 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetAllUsers
 {
-    public class GetAllUsersLogger :
+    public class LoggedGetAllUsersRequest :
         IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
-        private readonly ILogger<GetAllUsersLogger> _logger;
+        private readonly ILogger<LoggedGetAllUsersRequest> _logger;
         private readonly IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> _nextNode;
 
-        public GetAllUsersLogger(
-            ILogger<GetAllUsersLogger> logger,
+        public LoggedGetAllUsersRequest(
+            ILogger<LoggedGetAllUsersRequest> logger,
             IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> nextNode)
         {
             _nextNode = nextNode;

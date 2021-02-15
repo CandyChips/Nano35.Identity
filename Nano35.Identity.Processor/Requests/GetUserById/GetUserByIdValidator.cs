@@ -4,7 +4,7 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.GetUserById
 {
-    public class GetUserByIdValidatorErrorResult : IGetUserByIdErrorResultContract
+    public class ValidatedGetUserByIdRequestErrorResult : IGetUserByIdErrorResultContract
     {
         public string Message { get; set; }
     }
@@ -25,7 +25,7 @@ namespace Nano35.Identity.Processor.Requests.GetUserById
         {
             if (false)
             {
-                return new GetUserByIdValidatorErrorResult() {Message = "Ошибка валидации"};
+                return new ValidatedGetUserByIdRequestErrorResult() {Message = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input, cancellationToken);
         }

@@ -3,17 +3,17 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetAllRoles
 {
-    public class GetAllRolesValidatorErrorResult : IGetAllRolesErrorResultContract
+    public class ValidatedGetAllRolesRequestErrorResult : IGetAllRolesErrorResultContract
     {
         public string Message { get; set; }
     }
     
-    public class GetAllRolesValidator:
+    public class ValidatedGetAllRolesRequest:
         IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
     {
         private readonly IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract> _nextNode;
 
-        public GetAllRolesValidator(
+        public ValidatedGetAllRolesRequest(
             IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract> nextNode)
         {
             _nextNode = nextNode;
@@ -24,7 +24,7 @@ namespace Nano35.Identity.Api.Requests.GetAllRoles
         {
             if (false)
             {
-                return new GetAllRolesValidatorErrorResult() {Message = "Ошибка валидации"};
+                return new ValidatedGetAllRolesRequestErrorResult() {Message = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input);
         }

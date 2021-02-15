@@ -5,14 +5,14 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetAllRoles
 {
-    public class GetAllRolesLogger :
+    public class LoggedGetAllRolesRequest :
         IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
     {
-        private readonly ILogger<GetAllRolesLogger> _logger;
+        private readonly ILogger<LoggedGetAllRolesRequest> _logger;
         private readonly IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract> _nextNode;
 
-        public GetAllRolesLogger(
-            ILogger<GetAllRolesLogger> logger,
+        public LoggedGetAllRolesRequest(
+            ILogger<LoggedGetAllRolesRequest> logger,
             IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract> nextNode)
         {
             _nextNode = nextNode;

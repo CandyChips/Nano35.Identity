@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 
-namespace Nano35.Identity.Api.Requests.GenerateToken
+namespace Nano35.Identity.Processor.Requests.GenerateToken
 {
-    public class GenerateTokenLogger :
+    public class LoggedGenerateTokenRequest :
         IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
-        private readonly ILogger<GenerateTokenLogger> _logger;
+        private readonly ILogger<LoggedGenerateTokenRequest> _logger;
         private readonly IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> _nextNode;
 
-        public GenerateTokenLogger(
-            ILogger<GenerateTokenLogger> logger,
+        public LoggedGenerateTokenRequest(
+            ILogger<LoggedGenerateTokenRequest> logger,
             IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> nextNode)
         {
             _nextNode = nextNode;
@@ -20,12 +21,12 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
         }
 
         public async Task<IGenerateTokenResultContract> Ask(
-            IGenerateTokenRequestContract input)
+            IGenerateTokenRequestContract input,
+            CancellationToken cancellationToken)
         {
             _logger.LogInformation($"GenerateTokenLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = await _nextNode.Ask(input, cancellationToken);
             _logger.LogInformation($"GenerateTokenLogger ends on: {DateTime.Now}");
-            _logger.LogInformation("");
             return result;
         }
     }

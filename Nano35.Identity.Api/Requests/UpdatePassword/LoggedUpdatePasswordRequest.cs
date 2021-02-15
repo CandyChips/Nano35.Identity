@@ -5,14 +5,14 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.UpdatePassword
 {
-    public class UpdatePasswordLogger :
+    public class LoggedUpdatePasswordRequest :
         IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
-        private readonly ILogger<UpdatePasswordLogger> _logger;
+        private readonly ILogger<LoggedUpdatePasswordRequest> _logger;
         private readonly IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> _nextNode;
 
-        public UpdatePasswordLogger(
-            ILogger<UpdatePasswordLogger> logger,
+        public LoggedUpdatePasswordRequest(
+            ILogger<LoggedUpdatePasswordRequest> logger,
             IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> nextNode)
         {
             _nextNode = nextNode;

@@ -34,7 +34,7 @@ namespace Nano35.Identity.Api.Controllers
             _services = services;
         }
 
-        public class GetAllusersHttpContext :
+        public class GetAllUsersHttpContext :
             IGetAllUsersRequestContract
         {
         }
@@ -42,15 +42,15 @@ namespace Nano35.Identity.Api.Controllers
         [HttpGet]
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers(
-            [FromBody] GetAllusersHttpContext message)
+            [FromHeader] GetAllUsersHttpContext message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<GetAllUsersLogger>) _services.GetService(typeof(ILogger<GetAllUsersLogger>));
+            var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
             var requestLogger = (ILogger<GetAllUsersRequest>) _services.GetService(typeof(ILogger<GetAllUsersRequest>));
             
             var result =
-                await new GetAllUsersLogger(logger,
-                        new GetAllUsersValidator(
+                await new LoggedGetAllUsersRequest(logger,
+                        new ValidatedGetAllUsersRequest(
                             new GetAllUsersRequest(bus, requestLogger)))
                     .Ask(message);
 
@@ -70,15 +70,15 @@ namespace Nano35.Identity.Api.Controllers
         [HttpGet]
         [Route("GetAllRoles")]
         public async Task<IActionResult> GetAllRoles(
-            [FromBody] GetAllRolesHttpContext message)
+            [FromHeader] GetAllRolesHttpContext message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<GetAllRolesLogger>) _services.GetService(typeof(ILogger<GetAllRolesLogger>));
+            var logger = (ILogger<LoggedGetAllRolesRequest>) _services.GetService(typeof(ILogger<LoggedGetAllRolesRequest>));
             var requestLogger = (ILogger<GetAllRolesRequest>) _services.GetService(typeof(ILogger<GetAllRolesRequest>));
             
             var result =
-                await new GetAllRolesLogger(logger,
-                        new GetAllRolesValidator(
+                await new LoggedGetAllRolesRequest(logger,
+                        new ValidatedGetAllRolesRequest(
                             new GetAllRolesRequest(bus, requestLogger)))
                     .Ask(message);
 
@@ -90,25 +90,23 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        public class GetUserByIdHttpContext :
-            IGetUserByIdRequestContract
+        public class GetUserByIdHttpContext : IGetUserByIdRequestContract
         {
-            [FromHeader]
             public Guid UserId { get; set; }
         }
         
         [HttpGet]
         [Route("GetUserById")]
         public async Task<IActionResult> GetUserById(
-            GetUserByIdHttpContext message)
+            [FromHeader]GetUserByIdHttpContext message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<GetUserByIdLogger>) _services.GetService(typeof(ILogger<GetUserByIdLogger>));
+            var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
             var requestLogger = (ILogger<GetUserByIdRequest>) _services.GetService(typeof(ILogger<GetUserByIdRequest>));
             
             var result =
-                await new GetUserByIdLogger(logger,
-                        new GetUserByIdValidator(
+                await new LoggedGetUserByIdRequest(logger,
+                        new ValidatedGetUserByIdRequest(
                             new GetUserByIdRequest(bus, requestLogger)))
                     .Ask(message);
 
@@ -142,27 +140,25 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
         
-        public class GetRoleByIdHttpContext :
-            IGetRoleByIdRequestContract
+        public class GetRoleByIdHttpContext : IGetRoleByIdRequestContract
         {
-            [FromHeader]
             public Guid RoleId { get; set; }
         }
         
         [HttpGet]
         [Route("GetRoleById")]
         public async Task<IActionResult> GetRoleById(
-            GetRoleByIdHttpContext message)
+            [FromHeader]GetRoleByIdHttpContext message)
         {
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var requestLogger = (ILogger<GetRoleByIdRequest>) _services.GetService(typeof(ILogger<GetRoleByIdRequest>));
-            var logger = (ILogger<GetRoleByIdLogger>) _services.GetService(typeof(ILogger<GetRoleByIdLogger>));
+            var logger = (ILogger<LoggedGetRoleByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetRoleByIdRequest>));
             
             
             var result =
-                await new GetRoleByIdLogger(logger,
-                        new GetRoleByIdValidator(
+                await new LoggedGetRoleByIdRequest(logger,
+                        new ValidatedGetRoleByIdRequest(
                              new GetRoleByIdRequest(bus, requestLogger)))
                     .Ask(message);
 
@@ -174,8 +170,26 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        public class RegisterHttpContext
-        {
+       
+           
+            public class RegisterHttpContext : IRegisterRequestContract
+            {
+                public Guid NewUserId { get; set; }
+                public string Phone { get; set; }
+                public string Email { get; set; }
+                public string Password { get; set; }
+                public string PasswordConfirm { get; set; }
+                
+                public RegisterHttpContext(RegisterHttpContextHeader head, RegisterHttpContextBody body)
+                {
+                    NewUserId = head.NewUserId;
+                    Phone = body.Phone;
+                    Email = body.Email;
+                    Password = body.Password;
+                    PasswordConfirm = body.PasswordConfirm;
+                }
+            }
+            
             public class RegisterHttpContextHeader
             {
                 public Guid NewUserId { get; set; }
@@ -188,86 +202,72 @@ namespace Nano35.Identity.Api.Controllers
                 public string Password { get; set; }
                 public string PasswordConfirm { get; set; }
             }
-            [FromHeader]
-            public RegisterHttpContextHeader Head { get; set; }
-            [FromBody]
-            public RegisterHttpContextBody Bod { get; set; }
-        }
-        
+            
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(
-            RegisterHttpContext message)
+            [FromBody]RegisterHttpContextBody body,
+            [FromHeader] RegisterHttpContextHeader head)
         {
-
+            RegisterHttpContext message = new RegisterHttpContext(head, body);
             
-            //var bus = (IBus) _services.GetService((typeof(IBus)));
-            //var requestLogger = (ILogger<RegisterRequest>) _services.GetService(typeof(ILogger<RegisterRequest>));
-            //var logger = (ILogger<RegisterLogger>) _services.GetService(typeof(ILogger<RegisterLogger>));
-            //
-            //var result =
-            //    await new RegisterLogger(logger,
-            //            new RegisterValidator(
-            //                new RegisterRequest(bus, requestLogger)))
-            //        .Ask(message);
-            //return result switch
-            //{
-            //    IRegisterSuccessResultContract => Ok(result),
-            //    IRegisterErrorResultContract => BadRequest(result),
-            //    _ => BadRequest()
-            //};
-            return Ok();
+            var bus = (IBus) _services.GetService((typeof(IBus)));
+            var requestLogger = (ILogger<RegisterRequest>) _services.GetService(typeof(ILogger<RegisterRequest>));
+            var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
+            
+            var result =
+                await new LoggedRegisterRequest(logger,
+                        new ValidatedRegisterRequest(
+                            new RegisterRequest(bus, requestLogger)))
+                    .Ask(message);
+            return result switch
+            {
+                IRegisterSuccessResultContract => Ok(result),
+                IRegisterErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
+        }
+        
+        public class GenerateUserTokenHttpContext : IGenerateTokenRequestContract
+        {
+            public string Login { get; set; }
+            public string Password { get; set; }
+            
+            public GenerateUserTokenHttpContext(GenerateUserTokenBody body)
+            {
+                Login = body.Login;
+                Password = body.Password;
+            }
+        }
+        
+        public class GenerateUserTokenBody
+        {
+            public string Login { get; set; }
+            public string Password { get; set; }
         }
 
-        public class GenerateUserTokenHttpContext
-        {
-            public class GenerateUserTokenHttpContextHeader
-            {
-                public string Login { get; set; } 
-            }
-
-            public class GenerateUserTokenHttpContextBody
-            {
-                public string Login { get; set; } 
-                public string Password { get; set; }
-            }
-            
-            [FromHeader]
-            public GenerateUserTokenHttpContextHeader Head { get; set; }
-            [FromBody]
-            public GenerateUserTokenHttpContextBody Bod { get; set; }
-        }
-
-        //public class GenerateUserTokenHttpContext: IGenerateTokenRequestContract
-        //{
-        //    public string Login { get; set; }
-        //    public string Password { get; set; }
-        //}
-        
-            
-        
         [HttpPost]
         [Route("Authenticate")]
         public async Task<IActionResult> GenerateUserToken(
-            GenerateUserTokenHttpContext message)
+            [FromBody] GenerateUserTokenBody body)
         {
-           // var bus = (IBus) _services.GetService((typeof(IBus)));
-           // var requestLogger = (ILogger<GenerateTokenRequest>) _services.GetService(typeof(ILogger<GenerateTokenRequest>));
-           // var logger = (ILogger<GenerateTokenLogger>) _services.GetService(typeof(ILogger<GenerateTokenLogger>));
-           // 
-           // var result =
-           //     await new GenerateTokenLogger(logger,
-           //             new GenerateTokenValidator(
-           //                 new GenerateTokenRequest(bus, requestLogger)))
-           //         .Ask(message);
-//
-           // return result switch
-           // {
-           //     IGenerateTokenSuccessResultContract => Ok(result),
-           //     IGenerateTokenErrorResultContract => BadRequest(result),
-           //     _ => BadRequest()
-           // };
-            return Ok();
+            GenerateUserTokenHttpContext message = new GenerateUserTokenHttpContext(body);
+
+            var bus = (IBus) _services.GetService((typeof(IBus)));
+            var requestLogger = (ILogger<GenerateTokenRequest>) _services.GetService(typeof(ILogger<GenerateTokenRequest>));
+            var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
+            
+            var result =
+                await new LoggedGenerateTokenRequest(logger,
+                        new ValidatedGenerateTokenRequest(
+                            new GenerateTokenRequest(bus, requestLogger)))
+                    .Ask(message);
+            return result switch
+            {
+                IGenerateTokenSuccessResultContract => Ok(result),
+                IGenerateTokenErrorResultContract => BadRequest(result),
+                _ => BadRequest()
+            };
         }
 
         //[HttpPut]

@@ -3,17 +3,17 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetAllUsers
 {
-    public class GetAllUsersValidatorErrorResult : IGetAllUsersErrorResultContract
+    public class ValidatedGetAllUsersRequestErrorResult : IGetAllUsersErrorResultContract
     {
         public string Message { get; set; }
     }
     
-    public class GetAllUsersValidator:
+    public class ValidatedGetAllUsersRequest:
         IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
         private readonly IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> _nextNode;
 
-        public GetAllUsersValidator(
+        public ValidatedGetAllUsersRequest(
             IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> nextNode)
         {
             _nextNode = nextNode;
@@ -24,7 +24,7 @@ namespace Nano35.Identity.Api.Requests.GetAllUsers
         {
             if (false)
             {
-                return new GetAllUsersValidatorErrorResult() {Message = "Ошибка валидации"};
+                return new ValidatedGetAllUsersRequestErrorResult() {Message = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input);
         }

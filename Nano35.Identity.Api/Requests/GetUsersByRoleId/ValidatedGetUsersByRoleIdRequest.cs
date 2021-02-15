@@ -3,17 +3,17 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetUsersByRoleId
 {
-    public class GetUsersByRoleIdValidatorErrorResult : IGetUsersByRoleIdNotFoundResultContract
+    public class ValidatedGetUsersByRoleIdRequestErrorResult : IGetUsersByRoleIdNotFoundResultContract
     {
         public string Message { get; set; }
     }
     
-    public class GetUsersByRoleIdValidator:
+    public class ValidatedGetUsersByRoleIdRequest:
         IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract>
     {
         private readonly IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract> _nextNode;
 
-        public GetUsersByRoleIdValidator(
+        public ValidatedGetUsersByRoleIdRequest(
             IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract> nextNode)
         {
             _nextNode = nextNode;
@@ -24,7 +24,7 @@ namespace Nano35.Identity.Api.Requests.GetUsersByRoleId
         {
             if (false)
             {
-                return new GetUsersByRoleIdValidatorErrorResult() {Message = "Ошибка валидации"};
+                return new ValidatedGetUsersByRoleIdRequestErrorResult() {Message = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input);
         }

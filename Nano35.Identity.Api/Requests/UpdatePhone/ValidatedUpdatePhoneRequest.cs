@@ -3,17 +3,17 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
-    public class UpdatePhoneValidatorErrorResult : IUpdatePhoneErrorResultContract
+    public class ValidatedUpdatePhoneRequestErrorResult : IUpdatePhoneErrorResultContract
     {
         public string Error { get; set; }
     }
     
-    public class UpdatePhoneValidator:
+    public class ValidatedUpdatePhoneRequest:
         IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
         private readonly IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> _nextNode;
 
-        public UpdatePhoneValidator(
+        public ValidatedUpdatePhoneRequest(
             IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> nextNode)
         {
             _nextNode = nextNode;
@@ -24,7 +24,7 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
         {
             if (false)
             {
-                return new UpdatePhoneValidatorErrorResult() {Error = "Ошибка валидации"};
+                return new ValidatedUpdatePhoneRequestErrorResult() {Error = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input);
         }

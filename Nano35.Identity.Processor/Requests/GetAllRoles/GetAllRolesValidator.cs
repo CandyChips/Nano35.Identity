@@ -4,7 +4,7 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.GetAllRoles
 {
-    public class GetAllRolesValidatorErrorResult : IGetAllRolesErrorResultContract
+    public class ValidatedGetAllRolesRequestErrorResult : IGetAllRolesErrorResultContract
     {
         public string Message { get; set; }
     }
@@ -25,7 +25,7 @@ namespace Nano35.Identity.Processor.Requests.GetAllRoles
         {
             if (false)
             {
-                return new GetAllRolesValidatorErrorResult() {Message = "Ошибка валидации"};
+                return new ValidatedGetAllRolesRequestErrorResult() {Message = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input, cancellationToken);
         }

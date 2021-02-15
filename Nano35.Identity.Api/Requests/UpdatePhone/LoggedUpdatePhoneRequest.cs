@@ -5,14 +5,14 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
-    public class UpdatePhoneLogger :
+    public class LoggedUpdatePhoneRequest :
         IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
-        private readonly ILogger<UpdatePhoneLogger> _logger;
+        private readonly ILogger<LoggedUpdatePhoneRequest> _logger;
         private readonly IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> _nextNode;
 
-        public UpdatePhoneLogger(
-            ILogger<UpdatePhoneLogger> logger,
+        public LoggedUpdatePhoneRequest(
+            ILogger<LoggedUpdatePhoneRequest> logger,
             IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> nextNode)
         {
             _nextNode = nextNode;

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nano35.Identity.Api.Configurations;
 using Nano35.Identity.Api.ConfigureMiddleWares;
+using Nano35.Identity.Api.Helpers;
 
 namespace Nano35.Identity.Api
 {
@@ -30,6 +31,7 @@ namespace Nano35.Identity.Api
             new Configurator(services, new ConfigurationOfControllers()).Configure();
             services.AddMvc().ConfigureApiBehaviorOptions(options => {
                 options.SuppressInferBindingSourcesForParameters = true;
+                options.SuppressConsumesConstraintForFormFileParameters = true;
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 

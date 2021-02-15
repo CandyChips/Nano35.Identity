@@ -3,17 +3,17 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.UpdatePassword
 {
-    public class UpdatePasswordValidatorErrorResult : IUpdatePasswordErrorResultContract
+    public class ValidatedUpdatePasswordRequestErrorResult : IUpdatePasswordErrorResultContract
     {
         public string Error { get; set; }
     }
     
-    public class UpdatePasswordValidator:
+    public class ValidatedUpdatePasswordRequest:
         IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
         private readonly IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> _nextNode;
 
-        public UpdatePasswordValidator(
+        public ValidatedUpdatePasswordRequest(
             IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> nextNode)
         {
             _nextNode = nextNode;
@@ -24,7 +24,7 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
         {
             if (false)
             {
-                return new UpdatePasswordValidatorErrorResult() {Error = "Ошибка валидации"};
+                return new ValidatedUpdatePasswordRequestErrorResult() {Error = "Ошибка валидации"};
             }
             return await _nextNode.Ask(input);
         }
