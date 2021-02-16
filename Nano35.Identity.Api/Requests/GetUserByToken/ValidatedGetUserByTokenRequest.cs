@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FluentValidation;
 using Nano35.Contracts.Identity.Artifacts;
+using Nano35.Identity.Api.Requests.GenerateToken;
 
 namespace Nano35.Identity.Api.Requests.GetUserByToken
 {
@@ -11,22 +14,38 @@ namespace Nano35.Identity.Api.Requests.GetUserByToken
     public class ValidatedGetUserByTokenRequest:
         IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>
     {
+        private readonly IValidator<IGetUserByIdRequestContract> _validator;
         private readonly IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> _nextNode;
 
         public ValidatedGetUserByTokenRequest(
+            IValidator<IGetUserByIdRequestContract> validator,
             IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> nextNode)
         {
+            _validator = validator;
             _nextNode = nextNode;
         }
 
         public async Task<IGetUserByIdResultContract> Ask(
             IGetUserByIdRequestContract input)
         {
-            if (false)
+            var result = await _validator.ValidateAsync(input);
+
+            if (!result.IsValid)
             {
-                return new ValidatedGetUserByTokenRequestErrorResult() {Message = "Ошибка валидации"};
+                return new ValidatedGetUserByTokenRequestErrorResult() 
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
             }
             return await _nextNode.Ask(input);
+        }
+    }
+
+    public class GetUserByTokenRequestValidator :
+        AbstractValidator<IGetUserByIdRequestContract>
+    {
+        public GetUserByTokenRequestValidator()
+        {
+            RuleFor(token => token.UserId).NotEmpty().WithMessage(
+                "токена нет(хоть там и написано GetById)");
         }
     }
 }

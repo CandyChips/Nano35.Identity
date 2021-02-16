@@ -1,16 +1,16 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Api.Configurations;
 using Nano35.Identity.Api.ConfigureMiddleWares;
-using Nano35.Identity.Api.Helpers;
-using Nano35.Identity.Api.Requests.GenerateToken;
+using Nano35.Identity.Api.Requests.GetRoleById;
+using Nano35.Identity.Api.Requests.GetRoleByUserId;
+using Nano35.Identity.Api.Requests.GetUserById;
+using Nano35.Identity.Api.Requests.GetUsersByRoleId;
+using Nano35.Identity.Api.Requests.Register;
+using Nano35.Identity.Api.Validators;
 
 namespace Nano35.Identity.Api
 {
@@ -32,7 +32,12 @@ namespace Nano35.Identity.Api
             new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
             new Configurator(services, new ConfigurationOfControllers()).Configure();
             new Configurator(services, new ConfigurationOfFluidValidator()).Configure();
-            services.AddSingleton<IValidator<IGenerateTokenRequestContract>, GenerateTokenRequestValidator>();
+            services.AddSingleton<IValidator<IGenerateTokenRequestContract>, ValidatorOfGenerateTokenRequest>();
+            services.AddSingleton<IValidator<IGetRoleByIdRequestContract>, ValidatorOfGetRoleByIdRequest>();
+            services.AddSingleton<IValidator<IGetRoleByUserIdRequestContract>, ValidatorOfGetRoleByUserIdRequest>();
+            services.AddSingleton<IValidator<IGetUserByIdRequestContract>, ValidatorOfGetUserByIdRequest>();
+            services.AddSingleton<IValidator<IRegisterRequestContract>, ValidatorOfRegisterRequest>();
+            services.AddSingleton<IValidator<IGetUsersByRoleIdRequestContract>, ValidatorOfGetUsersByRoleIdRequest>();
 
         }
 

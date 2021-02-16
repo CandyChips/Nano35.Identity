@@ -112,11 +112,13 @@ namespace Nano35.Identity.Api.Controllers
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
-            var requestLogger = (ILogger<GetUserByIdRequest>) _services.GetService(typeof(ILogger<GetUserByIdRequest>));
+            var validator =
+                (IValidator<IGetUserByIdRequestContract>) _services.GetService(
+                    typeof(IValidator<IGetUserByIdRequestContract>));
             
             var result =
                 await new LoggedGetUserByIdRequest(logger,
-                        new ValidatedGetUserByIdRequest(
+                        new ValidatedGetUserByIdRequest(validator,
                             new GetUserByIdRequest(bus)
                             )
                         ).Ask(message);
@@ -142,10 +144,13 @@ namespace Nano35.Identity.Api.Controllers
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetUserByTokenRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByTokenRequest>));
             var auth = (ICustomAuthStateProvider) _services.GetService(typeof(ICustomAuthStateProvider));
+            var validator =
+                (IValidator<IGetUserByIdRequestContract>) _services.GetService(
+                    typeof(IValidator<IGetUserByIdRequestContract>));
             
             var result =
                 await new LoggedGetUserByTokenRequest(logger,
-                    new ValidatedGetUserByTokenRequest(
+                    new ValidatedGetUserByTokenRequest(validator,
                         new GetUserByTokenRequest(bus, auth)
                     )
                 ).Ask(new GetUserFromTokenHttpContext());
@@ -171,11 +176,13 @@ namespace Nano35.Identity.Api.Controllers
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetRoleByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetRoleByIdRequest>));
-            
+            var validator =
+                (IValidator<IGetRoleByIdRequestContract>) _services.GetService(
+                    typeof(IValidator<IGetRoleByIdRequestContract>));
             
             var result =
                 await new LoggedGetRoleByIdRequest(logger,
-                        new ValidatedGetRoleByIdRequest(
+                        new ValidatedGetRoleByIdRequest(validator,
                              new GetRoleByIdRequest(bus)
                              )
                         ).Ask(message);
@@ -231,12 +238,13 @@ namespace Nano35.Identity.Api.Controllers
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
-            
+            var validator =
+                (IValidator<IRegisterRequestContract>) _services.GetService(
+                    typeof(IValidator<IRegisterRequestContract>));
             var result =
                 await new LoggedRegisterRequest(logger,
-                        new ValidatedRegisterRequest(
-                            new RegisterRequest(bus)
-                            )
+                        new ValidatedRegisterRequest(validator,
+                            new RegisterRequest(bus))
                         ).Ask(message);
             return result switch
             {

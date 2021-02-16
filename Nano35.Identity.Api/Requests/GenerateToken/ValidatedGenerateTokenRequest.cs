@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.Linq;
 using FluentValidation;
 using System.Threading.Tasks;
 using Nano35.Contracts.Identity.Artifacts;
@@ -27,13 +25,6 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
             
         }
 
-        public class GenerateTokenContext :
-            IGenerateTokenRequestContract
-        {
-            public string Login { get; set; }
-            public string Password { get; set; }
-        }
-
         public async Task<IGenerateTokenResultContract> Ask(
             IGenerateTokenRequestContract input)
         {
@@ -47,13 +38,4 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
             return await _nextNode.Ask(input);
         }
     }
-    public class GenerateTokenRequestValidator :
-        AbstractValidator<IGenerateTokenRequestContract> 
-    {
-        public GenerateTokenRequestValidator()
-        {
-            RuleFor(token => token.Login).NotEmpty().WithMessage("лОГИН ПУСТОЙ БЛИН");
-            RuleFor(token => token.Password).NotEmpty().WithMessage("ПАРОЛЬ ПУСТОЙ БЛЯДЬ");
-        }
-    } 
 }
