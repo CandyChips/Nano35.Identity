@@ -1,37 +1,44 @@
+using System;
 using System.Threading.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Requests;
+using Nano35.Identity.Processor.Requests.GetRoleById;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.Consumers
 {
     public class GetRoleByIdConsumer : 
         IConsumer<IGetRoleByIdRequestContract>
     {
-        private readonly ILogger<GetRoleByIdConsumer> _logger;
-        private readonly MediatR.IMediator _mediator;
+        private readonly IServiceProvider  _services;
+        
         public GetRoleByIdConsumer(
-            ILogger<GetRoleByIdConsumer> logger,
-            IMediator mediator)
+            IServiceProvider services)
         {
-            _logger = logger;
-            _mediator = mediator;
+            _services = services;
         }
-        public async Task Consume(ConsumeContext<IGetRoleByIdRequestContract> context)
+        
+        public async Task Consume(
+            ConsumeContext<IGetRoleByIdRequestContract> context)
         {
-            _logger.LogInformation("IGetRoleByIdRequestContract tracked");
+            // Setup configuration of pipeline
+            var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
+            var logger = (ILogger<LoggedGetRoleByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetRoleByIdRequest>));
 
+            // Explore message of request
             var message = context.Message;
 
-            var request = new GetRoleByIdQuery()
-            {
-                RoleId = message.RoleId
-            };
-
-            var result = await _mediator.Send(request);
+            // Send request to pipeline
+            var result = 
+                await new LoggedGetRoleByIdRequest(logger,  
+                    new ValidatedGetRoleByIdRequest(
+                        new GetRoleByIdRequest(dbContext))
+                    ).Ask(message, context.CancellationToken);
             
+            // Check response of create client request
             switch (result)
             {
                 case IGetRoleByIdSuccessResultContract:

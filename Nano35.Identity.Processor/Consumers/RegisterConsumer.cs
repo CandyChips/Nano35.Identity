@@ -1,41 +1,46 @@
+using System;
 using System.Threading.Tasks;
 using MassTransit;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
+using Nano35.Identity.Processor.Models;
 using Nano35.Identity.Processor.Requests;
+using Nano35.Identity.Processor.Requests.Register;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.Consumers
 {
     public class RegisterConsumer : 
         IConsumer<IRegisterRequestContract>
     {
-        private readonly ILogger<RegisterConsumer> _logger;
-        private readonly MediatR.IMediator _mediator;
+        private readonly IServiceProvider  _services;
+        
         public RegisterConsumer(
-            ILogger<RegisterConsumer> logger, 
-            IMediator mediator)
+            IServiceProvider services)
         {
-            _logger = logger;
-            _mediator = mediator;
+            _services = services;
         }
-        public async Task Consume(ConsumeContext<IRegisterRequestContract> context)
+        
+        public async Task Consume(
+            ConsumeContext<IRegisterRequestContract> context)
         {
-            _logger.LogInformation("IRegisterRequestContract tracked");
+            // Setup configuration of pipeline
+            var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
+            var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
 
+            // Explore message of request
             var message = context.Message;
 
-            var request = new RegisterCommand()
-            {
-                NewUserId = message.NewUserId,
-                Phone = message.Phone,
-                Email = message.Email,
-                Password = message.Password,
-                PasswordConfirm = message.PasswordConfirm
-            };
-
-            var result = await _mediator.Send(request);
+            // Send request to pipeline
+            var result = 
+                await new LoggedRegisterRequest(logger,
+                    new ValidatedRegisterRequest(
+                        new RegisterRequest(userManager))
+                    ).Ask(message, context.CancellationToken);
             
+            // Check response of create client request
             switch (result)
             {
                 case IRegisterSuccessResultContract:

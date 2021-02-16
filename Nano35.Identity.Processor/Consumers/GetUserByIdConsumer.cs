@@ -1,38 +1,45 @@
+using System;
 using System.Threading.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Requests;
+using Nano35.Identity.Processor.Requests.GetAllRoles;
+using Nano35.Identity.Processor.Requests.GetAllUsers;
+using Nano35.Identity.Processor.Requests.GetUserById;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.Consumers
 {
     public class GetUserByIdConsumer : 
         IConsumer<IGetUserByIdRequestContract>
     {
-        private readonly ILogger<GetUserByIdConsumer> _logger;
-        private readonly MediatR.IMediator _mediator;
+        private readonly IServiceProvider  _services;
         
         public GetUserByIdConsumer(
-            ILogger<GetUserByIdConsumer> logger,
-            IMediator mediator)
+            IServiceProvider services)
         {
-            _logger = logger;
-            _mediator = mediator;
+            _services = services;
         }
+        
         public async Task Consume(ConsumeContext<IGetUserByIdRequestContract> context)
         {
-            _logger.LogInformation("IGetUserByIdRequestContract tracked");
+            // Setup configuration of pipeline
+            var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
+            var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
 
+            // Explore message of request
             var message = context.Message;
 
-            var request = new GetUserByIdQuery()
-            {
-                UserId = message.UserId
-            };
-
-            var result = await _mediator.Send(request);
+            // Send request to pipeline
+            var result = 
+                await new LoggedGetUserByIdRequest(logger,  
+                    new GetUserByIdValidator(
+                        new GetUserByIdRequest(dbContext))
+                    ).Ask(message, context.CancellationToken);
             
+            // Check response of create client request
             switch (result)
             {
                 case IGetUserByIdSuccessResultContract:

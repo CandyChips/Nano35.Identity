@@ -10,7 +10,9 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.GetUsersByRoleId
 {
     public class GetUsersByRoleIdRequest :
-        IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract>
+        IPipelineNode<
+            IGetUsersByRoleIdRequestContract, 
+            IGetUsersByRoleIdResultContract>
     {
         private readonly IBus _bus;
 
@@ -26,7 +28,9 @@ namespace Nano35.Identity.Api.Requests.GetUsersByRoleId
             var client = _bus.CreateRequestClient<IGetUsersByRoleIdRequestContract>(TimeSpan.FromSeconds(10));
             
             var response = await client
-                .GetResponse<IGetUsersByRoleIdSuccessResultContract, IGetUsersByRoleIdNotFoundResultContract>(input);
+                .GetResponse<
+                    IGetUsersByRoleIdSuccessResultContract, 
+                    IGetUsersByRoleIdNotFoundResultContract>(input);
             
             if (response.Is(out Response<IGetUsersByRoleIdSuccessResultContract> successResponse))
                 return successResponse.Message;

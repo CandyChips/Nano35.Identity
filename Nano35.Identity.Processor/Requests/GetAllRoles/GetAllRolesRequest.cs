@@ -10,7 +10,9 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 namespace Nano35.Identity.Processor.Requests.GetAllRoles
 {
     public class GetAllRolesRequest :
-        IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
+        IPipelineNode<
+            IGetAllRolesRequestContract, 
+            IGetAllRolesResultContract>
     {
         private readonly ApplicationContext _context;
 

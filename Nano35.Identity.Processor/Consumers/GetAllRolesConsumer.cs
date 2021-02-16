@@ -1,34 +1,42 @@
+using System;
 using System.Threading.Tasks;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Requests;
+using Nano35.Identity.Processor.Requests.GetAllRoles;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.Consumers
 {
     public class GetAllRolesConsumer : 
         IConsumer<IGetAllRolesRequestContract>
     {
-        private readonly ILogger<GetAllRolesConsumer> _logger;
-        private readonly MediatR.IMediator _mediator;
+        private readonly IServiceProvider  _services;
+        
         public GetAllRolesConsumer(
-            ILogger<GetAllRolesConsumer> logger, 
-            IMediator mediator)
+            IServiceProvider services)
         {
-            _logger = logger;
-            _mediator = mediator;
+            _services = services;
         }
+        
         public async Task Consume(ConsumeContext<IGetAllRolesRequestContract> context)
         {
-            _logger.LogInformation("IGetAllUsersRequestContract tracked");
+            // Setup configuration of pipeline
+            var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
+            var logger = (ILogger<LoggedGetAllRolesRequest>) _services.GetService(typeof(ILogger<LoggedGetAllRolesRequest>));
 
+            // Explore message of request
             var message = context.Message;
 
-            var request = new GetAllRolesQuery();
-
-            var result = await _mediator.Send(request);
+            // Send request to pipeline
+            var result = 
+                await new LoggedGetAllRolesRequest(logger,  
+                    new GetAllRolesRequest(dbContext)
+                ).Ask(message, context.CancellationToken);
             
+            // Check response of create client request
             switch (result)
             {
                 case IGetAllRolesSuccessResultContract:
