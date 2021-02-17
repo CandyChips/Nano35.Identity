@@ -144,15 +144,10 @@ namespace Nano35.Identity.Api.Controllers
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetUserByTokenRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByTokenRequest>));
             var auth = (ICustomAuthStateProvider) _services.GetService(typeof(ICustomAuthStateProvider));
-            var validator =
-                (IValidator<IGetUserByIdRequestContract>) _services.GetService(
-                    typeof(IValidator<IGetUserByIdRequestContract>));
-            
+
             var result =
                 await new LoggedGetUserByTokenRequest(logger,
-                    new ValidatedGetUserByTokenRequest(validator,
-                        new GetUserByTokenRequest(bus, auth)
-                    )
+                    new GetUserByTokenRequest(bus, auth)
                 ).Ask(new GetUserFromTokenHttpContext());
 
             return result switch
@@ -281,9 +276,7 @@ namespace Nano35.Identity.Api.Controllers
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
-            var validator =
-                (IValidator<IGenerateTokenRequestContract>) _services.GetService(
-                    typeof(IValidator<IGenerateTokenRequestContract>));
+            var validator = (IValidator<IGenerateTokenRequestContract>) _services.GetService(typeof(IValidator<IGenerateTokenRequestContract>));
             
             var result =
                 await new LoggedGenerateTokenRequest(logger,

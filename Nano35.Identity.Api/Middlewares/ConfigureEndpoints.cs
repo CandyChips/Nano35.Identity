@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace Nano35.Identity.Api.ConfigureMiddleWares
+namespace Nano35.Identity.Api.Middlewares
 {
     public static partial class ConfigureEndpoints
     {

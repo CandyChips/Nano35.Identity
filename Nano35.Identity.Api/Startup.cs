@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Api.Configurations;
-using Nano35.Identity.Api.ConfigureMiddleWares;
+using Nano35.Identity.Api.Middlewares;
 using Nano35.Identity.Api.Requests.GetRoleById;
 using Nano35.Identity.Api.Requests.GetRoleByUserId;
 using Nano35.Identity.Api.Requests.GetUserById;

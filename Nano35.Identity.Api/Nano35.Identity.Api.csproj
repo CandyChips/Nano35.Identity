@@ -19,4 +19,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.6.3" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ConfigureMiddleWares\AuthMiddleware.cs" />
+    <Compile Remove="Validators\ValidatorOfGetUserByTokenRequest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ConfigureMiddleWares" />
+  </ItemGroup>
 </Project>
