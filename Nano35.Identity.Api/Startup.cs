@@ -32,13 +32,6 @@ namespace Nano35.Identity.Api
             new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
             new Configurator(services, new ConfigurationOfControllers()).Configure();
             new Configurator(services, new ConfigurationOfFluidValidator()).Configure();
-            services.AddSingleton<IValidator<IGenerateTokenRequestContract>, ValidatorOfGenerateTokenRequest>();
-            services.AddSingleton<IValidator<IGetRoleByIdRequestContract>, ValidatorOfGetRoleByIdRequest>();
-            services.AddSingleton<IValidator<IGetRoleByUserIdRequestContract>, ValidatorOfGetRoleByUserIdRequest>();
-            services.AddSingleton<IValidator<IGetUserByIdRequestContract>, ValidatorOfGetUserByIdRequest>();
-            services.AddSingleton<IValidator<IRegisterRequestContract>, ValidatorOfRegisterRequest>();
-            services.AddSingleton<IValidator<IGetUsersByRoleIdRequestContract>, ValidatorOfGetUsersByRoleIdRequest>();
-
         }
 
         public void Configure(IApplicationBuilder app)
