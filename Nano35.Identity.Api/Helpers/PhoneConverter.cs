@@ -1,26 +1,18 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Nano35.Identity.Api.Helpers
+﻿namespace Nano35.Identity.Api.Helpers
 {
-    public class PhoneConverter :ICustomPhoneConverter
+    public static class PhoneConverter
     {
-        public string Phone { get; }
-
-        private string CurrentPhone => this.Phone; // Comes like +7(965)597-56-79
-
-        public void RuPhoneConverter()
+        public static string RuPhoneConverter(string currentPhone)// Comes like +7(800)555-35-35
         {
-            //string result =
-            //return result;
+            var result = currentPhone
+                .Replace("+", "")
+                .Replace("-", "")
+                .Replace("(", "")
+                .Replace(")", ""); // 78005553535
+            result = result.Substring(1); // 8005553535
+            return result; 
         }
         
     }
-    
-    public interface ICustomPhoneConverter
-    {
-        string Phone {get;}
-    }
+
 }
