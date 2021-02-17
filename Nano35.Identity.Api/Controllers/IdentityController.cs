@@ -277,8 +277,8 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GenerateUserToken(
             [FromBody] GenerateUserTokenBody body)
         {
-            GenerateUserTokenHttpContext message = new GenerateUserTokenHttpContext(body);
-
+            var message = new GenerateUserTokenHttpContext(body);
+            
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
             var validator =
@@ -312,7 +312,7 @@ namespace Nano35.Identity.Api.Controllers
         //        _ => BadRequest()
         //    };
         //}
-//
+        
         //[HttpPut]
         //[Route("UpdatePassword")]
         //public async Task<IActionResult> UpdatePassword(

@@ -81,14 +81,14 @@ namespace Nano35.Identity.Processor.Requests.Register
                 {
                     return new RegisterErrorResultContract() {Error = "Пароли не совпадают"};
                 }
-                /*var code = await UserManager.GenerateEmailConfirmationTokenAsync(TmpWorker);
-                var callbackUrl = Url.Action(
-                    "ConfirmEmail",
-                    "Account",
-                    new { userId = TmpWorker.Id, code = code },
-                    protocol: HttpContext.Request.Scheme);
-                await EmailService.SendEmailAsync(model.OrgEmail, "Confirm your account",
-                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");*/
+                //var code = await UserManager.GenerateEmailConfirmationTokenAsync(TmpWorker);
+                //var callbackUrl = Url.Action(
+                //    "ConfirmEmail",
+                //    "Account",
+                //    new { userId = TmpWorker.Id, code = code },
+                //    protocol: HttpContext.Request.Scheme);
+                //await EmailService.SendEmailAsync(model.OrgEmail, "Confirm your account",
+                //$"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
                 return new RegisterSuccessResultContract();
             }
     }

@@ -20,6 +20,7 @@ namespace Nano35.Identity.Processor.Requests.ConfirmEmailOfUser
             IGenerateTokenRequestContract input, 
             CancellationToken cancellationToken)
         {
+            // ToDo FIX IT NOW!!!
             throw new NotImplementedException();
         }
     }
