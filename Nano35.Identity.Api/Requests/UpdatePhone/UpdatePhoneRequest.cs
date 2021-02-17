@@ -23,6 +23,9 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
         public async Task<IUpdatePhoneResultContract> Ask(
             IUpdatePhoneRequestContract input)
         {
+            
+            input.Phone = PhoneConverter.RuPhoneConverter(input.Phone);
+
             var client = _bus.CreateRequestClient<IUpdatePhoneRequestContract>(TimeSpan.FromSeconds(10));
             
             var response = await client

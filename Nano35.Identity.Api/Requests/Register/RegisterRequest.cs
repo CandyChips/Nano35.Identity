@@ -5,6 +5,7 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
+using Nano35.Identity.Api.Helpers;
 
 namespace Nano35.Identity.Api.Requests.Register
 {
@@ -22,6 +23,9 @@ namespace Nano35.Identity.Api.Requests.Register
         public async Task<IRegisterResultContract> Ask(
             IRegisterRequestContract input)
         {
+            
+            input.Phone = PhoneConverter.RuPhoneConverter(input.Phone);
+            
             var client = _bus.CreateRequestClient<IRegisterRequestContract>(TimeSpan.FromSeconds(10));
             
             var response = await client
