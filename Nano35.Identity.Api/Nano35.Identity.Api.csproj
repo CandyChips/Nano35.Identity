@@ -23,7 +23,4 @@
     <Compile Remove="ConfigureMiddleWares\AuthMiddleware.cs" />
     <Compile Remove="Validators\ValidatorOfGetUserByTokenRequest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ConfigureMiddleWares" />
-  </ItemGroup>
 </Project>

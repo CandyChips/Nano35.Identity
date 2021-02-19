@@ -4,23 +4,31 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.UpdatePassword
 {
-    public class ValidatedUpdatePasswordRequestErrorResult : IUpdatePasswordErrorResultContract
+    public class ValidatedUpdatePasswordRequestErrorResult : 
+        IUpdatePasswordErrorResultContract
     {
         public string Error { get; set; }
     }
     
     public class UpdatePasswordValidator:
-        IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
+        IPipelineNode<
+            IUpdatePasswordRequestContract,
+            IUpdatePasswordResultContract>
     {
-        private readonly IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IUpdatePasswordRequestContract,
+            IUpdatePasswordResultContract> _nextNode;
 
         public UpdatePasswordValidator(
-            IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> nextNode)
+            IPipelineNode<
+                IUpdatePasswordRequestContract,
+                IUpdatePasswordResultContract> nextNode)
         {
             _nextNode = nextNode;
         }
 
-        public async Task<IUpdatePasswordResultContract> Ask(IUpdatePasswordRequestContract input,
+        public async Task<IUpdatePasswordResultContract> Ask(
+            IUpdatePasswordRequestContract input,
             CancellationToken cancellationToken)
         {
             if (false)

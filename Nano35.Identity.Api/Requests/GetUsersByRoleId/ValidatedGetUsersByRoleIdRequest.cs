@@ -5,20 +5,28 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetUsersByRoleId
 {
-    public class ValidatedGetUsersByRoleIdRequestErrorResult : IGetUsersByRoleIdNotFoundResultContract
+    public class ValidatedGetUsersByRoleIdRequestErrorResult :
+        IGetUsersByRoleIdNotFoundResultContract
     {
         public string Message { get; set; }
     }
     
     public class ValidatedGetUsersByRoleIdRequest:
-        IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract>
+        IPipelineNode<
+            IGetUsersByRoleIdRequestContract, 
+            IGetUsersByRoleIdResultContract>
     {
         private readonly IValidator<IGetUsersByRoleIdRequestContract> _validator;
-        private readonly IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            IGetUsersByRoleIdRequestContract,
+            IGetUsersByRoleIdResultContract> _nextNode;
 
         public ValidatedGetUsersByRoleIdRequest(
             IValidator<IGetUsersByRoleIdRequestContract> validator,
-            IPipelineNode<IGetUsersByRoleIdRequestContract, IGetUsersByRoleIdResultContract> nextNode)
+            IPipelineNode<
+                IGetUsersByRoleIdRequestContract, 
+                IGetUsersByRoleIdResultContract> nextNode)
         {
             _validator = validator;
             _nextNode = nextNode;
@@ -35,15 +43,6 @@ namespace Nano35.Identity.Api.Requests.GetUsersByRoleId
                     {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
             }
             return await _nextNode.Ask(input);
-        }
-    }
-
-    public class GetUsersByRoleIdRequestValidator :
-        AbstractValidator<IGetUsersByRoleIdRequestContract>
-    {
-        public GetUsersByRoleIdRequestValidator()
-        {
-            RuleFor(id => id.Id).NotEmpty().WithMessage("нет id");
         }
     }
 }

@@ -1,0 +1,17 @@
+﻿version: "3"
+services:
+  nano35-identity-api:
+    image: bushemi2021/nano35.identity.api:latest
+    ports:
+      - "8000:80"
+    networks:
+      - nano35-network
+
+  nano35-identity-processor:
+    image: bushemi2021/nano35.identity.processor:latest
+    networks:
+      - nano35-network
+
+networks:
+  nano35-network:
+    driver: bridge

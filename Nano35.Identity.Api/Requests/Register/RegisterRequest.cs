@@ -10,7 +10,9 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.Register
 {
     public class RegisterRequest :
-        IPipelineNode<IRegisterRequestContract, IRegisterResultContract>
+        IPipelineNode<
+            IRegisterRequestContract, 
+            IRegisterResultContract>
     {
         private readonly IBus _bus;
 

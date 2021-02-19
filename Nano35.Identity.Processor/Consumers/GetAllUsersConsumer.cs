@@ -1,10 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using MassTransit;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Processor.Requests;
 using Nano35.Identity.Processor.Requests.GetAllUsers;
 using Nano35.Identity.Processor.Services.Contexts;
 

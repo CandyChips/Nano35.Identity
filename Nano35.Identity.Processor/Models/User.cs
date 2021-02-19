@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Nano35.Contracts.Identity.Models;
-using Nano35.Contracts.Instance.Models;
 
 namespace Nano35.Identity.Processor.Models
 {

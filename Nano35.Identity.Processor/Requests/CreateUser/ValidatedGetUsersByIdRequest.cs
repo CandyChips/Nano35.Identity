@@ -4,23 +4,31 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.CreateUser
 {
-    public class ValidatedCreateUserRequestErrorResult : ICreateUserErrorResultContract
+    public class ValidatedCreateUserRequestErrorResult : 
+        ICreateUserErrorResultContract
     {
         public string Error { get; set; }
     }
     
     public class CreateUserValidator:
-        IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract>
+        IPipelineNode<
+            ICreateUserRequestContract,
+            ICreateUserResultContract>
     {
-        private readonly IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract> _nextNode;
+        private readonly IPipelineNode<
+            ICreateUserRequestContract, 
+            ICreateUserResultContract> _nextNode;
 
         public CreateUserValidator(
-            IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract> nextNode)
+            IPipelineNode<
+                ICreateUserRequestContract,
+                ICreateUserResultContract> nextNode)
         {
             _nextNode = nextNode;
         }
 
-        public async Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input,
+        public async Task<ICreateUserResultContract> Ask(
+            ICreateUserRequestContract input,
             CancellationToken cancellationToken)
         {
             if (false)

@@ -6,14 +6,21 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.GetUserByToken
 {
     public class LoggedGetUserByTokenRequest :
-        IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>
+        IPipelineNode<
+            IGetUserByIdRequestContract,
+            IGetUserByIdResultContract>
     {
         private readonly ILogger<LoggedGetUserByTokenRequest> _logger;
-        private readonly IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            IGetUserByIdRequestContract,
+            IGetUserByIdResultContract> _nextNode;
 
         public LoggedGetUserByTokenRequest(
             ILogger<LoggedGetUserByTokenRequest> logger,
-            IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> nextNode)
+            IPipelineNode<
+                IGetUserByIdRequestContract,
+                IGetUserByIdResultContract> nextNode)
         {
             _nextNode = nextNode;
             _logger = logger;

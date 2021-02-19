@@ -4,18 +4,25 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.Register
 {
-    public class ValidatedRegisterRequestErrorResult : IRegisterErrorResultContract
+    public class ValidatedRegisterRequestErrorResult :
+        IRegisterErrorResultContract
     {
         public string Error { get; set; }
     }
     
     public class ValidatedRegisterRequest:
-        IPipelineNode<IRegisterRequestContract, IRegisterResultContract>
+        IPipelineNode<
+            IRegisterRequestContract, 
+            IRegisterResultContract>
     {
-        private readonly IPipelineNode<IRegisterRequestContract, IRegisterResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IRegisterRequestContract, 
+            IRegisterResultContract> _nextNode;
 
         public ValidatedRegisterRequest(
-            IPipelineNode<IRegisterRequestContract, IRegisterResultContract> nextNode)
+            IPipelineNode<
+                IRegisterRequestContract,
+                IRegisterResultContract> nextNode)
         {
             _nextNode = nextNode;
         }

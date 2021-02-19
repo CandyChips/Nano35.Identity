@@ -3,18 +3,25 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetAllRoles
 {
-    public class ValidatedGetAllRolesRequestErrorResult : IGetAllRolesErrorResultContract
+    public class ValidatedGetAllRolesRequestErrorResult :
+        IGetAllRolesErrorResultContract
     {
         public string Message { get; set; }
     }
     
     public class ValidatedGetAllRolesRequest:
-        IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
+        IPipelineNode<
+            IGetAllRolesRequestContract, 
+            IGetAllRolesResultContract>
     {
-        private readonly IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IGetAllRolesRequestContract,
+            IGetAllRolesResultContract> _nextNode;
 
         public ValidatedGetAllRolesRequest(
-            IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract> nextNode)
+            IPipelineNode<
+                IGetAllRolesRequestContract,
+                IGetAllRolesResultContract> nextNode)
         {
             _nextNode = nextNode;
         }

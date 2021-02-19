@@ -10,7 +10,9 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
     public class UpdatePhoneRequest :
-        IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
+        IPipelineNode<
+            IUpdatePhoneRequestContract, 
+            IUpdatePhoneResultContract>
     {
         private readonly IBus _bus;
 

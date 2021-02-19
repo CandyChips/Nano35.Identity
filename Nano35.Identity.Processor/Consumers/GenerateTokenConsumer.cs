@@ -1,14 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using MassTransit;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Models;
-using Nano35.Identity.Processor.Requests;
 using Nano35.Identity.Processor.Requests.GenerateToken;
-using Nano35.Identity.Processor.Services.Contexts;
 using Nano35.Identity.Processor.Services.Helpers;
 
 namespace Nano35.Identity.Processor.Consumers

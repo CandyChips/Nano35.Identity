@@ -7,20 +7,27 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Processor.Requests.GetUserById
 {
     public class LoggedGetUserByIdRequest :
-        IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>
+        IPipelineNode<
+            IGetUserByIdRequestContract,
+            IGetUserByIdResultContract>
     {
         private readonly ILogger<LoggedGetUserByIdRequest> _logger;
-        private readonly IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IGetUserByIdRequestContract,
+            IGetUserByIdResultContract> _nextNode;
 
         public LoggedGetUserByIdRequest(
             ILogger<LoggedGetUserByIdRequest> logger,
-            IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> nextNode)
+            IPipelineNode<
+                IGetUserByIdRequestContract,
+                IGetUserByIdResultContract> nextNode)
         {
             _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IGetUserByIdResultContract> Ask(IGetUserByIdRequestContract input,
+        public async Task<IGetUserByIdResultContract> Ask(
+            IGetUserByIdRequestContract input,
             CancellationToken cancellationToken)
         {
             _logger.LogInformation($"GetUserByIdLogger starts on: {DateTime.Now}");

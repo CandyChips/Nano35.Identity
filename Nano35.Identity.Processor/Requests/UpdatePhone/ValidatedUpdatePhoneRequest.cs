@@ -4,23 +4,31 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.UpdatePhone
 {
-    public class ValidatedUpdatePhoneRequestErrorResult : IUpdatePhoneErrorResultContract
+    public class ValidatedUpdatePhoneRequestErrorResult : 
+        IUpdatePhoneErrorResultContract
     {
         public string Error { get; set; }
     }
     
     public class UpdatePhoneValidator:
-        IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
+        IPipelineNode<
+            IUpdatePhoneRequestContract,
+            IUpdatePhoneResultContract>
     {
-        private readonly IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IUpdatePhoneRequestContract, 
+            IUpdatePhoneResultContract> _nextNode;
 
         public UpdatePhoneValidator(
-            IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> nextNode)
+            IPipelineNode<
+                IUpdatePhoneRequestContract,
+                IUpdatePhoneResultContract> nextNode)
         {
             _nextNode = nextNode;
         }
 
-        public async Task<IUpdatePhoneResultContract> Ask(IUpdatePhoneRequestContract input,
+        public async Task<IUpdatePhoneResultContract> Ask(
+            IUpdatePhoneRequestContract input,
             CancellationToken cancellationToken)
         {
             if (false)

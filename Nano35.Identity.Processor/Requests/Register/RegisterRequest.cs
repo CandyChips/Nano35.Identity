@@ -1,28 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
 using Nano35.Identity.Processor.Models;
-using Nano35.Identity.Processor.Requests.Behaviours;
-using Nano35.Identity.Processor.Services.Contexts;
-using Nano35.Identity.Processor.Services.MappingProfiles;
 
 namespace Nano35.Identity.Processor.Requests.Register
 {
     public class RegisterRequest :
-        IPipelineNode<IRegisterRequestContract, IRegisterResultContract>
+        IPipelineNode<
+            IRegisterRequestContract, 
+            IRegisterResultContract>
     {
-        public Guid NewUserId { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string PasswordConfirm { get; set; }
-        
         private readonly UserManager<User> _userManager;
 
         public RegisterRequest(

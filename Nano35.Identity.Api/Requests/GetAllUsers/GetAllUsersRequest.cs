@@ -9,7 +9,9 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.GetAllUsers
 {
     public class GetAllUsersRequest :
-        IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>
+        IPipelineNode<
+            IGetAllUsersRequestContract, 
+            IGetAllUsersResultContract>
     {
         private readonly IBus _bus;
 

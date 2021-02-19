@@ -4,23 +4,31 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.GetRoleById
 {
-    public class ValidatedGetRoleByIdRequestErrorResult : IGetRoleByIdErrorResultContract
+    public class ValidatedGetRoleByIdRequestErrorResult :
+        IGetRoleByIdErrorResultContract
     {
         public string Message { get; set; }
     }
     
     public class ValidatedGetRoleByIdRequest:
-        IPipelineNode<IGetRoleByIdRequestContract, IGetRoleByIdResultContract>
+        IPipelineNode<
+            IGetRoleByIdRequestContract,
+            IGetRoleByIdResultContract>
     {
-        private readonly IPipelineNode<IGetRoleByIdRequestContract, IGetRoleByIdResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IGetRoleByIdRequestContract, 
+            IGetRoleByIdResultContract> _nextNode;
 
         public ValidatedGetRoleByIdRequest(
-            IPipelineNode<IGetRoleByIdRequestContract, IGetRoleByIdResultContract> nextNode)
+            IPipelineNode<
+                IGetRoleByIdRequestContract,
+                IGetRoleByIdResultContract> nextNode)
         {
             _nextNode = nextNode;
         }
 
-        public async Task<IGetRoleByIdResultContract> Ask(IGetRoleByIdRequestContract input,
+        public async Task<IGetRoleByIdResultContract> Ask(
+            IGetRoleByIdRequestContract input,
             CancellationToken cancellationToken)
         {
             if (false)

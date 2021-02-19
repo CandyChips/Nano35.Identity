@@ -7,14 +7,17 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.GetUserByToken
 {
     public class GetUserByTokenRequest :
-        IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>
+        IPipelineNode<
+            IGetUserByIdRequestContract,
+            IGetUserByIdResultContract>
     {
-        
         private readonly IBus _bus;
+        
         private readonly ICustomAuthStateProvider _auth;
 
         public GetUserByTokenRequest(
-            IBus bus, ICustomAuthStateProvider auth)
+            IBus bus, 
+            ICustomAuthStateProvider auth)
         {
             _bus = bus;
             _auth = auth;

@@ -6,20 +6,27 @@ using Nano35.Identity.Api.Requests.GenerateToken;
 
 namespace Nano35.Identity.Api.Requests.GetUserByToken
 {
-    public class ValidatedGetUserByTokenRequestErrorResult : IGetUserByIdErrorResultContract
+    public class ValidatedGetUserByTokenRequestErrorResult :
+        IGetUserByIdErrorResultContract
     {
         public string Message { get; set; }
     }
     
     public class ValidatedGetUserByTokenRequest:
-        IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>
+        IPipelineNode<
+            IGetUserByIdRequestContract,
+            IGetUserByIdResultContract>
     {
         private readonly IValidator<IGetUserByIdRequestContract> _validator;
-        private readonly IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IGetUserByIdRequestContract, 
+            IGetUserByIdResultContract> _nextNode;
 
         public ValidatedGetUserByTokenRequest(
             IValidator<IGetUserByIdRequestContract> validator,
-            IPipelineNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> nextNode)
+            IPipelineNode<
+                IGetUserByIdRequestContract,
+                IGetUserByIdResultContract> nextNode)
         {
             _validator = validator;
             _nextNode = nextNode;
@@ -36,16 +43,6 @@ namespace Nano35.Identity.Api.Requests.GetUserByToken
                     {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
             }
             return await _nextNode.Ask(input);
-        }
-    }
-
-    public class GetUserByTokenRequestValidator :
-        AbstractValidator<IGetUserByIdRequestContract>
-    {
-        public GetUserByTokenRequestValidator()
-        {
-            RuleFor(token => token.UserId).NotEmpty().WithMessage(
-                "токена нет(хоть там и написано GetById)");
         }
     }
 }

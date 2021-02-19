@@ -5,20 +5,28 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GenerateToken
 {
-    public class ValidatedGenerateTokenRequestErrorResult : IGenerateTokenErrorResultContract
+    public class ValidatedGenerateTokenRequestErrorResult :
+        IGenerateTokenErrorResultContract
     {
         public string Message { get; set; }
     }
     
     public class ValidatedGenerateTokenRequest:
-        IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+        IPipelineNode<
+            IGenerateTokenRequestContract,
+            IGenerateTokenResultContract>
     {
         private readonly IValidator<IGenerateTokenRequestContract> _validator;
-        private readonly IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            IGenerateTokenRequestContract,
+            IGenerateTokenResultContract> _nextNode;
         
         public ValidatedGenerateTokenRequest(
             IValidator<IGenerateTokenRequestContract> validator,
-            IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> nextNode)
+            IPipelineNode<
+                IGenerateTokenRequestContract,
+                IGenerateTokenResultContract> nextNode)
         {   
             _validator = validator;
             _nextNode = nextNode;

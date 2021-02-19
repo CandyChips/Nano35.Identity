@@ -3,14 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
-using Nano35.Identity.Processor.Requests.Behaviours;
 using Nano35.Identity.Processor.Services.Contexts;
 using Nano35.Identity.Processor.Services.MappingProfiles;
 
 namespace Nano35.Identity.Processor.Requests.GetAllUsers
 {
     public class GetAllUsersRequest :
-        IPipelineNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>
+        IPipelineNode<
+            IGetAllUsersRequestContract,
+            IGetAllUsersResultContract>
     {
         private readonly ApplicationContext _context;
 

@@ -9,7 +9,9 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.GetAllRoles
 {
     public class GetAllRolesRequest :
-        IPipelineNode<IGetAllRolesRequestContract, IGetAllRolesResultContract>
+        IPipelineNode<
+            IGetAllRolesRequestContract,
+            IGetAllRolesResultContract>
     {
         private readonly IBus _bus;
 

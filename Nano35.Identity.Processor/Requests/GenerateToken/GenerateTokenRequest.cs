@@ -1,22 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Models;
-using Nano35.Identity.Processor.Requests.Behaviours;
 using Nano35.Identity.Processor.Services.Helpers;
 
 
 namespace Nano35.Identity.Processor.Requests.GenerateToken
 {
     public class GenerateTokenRequest :
-        IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+        IPipelineNode<
+            IGenerateTokenRequestContract, 
+            IGenerateTokenResultContract>
     {
-        public string Login { get; set; }
-        
-        public string Password { get; set; }
-        
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtGenerator _jwtGenerator;

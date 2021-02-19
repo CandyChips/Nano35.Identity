@@ -5,20 +5,28 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.CreateUser
 {
-    public class ValidatedCreateUserRequestErrorResult : ICreateUserErrorResultContract
+    public class ValidatedCreateUserRequestErrorResult :
+        ICreateUserErrorResultContract
     {
         public string Error { get; set; }
     }
     
     public class ValidatedCreateUserRequest:
-        IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract>
+        IPipelineNode<
+            ICreateUserRequestContract,
+            ICreateUserResultContract>
     {
         private readonly IValidator<ICreateUserRequestContract> _validator;
-        private readonly IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            ICreateUserRequestContract, 
+            ICreateUserResultContract> _nextNode;
         
         public ValidatedCreateUserRequest(
             IValidator<ICreateUserRequestContract> validator,
-            IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract> nextNode)
+            IPipelineNode<
+                ICreateUserRequestContract, 
+                ICreateUserResultContract> nextNode)
         {   
             _validator = validator;
             _nextNode = nextNode;

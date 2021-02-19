@@ -3,18 +3,25 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
-    public class ValidatedUpdatePhoneRequestErrorResult : IUpdatePhoneErrorResultContract
+    public class ValidatedUpdatePhoneRequestErrorResult :
+        IUpdatePhoneErrorResultContract
     {
         public string Error { get; set; }
     }
     
     public class ValidatedUpdatePhoneRequest:
-        IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
+        IPipelineNode<
+            IUpdatePhoneRequestContract,
+            IUpdatePhoneResultContract>
     {
-        private readonly IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> _nextNode;
+        private readonly IPipelineNode<
+            IUpdatePhoneRequestContract, 
+            IUpdatePhoneResultContract> _nextNode;
 
         public ValidatedUpdatePhoneRequest(
-            IPipelineNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> nextNode)
+            IPipelineNode<
+                IUpdatePhoneRequestContract,
+                IUpdatePhoneResultContract> nextNode)
         {
             _nextNode = nextNode;
         }

@@ -7,26 +7,33 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Processor.Requests.GetRoleByUserId
 {
     public class LoggedGetRoleByUserIdRequest :
-        IPipelineNode<IGetRoleByUserIdRequestContract, IGetRoleByUserIdResultContract>
+        IPipelineNode<
+            IGetRoleByUserIdRequestContract,
+            IGetRoleByUserIdResultContract>
     {
         private readonly ILogger<LoggedGetRoleByUserIdRequest> _logger;
-        private readonly IPipelineNode<IGetRoleByUserIdRequestContract, IGetRoleByUserIdResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            IGetRoleByUserIdRequestContract, 
+            IGetRoleByUserIdResultContract> _nextNode;
 
         public LoggedGetRoleByUserIdRequest(
             ILogger<LoggedGetRoleByUserIdRequest> logger,
-            IPipelineNode<IGetRoleByUserIdRequestContract, IGetRoleByUserIdResultContract> nextNode)
+            IPipelineNode<
+                IGetRoleByUserIdRequestContract,
+                IGetRoleByUserIdResultContract> nextNode)
         {
             _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IGetRoleByUserIdResultContract> Ask(IGetRoleByUserIdRequestContract input,
+        public async Task<IGetRoleByUserIdResultContract> Ask(
+            IGetRoleByUserIdRequestContract input,
             CancellationToken cancellationToken)
         {
             _logger.LogInformation($"GetRoleByUserIdLogger starts on: {DateTime.Now}");
             var result = await _nextNode.Ask(input, cancellationToken);
             _logger.LogInformation($"GetRoleByUserIdLogger ends on: {DateTime.Now}");
-            _logger.LogInformation("");
             return result;
         }
     }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation;
 using Nano35.Contracts.Identity.Artifacts;
 
-namespace Nano35.Identity.Api.Requests.GetUserById
+namespace Nano35.Identity.Processor.Requests.GetUserById
 {
-    public class ValidatedGetUserByIdRequestErrorResult : 
+    public class ValidatedGetUserByIdRequestErrorResult :
         IGetUserByIdErrorResultContract
     {
         public string Message { get; set; }
@@ -14,35 +12,30 @@ namespace Nano35.Identity.Api.Requests.GetUserById
     
     public class ValidatedGetUserByIdRequest:
         IPipelineNode<
-            IGetUserByIdRequestContract,
+            IGetUserByIdRequestContract, 
             IGetUserByIdResultContract>
     {
-        private readonly IValidator<IGetUserByIdRequestContract> _validator;
-        
         private readonly IPipelineNode<
             IGetUserByIdRequestContract, 
             IGetUserByIdResultContract> _nextNode;
 
         public ValidatedGetUserByIdRequest(
-            IValidator<IGetUserByIdRequestContract> validator,
             IPipelineNode<
                 IGetUserByIdRequestContract,
                 IGetUserByIdResultContract> nextNode)
         {
-            _validator = validator;
             _nextNode = nextNode;
         }
 
         public async Task<IGetUserByIdResultContract> Ask(
-            IGetUserByIdRequestContract input)
+            IGetUserByIdRequestContract input,
+            CancellationToken cancellationToken)
         {
-            var result = await _validator.ValidateAsync(input);
-            if (!result.IsValid)
+            if (false)
             {
-                return new ValidatedGetUserByIdRequestErrorResult() 
-                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return new ValidatedGetUserByIdRequestErrorResult() {Message = "Ошибка валидации"};
             }
-            return await _nextNode.Ask(input);
+            return await _nextNode.Ask(input, cancellationToken);
         }
     }
 }

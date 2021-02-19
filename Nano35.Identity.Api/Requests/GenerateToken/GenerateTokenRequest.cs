@@ -9,7 +9,9 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.GenerateToken
 {
     public class GenerateTokenRequest :
-        IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+        IPipelineNode<
+            IGenerateTokenRequestContract,
+            IGenerateTokenResultContract>
     {
         private readonly IBus _bus;
 

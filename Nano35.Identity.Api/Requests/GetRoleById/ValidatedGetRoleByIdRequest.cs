@@ -5,20 +5,28 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GetRoleById
 {
-    public class ValidatedGetRoleByIdRequestErrorResult : IGetRoleByIdErrorResultContract
+    public class ValidatedGetRoleByIdRequestErrorResult :
+        IGetRoleByIdErrorResultContract
     {
         public string Message { get; set; }
     }
     
     public class ValidatedGetRoleByIdRequest:
-        IPipelineNode<IGetRoleByIdRequestContract, IGetRoleByIdResultContract>
+        IPipelineNode<
+            IGetRoleByIdRequestContract, 
+            IGetRoleByIdResultContract>
     {
         private readonly IValidator<IGetRoleByIdRequestContract> _validator;
-        private readonly IPipelineNode<IGetRoleByIdRequestContract, IGetRoleByIdResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            IGetRoleByIdRequestContract, 
+            IGetRoleByIdResultContract> _nextNode;
 
         public ValidatedGetRoleByIdRequest(
             IValidator<IGetRoleByIdRequestContract> validator,
-            IPipelineNode<IGetRoleByIdRequestContract, IGetRoleByIdResultContract> nextNode)
+            IPipelineNode<
+                IGetRoleByIdRequestContract,
+                IGetRoleByIdResultContract> nextNode)
         {
             _validator = validator;
             _nextNode = nextNode;
@@ -35,16 +43,6 @@ namespace Nano35.Identity.Api.Requests.GetRoleById
                     {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
             }
             return await _nextNode.Ask(input);
-        }
-    }
-
-    public class GetRoleByIdRequestValidator:
-        AbstractValidator<IGetRoleByIdRequestContract>
-    {
-
-        public GetRoleByIdRequestValidator()
-        {
-            RuleFor(id => id.RoleId).NotEmpty().WithMessage("Нет Id");
         }
     }
 }

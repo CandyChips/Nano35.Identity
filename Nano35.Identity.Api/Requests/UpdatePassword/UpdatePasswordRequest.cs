@@ -10,7 +10,9 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.UpdatePassword
 {
     public class UpdatePasswordRequest :
-        IPipelineNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
+        IPipelineNode<
+            IUpdatePasswordRequestContract, 
+            IUpdatePasswordResultContract>
     {
         private readonly IBus _bus;
 

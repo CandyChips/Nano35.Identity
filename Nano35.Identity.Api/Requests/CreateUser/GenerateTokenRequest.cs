@@ -9,7 +9,9 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.CreateUser
 {
     public class CreateUserRequest :
-        IPipelineNode<ICreateUserRequestContract, ICreateUserResultContract>
+        IPipelineNode<
+            ICreateUserRequestContract, 
+            ICreateUserResultContract>
     {
         private readonly IBus _bus;
 

@@ -7,14 +7,21 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Processor.Requests.GenerateToken
 {
     public class LoggedGenerateTokenRequest :
-        IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+        IPipelineNode<
+            IGenerateTokenRequestContract, 
+            IGenerateTokenResultContract>
     {
         private readonly ILogger<LoggedGenerateTokenRequest> _logger;
-        private readonly IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> _nextNode;
+        
+        private readonly IPipelineNode<
+            IGenerateTokenRequestContract,
+            IGenerateTokenResultContract> _nextNode;
 
         public LoggedGenerateTokenRequest(
             ILogger<LoggedGenerateTokenRequest> logger,
-            IPipelineNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> nextNode)
+            IPipelineNode<
+                IGenerateTokenRequestContract, 
+                IGenerateTokenResultContract> nextNode)
         {
             _nextNode = nextNode;
             _logger = logger;

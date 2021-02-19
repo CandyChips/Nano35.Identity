@@ -72,8 +72,7 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        public class GetAllRolesHttpContext :
-            IGetAllRolesRequestContract
+        public class GetAllRolesHttpContext : IGetAllRolesRequestContract
         {
         }
         
@@ -190,32 +189,30 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-       
-           
-            public class RegisterHttpContext : IRegisterRequestContract
-            {
-                public Guid NewUserId { get; set; }
-                public string Phone { get; set; }
-                public string Email { get; set; }
-                public string Password { get; set; }
-                public string PasswordConfirm { get; set; }
-                
-                public RegisterHttpContext(RegisterHttpContextHeader head, RegisterHttpContextBody body)
-                {
-                    NewUserId = head.NewUserId;
-                    Phone = body.Phone;
-                    Email = body.Email;
-                    Password = body.Password;
-                    PasswordConfirm = body.PasswordConfirm;
-                }
-            }
+        public class RegisterHttpContext : IRegisterRequestContract
+        {
+            public Guid NewUserId { get; set; }
+            public string Phone { get; set; }
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public string PasswordConfirm { get; set; }
             
-            public class RegisterHttpContextHeader
+            public RegisterHttpContext(RegisterHttpContextHeader head, RegisterHttpContextBody body)
             {
-                public Guid NewUserId { get; set; }
+                NewUserId = head.NewUserId;
+                Phone = body.Phone;
+                Email = body.Email;
+                Password = body.Password;
+                PasswordConfirm = body.PasswordConfirm;
             }
-            
-            public class RegisterHttpContextBody
+        }
+        
+        public class RegisterHttpContextHeader
+        {
+            public Guid NewUserId { get; set; }
+        }
+        
+        public class RegisterHttpContextBody
             {
                 public string Phone { get; set; }
                 public string Email { get; set; }
@@ -233,14 +230,14 @@ namespace Nano35.Identity.Api.Controllers
             
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
-            var validator =
-                (IValidator<IRegisterRequestContract>) _services.GetService(
-                    typeof(IValidator<IRegisterRequestContract>));
+            var validator = (IValidator<IRegisterRequestContract>) _services.GetService(typeof(IValidator<IRegisterRequestContract>));
+            
             var result =
                 await new LoggedRegisterRequest(logger,
                         new ValidatedRegisterRequest(validator,
                             new RegisterRequest(bus))
                         ).Ask(message);
+            
             return result switch
             {
                 IRegisterSuccessResultContract => Ok(result),
