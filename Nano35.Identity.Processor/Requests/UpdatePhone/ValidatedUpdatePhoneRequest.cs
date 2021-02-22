@@ -10,7 +10,7 @@ namespace Nano35.Identity.Processor.Requests.UpdatePhone
         public string Error { get; set; }
     }
     
-    public class UpdatePhoneValidator:
+    public class ValidatedUpdatePhoneRequest:
         IPipelineNode<
             IUpdatePhoneRequestContract,
             IUpdatePhoneResultContract>
@@ -19,7 +19,7 @@ namespace Nano35.Identity.Processor.Requests.UpdatePhone
             IUpdatePhoneRequestContract, 
             IUpdatePhoneResultContract> _nextNode;
 
-        public UpdatePhoneValidator(
+        public ValidatedUpdatePhoneRequest(
             IPipelineNode<
                 IUpdatePhoneRequestContract,
                 IUpdatePhoneResultContract> nextNode)

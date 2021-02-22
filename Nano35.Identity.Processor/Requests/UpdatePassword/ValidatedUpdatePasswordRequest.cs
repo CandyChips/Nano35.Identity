@@ -10,7 +10,7 @@ namespace Nano35.Identity.Processor.Requests.UpdatePassword
         public string Error { get; set; }
     }
     
-    public class UpdatePasswordValidator:
+    public class ValidatedUpdatePasswordRequest:
         IPipelineNode<
             IUpdatePasswordRequestContract,
             IUpdatePasswordResultContract>
@@ -19,7 +19,7 @@ namespace Nano35.Identity.Processor.Requests.UpdatePassword
             IUpdatePasswordRequestContract,
             IUpdatePasswordResultContract> _nextNode;
 
-        public UpdatePasswordValidator(
+        public ValidatedUpdatePasswordRequest(
             IPipelineNode<
                 IUpdatePasswordRequestContract,
                 IUpdatePasswordResultContract> nextNode)

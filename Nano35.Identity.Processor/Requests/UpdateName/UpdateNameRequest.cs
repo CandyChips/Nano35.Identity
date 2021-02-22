@@ -8,35 +8,35 @@ using Nano35.Contracts.Identity.Models;
 using Nano35.Identity.Processor.Models;
 using Nano35.Identity.Processor.Services.Contexts;
 
-namespace Nano35.Identity.Processor.Requests.UpdatePassword
+namespace Nano35.Identity.Processor.Requests.UpdateName
 {
-    public class UpdatePasswordRequest :
+    public class UpdateNameRequest :
         IPipelineNode<
-            IUpdatePasswordRequestContract,
-            IUpdatePasswordResultContract>
+            IUpdateNameRequestContract,
+            IUpdateNameResultContract>
     {
         private readonly UserManager<User> _userManager;
 
-        public UpdatePasswordRequest(
+        public UpdateNameRequest(
             UserManager<User> userManager)
         {
             _userManager = userManager;
         }
-        
-        private class UpdatePasswordSuccessResultContract : 
-            IUpdatePasswordSuccessResultContract
+
+        private class UpdateNameSuccessResultContract : 
+            IUpdateNameSuccessResultContract
         {
             public IEnumerable<IUserViewModel> Data { get; set; }
         }
 
         private class GetAllClientStatesErrorResultContract : 
-            IUpdatePasswordErrorResultContract
+            IUpdateNameErrorResultContract
         {
             public string Error { get; set; }
         }
 
-        public async Task<IUpdatePasswordResultContract> Ask(
-            IUpdatePasswordRequestContract request,
+        public async Task<IUpdateNameResultContract> Ask(
+            IUpdateNameRequestContract request,
             CancellationToken cancellationToken)
         {   
             throw new NotImplementedException();

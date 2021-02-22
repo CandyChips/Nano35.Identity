@@ -6,18 +6,18 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.UpdatePhone
 {
-    public class LoggedGetUserByRoleIdRequest :
+    public class LoggedUpdatePhoneRequest :
         IPipelineNode<
             IUpdatePhoneRequestContract,
             IUpdatePhoneResultContract>
     {
-        private readonly ILogger<LoggedGetUserByRoleIdRequest> _logger;
+        private readonly ILogger<LoggedUpdatePhoneRequest> _logger;
         private readonly IPipelineNode<
             IUpdatePhoneRequestContract, 
             IUpdatePhoneResultContract> _nextNode;
 
-        public LoggedGetUserByRoleIdRequest(
-            ILogger<LoggedGetUserByRoleIdRequest> logger,
+        public LoggedUpdatePhoneRequest(
+            ILogger<LoggedUpdatePhoneRequest> logger,
             IPipelineNode<
                 IUpdatePhoneRequestContract, 
                 IUpdatePhoneResultContract> nextNode)
@@ -30,9 +30,9 @@ namespace Nano35.Identity.Processor.Requests.UpdatePhone
             IUpdatePhoneRequestContract input,
             CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"GetUserByRoleIdLogger starts on: {DateTime.Now}");
+            _logger.LogInformation($"UpdatePhoneLogger starts on: {DateTime.Now}");
             var result = await _nextNode.Ask(input, cancellationToken);
-            _logger.LogInformation($"GetUserByRoleIdLogger ends on: {DateTime.Now}");
+            _logger.LogInformation($"UpdatePhoneLogger ends on: {DateTime.Now}");
             return result;
         }
     }

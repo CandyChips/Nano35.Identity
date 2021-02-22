@@ -6,18 +6,19 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.Requests.UpdatePassword
 {
-    public class LoggedGetUserByRoleIdRequest :
+    public class LoggedUpdatePasswordRequest :
         IPipelineNode<
             IUpdatePasswordRequestContract, 
             IUpdatePasswordResultContract>
     {
-        private readonly ILogger<LoggedGetUserByRoleIdRequest> _logger;
+        private readonly ILogger<LoggedUpdatePasswordRequest> _logger;
+        
         private readonly IPipelineNode<
             IUpdatePasswordRequestContract, 
             IUpdatePasswordResultContract> _nextNode;
 
-        public LoggedGetUserByRoleIdRequest(
-            ILogger<LoggedGetUserByRoleIdRequest> logger,
+        public LoggedUpdatePasswordRequest(
+            ILogger<LoggedUpdatePasswordRequest> logger,
             IPipelineNode<
                 IUpdatePasswordRequestContract,
                 IUpdatePasswordResultContract> nextNode)
@@ -30,9 +31,9 @@ namespace Nano35.Identity.Processor.Requests.UpdatePassword
             IUpdatePasswordRequestContract input,
             CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"GetUserByRoleIdLogger starts on: {DateTime.Now}");
+            _logger.LogInformation($"UpdatePasswordLogger starts on: {DateTime.Now}");
             var result = await _nextNode.Ask(input, cancellationToken);
-            _logger.LogInformation($"GetUserByRoleIdLogger ends on: {DateTime.Now}");
+            _logger.LogInformation($"UpdatePasswordLogger ends on: {DateTime.Now}");
             return result;
         }
     }

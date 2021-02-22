@@ -8,7 +8,7 @@ namespace Nano35.Identity.Api.Validators
     {
         public ValidatorOfGetUsersByRoleIdRequest()
         {
-            RuleFor(id => id.Id).NotEmpty().WithMessage("нет id");
+            RuleFor(id => id.RoleId).NotEmpty().WithMessage("нет id");
         }
     }
 }

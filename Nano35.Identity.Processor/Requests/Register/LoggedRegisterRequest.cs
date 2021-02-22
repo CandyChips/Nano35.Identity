@@ -12,6 +12,7 @@ namespace Nano35.Identity.Processor.Requests.Register
             IRegisterResultContract>
     {
         private readonly ILogger<LoggedRegisterRequest> _logger;
+        
         private readonly IPipelineNode<
             IRegisterRequestContract,
             IRegisterResultContract> _nextNode;

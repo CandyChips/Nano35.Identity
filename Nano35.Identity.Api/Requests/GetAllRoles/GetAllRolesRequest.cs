@@ -27,9 +27,9 @@ namespace Nano35.Identity.Api.Requests.GetAllRoles
             var client = _bus.CreateRequestClient<IGetAllRolesRequestContract>(TimeSpan.FromSeconds(10));
                 
             var response = await client
-                .GetResponse<IGetAllRolesResultContract, IGetAllRolesErrorResultContract>(input);
+                .GetResponse<IGetAllRolesSuccessResultContract, IGetAllRolesErrorResultContract>(input);
 
-            if (response.Is(out Response<IGetAllRolesResultContract> successResponse))
+            if (response.Is(out Response<IGetAllRolesSuccessResultContract> successResponse))
                 return successResponse.Message;
             
             if (response.Is(out Response<IGetAllRolesErrorResultContract> errorResponse))

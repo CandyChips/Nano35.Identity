@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
+using Nano35.Identity.Processor.Models;
 using Nano35.Identity.Processor.Services.Contexts;
 using Nano35.Identity.Processor.Services.MappingProfiles;
 
@@ -13,12 +16,12 @@ namespace Nano35.Identity.Processor.Requests.GetAllUsers
             IGetAllUsersRequestContract,
             IGetAllUsersResultContract>
     {
-        private readonly ApplicationContext _context;
+        private readonly UserManager<User> _userManager;
 
         public GetAllUsersRequest(
-            ApplicationContext context)
+            UserManager<User> userManager)
         {
-            _context = context;
+            _userManager = userManager;
         }
         
         private class GetAllUsersSuccessResultContract : 
@@ -37,8 +40,8 @@ namespace Nano35.Identity.Processor.Requests.GetAllUsers
             IGetAllUsersRequestContract request,
             CancellationToken cancellationToken)
         {
-            var result = await _context.Users.MapAllToAsync<IUserViewModel>();
-
+            var result = await _userManager.Users.MapAllToAsync<IUserViewModel>();
+            
             if (result.Count == 0)
                 return new GetAllClientStatesErrorResultContract() {Message = "Не найдено ни одной записи"};
                 

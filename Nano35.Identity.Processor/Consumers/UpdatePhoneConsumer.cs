@@ -5,46 +5,46 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Models;
-using Nano35.Identity.Processor.Requests.GetAllUsers;
-using Nano35.Identity.Processor.Services.Contexts;
+using Nano35.Identity.Processor.Requests.UpdatePhone;
 
 namespace Nano35.Identity.Processor.Consumers
 {
-    public class GetAllUsersConsumer : 
-        IConsumer<IGetAllUsersRequestContract>
+    public class UpdatePhoneConsumer : 
+        IConsumer<IUpdatePhoneRequestContract>
     {
         private readonly IServiceProvider  _services;
         
-        public GetAllUsersConsumer(
+        public UpdatePhoneConsumer(
             IServiceProvider services)
         {
             _services = services;
         }
         
-        public async Task Consume(ConsumeContext<IGetAllUsersRequestContract> context)
+        public async Task Consume(
+            ConsumeContext<IUpdatePhoneRequestContract> context)
         {
             // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
+            var logger = (ILogger<LoggedUpdatePhoneRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePhoneRequest>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedGetAllUsersRequest(logger,  
-                    new ValidatedGetAllUsersRequest(
-                        new GetAllUsersRequest(userManager))
+                await new LoggedUpdatePhoneRequest(logger,
+                    new ValidatedUpdatePhoneRequest(
+                        new UpdatePhoneRequest(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request
             switch (result)
             {
-                case IGetAllUsersSuccessResultContract:
-                    await context.RespondAsync<IGetAllUsersSuccessResultContract>(result);
+                case IUpdatePhoneSuccessResultContract:
+                    await context.RespondAsync<IUpdatePhoneSuccessResultContract>(result);
                     break;
-                case IGetAllUsersErrorResultContract:
-                    await context.RespondAsync<IGetAllUsersErrorResultContract>(result);
+                case IUpdatePhoneErrorResultContract:
+                    await context.RespondAsync<IUpdatePhoneErrorResultContract>(result);
                     break;
             }
         }
