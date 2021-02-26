@@ -5,6 +5,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
+using Nano35.HttpContext.identity;
 using Nano35.Identity.Api.Helpers;
 using Nano35.Identity.Api.Requests.GenerateToken;
 using Nano35.Identity.Api.Requests.GetAllRoles;
@@ -24,105 +25,6 @@ namespace Nano35.Identity.Api.Controllers
     [Route("[controller]")]
     public class IdentityController : ControllerBase
     {
-        //public class GetAllUsersHttpContext : IGetAllUsersRequestContract
-        //{
-        //}
-
-        //public class GetAllRolesHttpContext : IGetAllRolesRequestContract
-        //{
-        //}
-
-        public class GetUserFromTokenHttpContext : IGetUserByIdRequestContract
-        {
-            public Guid UserId { get; set; }
-        }
-
-        //public class GetRoleByIdHttpContext : IGetRoleByIdRequestContract
-        //{
-        //    public Guid RoleId { get; set; }
-        //}
-
-        public class RegisterHttpContext : IRegisterRequestContract
-        {
-            public Guid NewId { get; set; }
-            public string Phone { get; set; }
-            public string Email { get; set; }
-            public string Name { get; set; }
-            public string Password { get; set; }
-            public string PasswordConfirm { get; set; }
-            
-            public RegisterHttpContext(RegisterHttpContextHeader head, RegisterHttpContextBody body)
-            {
-                NewId = head.NewUserId;
-                Phone = body.Phone;
-                Name = body.Name;
-                Email = body.Email;
-                Password = body.Password;
-                PasswordConfirm = body.PasswordConfirm;
-            }
-        }
-        
-        public class RegisterHttpContextHeader
-        {
-            public Guid NewUserId { get; set; }
-        }
-        
-        public class RegisterHttpContextBody
-        {
-            public string Phone { get; set; }
-            public string Email { get; set; }
-            public string Name { get; set; }
-            public string Password { get; set; }
-            public string PasswordConfirm { get; set; }
-        }
-
-        public class GetUserByIdHttpContext : IGetUserByIdRequestContract
-        {
-            public Guid UserId { get; set; }
-        }
-
-        public class GenerateUserTokenHttpContext : IGenerateTokenRequestContract
-        {
-            public string Login { get; set; }
-            public string Password { get; set; }
-            
-            public GenerateUserTokenHttpContext(GenerateUserTokenBody body)
-            {
-                Login = body.Login;
-                Password = body.Password;
-            }
-        }
-        
-        public class GenerateUserTokenBody
-        {
-            public string Login { get; set; }
-            public string Password { get; set; }
-        }
-
-        public class UpdatePhoneHttpContext : IUpdatePhoneRequestContract
-        {
-            public Guid UserId { get; set; }
-            public string Phone { get; set; }
-        }
-
-        public class UpdateNameHttpContext : IUpdateNameRequestContract
-        {
-            public Guid UserId { get; set; }
-            public string Name { get; set; }
-        }
-
-        public class UpdateEmailHttpContext : IUpdateEmailRequestContract
-        {
-            public Guid UserId { get; set; }
-            public string Email { get; set; }
-        }
-
-        public class UpdatePasswordHttpContext : IUpdatePasswordRequestContract
-        {
-            public Guid UserId { get; set; }
-            public string Password { get; set; }
-        }
-        
         private readonly IServiceProvider  _services;
 
         public IdentityController(IServiceProvider  services)
@@ -227,7 +129,7 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("UpdatePhone")]
         public async Task<IActionResult> UpdatePhone(
             [FromBody] UpdatePhoneHttpContext query)
@@ -250,7 +152,7 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("UpdatePassword")]
         public async Task<IActionResult> UpdatePassword(
             [FromBody] UpdatePasswordHttpContext query)
@@ -273,7 +175,7 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("UpdateName")]
         public async Task<IActionResult> UpdateName(
             [FromBody] UpdateNameHttpContext query)
@@ -296,7 +198,7 @@ namespace Nano35.Identity.Api.Controllers
             };
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Route("UpdateEmail")]
         public async Task<IActionResult> UpdateEmail(
             [FromBody] UpdateEmailHttpContext query)
