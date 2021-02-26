@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nano35-identity-processor
+  namespace: nano35
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nano35-identity-processor
+  template:
+    metadata:
+      labels:
+        app: nano35-identity-processor
+    spec:
+      containers:
+      - image: bushemi2021/nano35.identity.processor:latest
+        name: nano35-identity-processor
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
