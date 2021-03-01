@@ -9,6 +9,7 @@ namespace Nano35.Identity.Api.Middlewares
         {
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
                 endpoints.MapGet("/", async context =>
                 {

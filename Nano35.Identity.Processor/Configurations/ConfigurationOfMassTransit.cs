@@ -28,19 +28,9 @@ namespace Nano35.Identity.Processor.Configurations
                         e.Consumer<GetAllUsersConsumer>(provider);
                     });
                     
-                    cfg.ReceiveEndpoint("IGetAllRolesRequestContract", e =>
-                    {
-                        e.Consumer<GetAllRolesConsumer>(provider);
-                    });
-                    
                     cfg.ReceiveEndpoint("IGetUserByIdRequestContract", e =>
                     {
                         e.Consumer<GetUserByIdConsumer>(provider);
-                    });
-                    
-                    cfg.ReceiveEndpoint("IGetRoleByIdRequestContract", e =>
-                    {
-                        e.Consumer<GetRoleByIdConsumer>(provider);
                     });
                     
                     cfg.ReceiveEndpoint("IRegisterRequestContract", e =>
@@ -54,9 +44,7 @@ namespace Nano35.Identity.Processor.Configurations
                     });
                 }));
                 x.AddConsumer<GetAllUsersConsumer>();
-                x.AddConsumer<GetAllRolesConsumer>();
                 x.AddConsumer<GetUserByIdConsumer>();
-                x.AddConsumer<GetRoleByIdConsumer>();
                 x.AddConsumer<RegisterConsumer>();
                 x.AddConsumer<GenerateTokenConsumer>();
             });

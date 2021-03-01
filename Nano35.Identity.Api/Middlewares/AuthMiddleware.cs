@@ -18,7 +18,7 @@ namespace Nano35.Identity.Api.Middlewares
             this._logger = logger;
         }
  
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(Microsoft.AspNetCore.Http.HttpContext context)
         {
             var token = context.Request.Headers["Authorization"]!.ToString().Split(' ').Last();
             if (token != "")

@@ -52,7 +52,7 @@ namespace Nano35.Identity.Processor.Requests.Register
                     return new RegisterErrorResultContract() {Error = "Пароли не совпадают"};
                 }
 
-                if (_userManager.Users.Select(a => a.Id).Contains(request.NewId.ToString()))
+                if (_userManager.Users.Select(a => a.Id).Contains(request.NewUserId.ToString()))
                 {
                     return new RegisterErrorResultContract() {Error = "Повторите попытку"};
                 }
@@ -68,7 +68,7 @@ namespace Nano35.Identity.Processor.Requests.Register
                 }
                 var worker = new User()
                 {
-                    Id = request.NewId.ToString(),
+                    Id = request.NewUserId.ToString(),
                     UserName = request.Phone,
                     Email = request.Email,
                     Name = "Оператор системы",

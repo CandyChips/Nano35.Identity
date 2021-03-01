@@ -5,12 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Api.Configurations;
 using Nano35.Identity.Api.Middlewares;
-using Nano35.Identity.Api.Requests.GetRoleById;
-using Nano35.Identity.Api.Requests.GetRoleByUserId;
-using Nano35.Identity.Api.Requests.GetUserById;
-using Nano35.Identity.Api.Requests.GetUsersByRoleId;
-using Nano35.Identity.Api.Requests.Register;
-using Nano35.Identity.Api.Validators;
 
 namespace Nano35.Identity.Api
 {
@@ -32,6 +26,8 @@ namespace Nano35.Identity.Api
             new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
             new Configurator(services, new ConfigurationOfControllers()).Configure();
             new Configurator(services, new ConfigurationOfFluidValidator()).Configure();
+            
+            services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app)
