@@ -8,7 +8,9 @@ namespace Nano35.Identity.Api.Validators
     {
         public ValidatorOfGetUserByIdRequest()
         {
-            RuleFor(id => id.UserId).NotEmpty().WithMessage("нет userId");
+            RuleFor(id => id.UserId)
+                .NotEmpty()
+                .WithMessage("Ошибка сервера. Обновите страницу.");
         }
     } 
 }

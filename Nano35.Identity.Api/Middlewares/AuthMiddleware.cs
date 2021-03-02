@@ -2,20 +2,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Nano35.Identity.Api.Helpers;
 
 namespace Nano35.Identity.Api.Middlewares
 {
     public class UseAuthMiddleware
     {    
         private readonly RequestDelegate _next;
+        private readonly CookiesAuthStateProvider _authStateProvider;
         private readonly ILogger<UseAuthMiddleware> _logger;
  
         public UseAuthMiddleware(
             RequestDelegate next, 
-            ILogger<UseAuthMiddleware> logger)
+            ILogger<UseAuthMiddleware> logger,
+            CookiesAuthStateProvider authStateProvider)
         {
-            this._next = next;
-            this._logger = logger;
+            _next = next;
+            _logger = logger;
+            _authStateProvider = authStateProvider;
         }
  
         public async Task InvokeAsync(Microsoft.AspNetCore.Http.HttpContext context)

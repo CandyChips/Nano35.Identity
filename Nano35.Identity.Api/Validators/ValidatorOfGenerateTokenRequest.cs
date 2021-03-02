@@ -8,8 +8,12 @@ namespace Nano35.Identity.Api.Validators
     {
         public ValidatorOfGenerateTokenRequest()
         {
-            RuleFor(token => token.Login).NotEmpty().WithMessage("лОГИН ПУСТОЙ БЛИН");
-            RuleFor(token => token.Password).NotEmpty().WithMessage("ПАРОЛЬ ПУСТОЙ БЛЯДЬ");
+            RuleFor(token => token.Login)
+                .NotEmpty()
+                .WithMessage("Не указан номер телефона");
+            RuleFor(token => token.Password)
+                .NotEmpty()
+                .WithMessage("Не указан пароль");
         }
     } 
 }

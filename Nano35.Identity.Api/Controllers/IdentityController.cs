@@ -5,8 +5,8 @@ using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.HttpContext.identity;
 using Nano35.Identity.Api.Helpers;
+using Nano35.HttpContext.identity;
 using Nano35.Identity.Api.Requests.GenerateToken;
 using Nano35.Identity.Api.Requests.GetAllUsers;
 using Nano35.Identity.Api.Requests.GetUserById;
@@ -64,7 +64,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpGet]
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers(
-            [FromQuery]GetAllUsersHttpContext.GetAllUsersBody message)
+            [FromQuery]GetAllUsersHttpContext.GetAllUsersQuery message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
@@ -100,12 +100,15 @@ namespace Nano35.Identity.Api.Controllers
                     new GetUserByTokenRequest(bus, auth)
                 ).Ask(new GetUserByIdRequestContract());
 
-            return result switch
+            switch (result)
             {
-                IGetUserByIdSuccessResultContract => Ok(result),
-                IGetUserByIdErrorResultContract => BadRequest(result),
-                _ => BadRequest()
-            };
+                case IGetUserByIdSuccessResultContract a:
+                    return Ok(a.Data);
+                case IGetUserByIdErrorResultContract b:
+                    return BadRequest(result);
+                default:
+                    return BadRequest();
+            }
         }
         
         [HttpPost]
