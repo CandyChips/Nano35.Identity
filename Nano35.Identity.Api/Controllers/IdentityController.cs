@@ -33,7 +33,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpGet]
         [Route("GetUserById")]
         public async Task<IActionResult> GetUserById(
-            [FromQuery]GetUserByIdHttpContext.GetUserByIdQuery message)
+            [FromQuery]GetUserByIdHttpQuery message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
@@ -64,7 +64,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpGet]
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers(
-            [FromQuery]GetAllUsersHttpContext.GetAllUsersQuery message)
+            [FromQuery]GetAllUsersHttpQuery message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
@@ -114,8 +114,8 @@ namespace Nano35.Identity.Api.Controllers
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(
-            [FromBody] RegisterHttpContext.RegisterBody body,
-            [FromHeader] RegisterHttpContext.RegisterHeader head)
+            [FromBody] RegisterHttpBody body,
+            [FromHeader] RegisterHttpHeader head)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
@@ -147,7 +147,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpPost]
         [Route("Authenticate")]
         public async Task<IActionResult> GenerateUserToken(
-            [FromBody] GenerateUserTokenHttpContext.GenerateUserTokenBody body)
+            [FromBody] GenerateUserTokenHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
@@ -176,7 +176,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpPatch]
         [Route("UpdatePhone")]
         public async Task<IActionResult> UpdatePhone(
-            [FromBody] UpdatePhoneHttpContext.UpdatePhoneBody body)
+            [FromBody] UpdatePhoneHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedUpdatePhoneRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePhoneRequest>));
@@ -205,7 +205,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpPatch]
         [Route("UpdatePassword")]
         public async Task<IActionResult> UpdatePassword(
-            [FromBody] UpdatePasswordHttpContext.UpdatePasswordBody body)
+            [FromBody] UpdatePasswordHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedUpdatePasswordRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePasswordRequest>));
@@ -234,7 +234,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpPatch]
         [Route("UpdateName")]
         public async Task<IActionResult> UpdateName(
-            [FromBody] UpdateNameHttpContext.UpdateNameBody body)
+            [FromBody] UpdateNameHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedUpdateNameRequest>) _services.GetService(typeof(ILogger<LoggedUpdateNameRequest>));
@@ -263,7 +263,7 @@ namespace Nano35.Identity.Api.Controllers
         [HttpPatch]
         [Route("UpdateEmail")]
         public async Task<IActionResult> UpdateEmail(
-            [FromBody] UpdateEmailHttpContext.UpdateEmailBody body)
+            [FromBody] UpdateEmailHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedUpdateEmailRequest>) _services.GetService(typeof(ILogger<LoggedUpdateEmailRequest>));

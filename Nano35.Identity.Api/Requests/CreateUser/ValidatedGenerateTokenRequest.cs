@@ -41,7 +41,7 @@ namespace Nano35.Identity.Api.Requests.CreateUser
             if (!result.IsValid)
             {
                 return new ValidatedCreateUserRequestErrorResult()
-                    {Error = result.Errors.FirstOrDefault()?.ErrorMessage};
+                    { Error = result.Errors.FirstOrDefault()?.ErrorMessage };
             }
             return await _nextNode.Ask(input);
         }
