@@ -49,14 +49,13 @@ namespace Nano35.Identity.Api.Controllers
             var result = 
                 await new LoggedGetUserByIdRequest(logger,
                     new ValidatedGetUserByIdRequest(validator,
-                        new GetUserByIdRequest(bus)
-                    )
+                        new GetUserByIdRequest(bus))
                 ).Ask(request);
 
             return result switch
             {
-                IGetUserByIdSuccessResultContract => Ok(result),
-                IGetUserByIdErrorResultContract => BadRequest(result),
+                IGetUserByIdSuccessResultContract success => Ok(success),
+                IGetUserByIdErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -76,13 +75,13 @@ namespace Nano35.Identity.Api.Controllers
             
             var result = 
                 await new LoggedGetAllUsersRequest(logger,
-                    new GetAllUsersRequest(bus)
-                ).Ask(request);
+                    new GetAllUsersRequest(bus))
+                    .Ask(request);
 
             return result switch
             {
-                IGetAllUsersSuccessResultContract => Ok(result),
-                IGetAllUsersErrorResultContract => BadRequest(result),
+                IGetAllUsersSuccessResultContract success => Ok(success),
+                IGetAllUsersErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -97,18 +96,15 @@ namespace Nano35.Identity.Api.Controllers
 
             var result =
                 await new LoggedGetUserByTokenRequest(logger,
-                    new GetUserByTokenRequest(bus, auth)
-                ).Ask(new GetUserByIdRequestContract());
+                    new GetUserByTokenRequest(bus, auth))
+                    .Ask(new GetUserByIdRequestContract());
 
-            switch (result)
+            return result switch
             {
-                case IGetUserByIdSuccessResultContract a:
-                    return Ok(a.Data);
-                case IGetUserByIdErrorResultContract b:
-                    return BadRequest(result);
-                default:
-                    return BadRequest();
-            }
+                IGetUserByIdSuccessResultContract success => Ok(success),
+                IGetUserByIdErrorResultContract error => BadRequest(error),
+                _ => BadRequest()
+            };
         }
         
         [HttpPost]
@@ -133,13 +129,13 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedRegisterRequest(logger,
                         new ValidatedRegisterRequest(validator,
-                            new RegisterRequest(bus))
-                        ).Ask(request);
+                            new RegisterRequest(bus)))
+                    .Ask(request);
             
             return result switch
             {
-                IRegisterSuccessResultContract => Ok(result),
-                IRegisterErrorResultContract => BadRequest(result),
+                IRegisterSuccessResultContract success => Ok(success),
+                IRegisterErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -167,8 +163,8 @@ namespace Nano35.Identity.Api.Controllers
             
             return result switch
             {
-                IGenerateTokenSuccessResultContract => Ok(result),
-                IGenerateTokenErrorResultContract => BadRequest(result),
+                IGenerateTokenSuccessResultContract success => Ok(success),
+                IGenerateTokenErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -196,8 +192,8 @@ namespace Nano35.Identity.Api.Controllers
             
             return result switch
             {
-                IUpdatePhoneSuccessResultContract => Ok(result),
-                IUpdatePhoneErrorResultContract => BadRequest(result),
+                IUpdatePhoneSuccessResultContract success => Ok(success),
+                IUpdatePhoneErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -225,8 +221,8 @@ namespace Nano35.Identity.Api.Controllers
             
             return result switch
             {
-                IUpdatePasswordSuccessResultContract => Ok(result),
-                IUpdatePasswordErrorResultContract => BadRequest(result),
+                IUpdatePasswordSuccessResultContract success => Ok(success),
+                IUpdatePasswordErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -254,8 +250,8 @@ namespace Nano35.Identity.Api.Controllers
             
             return result switch
             {
-                IUpdateNameSuccessResultContract => Ok(result),
-                IUpdateNameErrorResultContract => BadRequest(result),
+                IUpdateNameSuccessResultContract success => Ok(success),
+                IUpdateNameErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }
@@ -283,8 +279,8 @@ namespace Nano35.Identity.Api.Controllers
             
             return result switch
             {
-                IUpdateEmailSuccessResultContract => Ok(result),
-                IUpdateEmailErrorResultContract => BadRequest(result),
+                IUpdateEmailSuccessResultContract success => Ok(success),
+                IUpdateEmailErrorResultContract error => BadRequest(error),
                 _ => BadRequest()
             };
         }

@@ -23,11 +23,17 @@ namespace Nano35.Identity.Api.Configurations
                         h.Password(ContractBase.RabbitMqPassword);
                     });
                 }));
+                
+                x.AddRequestClient<ICreateUserRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/ICreateUserRequestContract"));
+                x.AddRequestClient<IConfirmEmailOfUserRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IConfirmEmailOfUserRequestContract"));
+                x.AddRequestClient<IGetUserByIdRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IGetUserByIdRequestContract"));
                 x.AddRequestClient<IGetAllUsersRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IGetAllUsersRequestContract"));
-                x.AddRequestClient<IRegisterRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IRegisterRequestContract"));
                 x.AddRequestClient<IGenerateTokenRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IGenerateTokenRequestContract"));
+                x.AddRequestClient<IRegisterRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IRegisterRequestContract"));
                 x.AddRequestClient<IUpdatePhoneRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IUpdatePhoneRequestContract"));
                 x.AddRequestClient<IUpdatePasswordRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IUpdatePasswordRequestContract"));
+                x.AddRequestClient<IUpdateEmailRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IUpdateEmailRequestContract"));
+                x.AddRequestClient<IUpdateNameRequestContract>(new Uri($"{ContractBase.RabbitMqLocation}/IUpdateNameRequestContract"));
             });
             services.AddMassTransitHostedService();
         }
