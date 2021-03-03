@@ -24,6 +24,7 @@ namespace Nano35.Identity.Api.Configurations
                         ValidateLifetime = false
                     };
                 });
+
         }
     }
 }

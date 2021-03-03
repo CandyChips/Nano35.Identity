@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FluentValidation;
 using MassTransit;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
@@ -32,6 +33,9 @@ namespace Nano35.Identity.Api.Controllers
         
         [HttpGet]
         [Route("GetUserById")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetUserByIdSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetUserByIdErrorResultContract))]    
         public async Task<IActionResult> GetUserById(
             [FromQuery]GetUserByIdHttpQuery message)
         {
@@ -62,6 +66,9 @@ namespace Nano35.Identity.Api.Controllers
         
         [HttpGet]
         [Route("GetAllUsers")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetAllUsersSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetAllUsersErrorResultContract))]    
         public async Task<IActionResult> GetAllUsers(
             [FromQuery]GetAllUsersHttpQuery message)
         {
@@ -88,6 +95,9 @@ namespace Nano35.Identity.Api.Controllers
 
         [HttpGet]
         [Route("GetUserFromToken")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetUserByIdSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetUserByIdErrorResultContract))] 
         public async Task<IActionResult> GetUserFromToken()
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
@@ -109,6 +119,9 @@ namespace Nano35.Identity.Api.Controllers
         
         [HttpPost]
         [Route("Register")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IRegisterSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IRegisterErrorResultContract))] 
         public async Task<IActionResult> Register(
             [FromBody] RegisterHttpBody body,
             [FromHeader] RegisterHttpHeader head)
@@ -142,6 +155,9 @@ namespace Nano35.Identity.Api.Controllers
         
         [HttpPost]
         [Route("Authenticate")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGenerateTokenSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGenerateTokenErrorResultContract))] 
         public async Task<IActionResult> GenerateUserToken(
             [FromBody] GenerateUserTokenHttpBody body)
         {
@@ -171,6 +187,9 @@ namespace Nano35.Identity.Api.Controllers
 
         [HttpPatch]
         [Route("UpdatePhone")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdatePhoneSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdatePhoneErrorResultContract))] 
         public async Task<IActionResult> UpdatePhone(
             [FromBody] UpdatePhoneHttpBody body)
         {
@@ -200,6 +219,9 @@ namespace Nano35.Identity.Api.Controllers
 
         [HttpPatch]
         [Route("UpdatePassword")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdatePasswordSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdatePasswordErrorResultContract))] 
         public async Task<IActionResult> UpdatePassword(
             [FromBody] UpdatePasswordHttpBody body)
         {
@@ -229,6 +251,9 @@ namespace Nano35.Identity.Api.Controllers
 
         [HttpPatch]
         [Route("UpdateName")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdateNameSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdateNameErrorResultContract))] 
         public async Task<IActionResult> UpdateName(
             [FromBody] UpdateNameHttpBody body)
         {
@@ -258,6 +283,9 @@ namespace Nano35.Identity.Api.Controllers
 
         [HttpPatch]
         [Route("UpdateEmail")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdateEmailSuccessResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdateEmailErrorResultContract))] 
         public async Task<IActionResult> UpdateEmail(
             [FromBody] UpdateEmailHttpBody body)
         {
