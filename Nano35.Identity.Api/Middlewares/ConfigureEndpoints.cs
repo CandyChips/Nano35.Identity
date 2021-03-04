@@ -13,7 +13,7 @@ namespace Nano35.Identity.Api.Middlewares
                 endpoints.MapControllers();
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("please use swagger");
+                    context.Response.Redirect("/swagger");
                 });
             });
         }

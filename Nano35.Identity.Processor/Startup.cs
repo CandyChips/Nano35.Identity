@@ -21,15 +21,10 @@ namespace Nano35.Identity.Processor
             new Configurator(services, new EntityFrameworkConfiguration()).Configure();
             new Configurator(services, new MassTransitConfiguration()).Configure();
             new Configurator(services, new JWTGeneratorConfiguration()).Configure();
-            services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHealthChecks("/health");
-            });
         }
     }
 }
