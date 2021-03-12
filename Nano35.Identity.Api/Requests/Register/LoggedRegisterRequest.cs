@@ -6,31 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.Register
 {
     public class LoggedRegisterRequest :
-        IPipelineNode<
-            IRegisterRequestContract,
-            IRegisterResultContract>
+        PipeNodeBase<IRegisterRequestContract, IRegisterResultContract>
     {
         private readonly ILogger<LoggedRegisterRequest> _logger;
         
-        private readonly IPipelineNode<
-            IRegisterRequestContract, 
-            IRegisterResultContract> _nextNode;
-
         public LoggedRegisterRequest(
             ILogger<LoggedRegisterRequest> logger,
-            IPipelineNode<
-                IRegisterRequestContract,
-                IRegisterResultContract> nextNode)
+            IPipeNode<IRegisterRequestContract, IRegisterResultContract> next) : 
+            base (next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IRegisterResultContract> Ask(
-            IRegisterRequestContract input)
+        public override Task<IRegisterResultContract> Ask(IRegisterRequestContract input)
         {
             _logger.LogInformation($"RegisterLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"RegisterLogger ends on: {DateTime.Now}");
             return result;
         }

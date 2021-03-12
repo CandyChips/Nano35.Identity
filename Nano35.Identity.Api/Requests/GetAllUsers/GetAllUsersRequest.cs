@@ -9,20 +9,16 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.GetAllUsers
 {
     public class GetAllUsersRequest :
-        IPipelineNode<
-            IGetAllUsersRequestContract, 
-            IGetAllUsersResultContract>
+        EndPointNodeBase<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
         private readonly IBus _bus;
 
-        public GetAllUsersRequest(
-            IBus bus)
+        public GetAllUsersRequest(IBus bus)
         {
             _bus = bus;
         }
         
-        public async Task<IGetAllUsersResultContract> Ask(
-            IGetAllUsersRequestContract input)
+        public override async Task<IGetAllUsersResultContract> Ask(IGetAllUsersRequestContract input)
         {
             var client = _bus.CreateRequestClient<IGetAllUsersRequestContract>(TimeSpan.FromSeconds(10));
             var response = await client

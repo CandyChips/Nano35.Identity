@@ -10,22 +10,17 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.Register
 {
     public class RegisterRequest :
-        IPipelineNode<
-            IRegisterRequestContract, 
-            IRegisterResultContract>
+        EndPointNodeBase<IRegisterRequestContract, IRegisterResultContract>
     {
         private readonly IBus _bus;
 
-        public RegisterRequest(
-            IBus bus)
+        public RegisterRequest(IBus bus)
         {
             _bus = bus;
         }
 
-        public async Task<IRegisterResultContract> Ask(
-            IRegisterRequestContract input)
+        public override async Task<IRegisterResultContract> Ask(IRegisterRequestContract input)
         {
-            
             input.Phone = PhoneConverter.RuPhoneConverter(input.Phone);
             
             var client = _bus.CreateRequestClient<IRegisterRequestContract>(TimeSpan.FromSeconds(10));

@@ -6,20 +6,16 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.ConfirmEmailOfUser
 {
     public class ConfirmEmailOfUserRequest :
-        IPipelineNode<
-            IGenerateTokenRequestContract,
-            IGenerateTokenResultContract>
+        EndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
         private readonly IBus _bus;
 
-        public ConfirmEmailOfUserRequest(
-            IBus bus)
+        public ConfirmEmailOfUserRequest(IBus bus)
         {
             _bus = bus;
         }
         
-        public async Task<IGenerateTokenResultContract> Ask(
-            IGenerateTokenRequestContract input)
+        public override async Task<IGenerateTokenResultContract> Ask(IGenerateTokenRequestContract input)
         {
             var client = _bus.CreateRequestClient<IGenerateTokenRequestContract>(TimeSpan.FromSeconds(10));
                 

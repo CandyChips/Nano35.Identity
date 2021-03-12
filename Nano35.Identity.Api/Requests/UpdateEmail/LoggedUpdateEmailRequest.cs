@@ -6,31 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.UpdateEmail
 {
     public class LoggedUpdateEmailRequest :
-        IPipelineNode<
-            IUpdateEmailRequestContract,
-            IUpdateEmailResultContract>
+        PipeNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
     {
         private readonly ILogger<LoggedUpdateEmailRequest> _logger;
         
-        private readonly IPipelineNode<
-            IUpdateEmailRequestContract, 
-            IUpdateEmailResultContract> _nextNode;
-
         public LoggedUpdateEmailRequest(
             ILogger<LoggedUpdateEmailRequest> logger,
-            IPipelineNode<
-                IUpdateEmailRequestContract, 
-                IUpdateEmailResultContract> nextNode)
+            IPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IUpdateEmailResultContract> Ask(
-            IUpdateEmailRequestContract input)
+        public override Task<IUpdateEmailResultContract> Ask(IUpdateEmailRequestContract input)
         {
             _logger.LogInformation($"UpdateEmailLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"UpdateEmailLogger ends on: {DateTime.Now}");
             return result;
         }

@@ -8,41 +8,33 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
     public class ValidatedUpdatePasswordRequestErrorResult :
      IUpdatePasswordErrorResultContract
     {
-        public string Error { get; set; }
+        public string Message { get; set; }
     }
     
     public class ValidatedUpdatePasswordRequest:
-        IPipelineNode<
-            IUpdatePasswordRequestContract,
-            IUpdatePasswordResultContract>
+        PipeNodeBase<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
         private readonly IValidator<IUpdatePasswordRequestContract> _validator;
 
-        private readonly IPipelineNode<
-            IUpdatePasswordRequestContract, 
-            IUpdatePasswordResultContract> _nextNode;
-
         public ValidatedUpdatePasswordRequest(
             IValidator<IUpdatePasswordRequestContract> validator,
-            IPipelineNode<
-                IUpdatePasswordRequestContract, 
-                IUpdatePasswordResultContract> nextNode)
+            IPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _validator = validator;
         }
 
-        public async Task<IUpdatePasswordResultContract> Ask(
-            IUpdatePasswordRequestContract input)
+        public override Task<IUpdatePasswordResultContract> Ask(IUpdatePasswordRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
-            
+            var result = _validator.ValidateAsync(input).Result;
+
             if (!result.IsValid)
             {
-                return new ValidatedUpdatePasswordRequestErrorResult() 
-                    {Error = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return Task.Run(() => new ValidatedUpdatePasswordRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as IUpdatePasswordResultContract);
             }
-            return await _nextNode.Ask(input);
+            
+            return DoNext(input);
         }
     }
 }

@@ -6,31 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.UpdateName
 {
     public class LoggedUpdateNameRequest :
-        IPipelineNode<
-            IUpdateNameRequestContract,
-            IUpdateNameResultContract>
+        PipeNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
     {
         private readonly ILogger<LoggedUpdateNameRequest> _logger;
         
-        private readonly IPipelineNode<
-            IUpdateNameRequestContract, 
-            IUpdateNameResultContract> _nextNode;
-
         public LoggedUpdateNameRequest(
             ILogger<LoggedUpdateNameRequest> logger,
-            IPipelineNode<
-                IUpdateNameRequestContract, 
-                IUpdateNameResultContract> nextNode)
+            IPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IUpdateNameResultContract> Ask(
-            IUpdateNameRequestContract input)
+        public override Task<IUpdateNameResultContract> Ask(IUpdateNameRequestContract input)
         {
             _logger.LogInformation($"UpdateNameLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"UpdateNameLogger ends on: {DateTime.Now}");
             return result;
         }

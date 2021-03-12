@@ -6,30 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.UpdatePassword
 {
     public class LoggedUpdatePasswordRequest :
-        IPipelineNode<
-            IUpdatePasswordRequestContract,
-            IUpdatePasswordResultContract>
+        PipeNodeBase<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
         private readonly ILogger<LoggedUpdatePasswordRequest> _logger;
-        private readonly IPipelineNode<
-            IUpdatePasswordRequestContract,
-            IUpdatePasswordResultContract> _nextNode;
 
         public LoggedUpdatePasswordRequest(
             ILogger<LoggedUpdatePasswordRequest> logger,
-            IPipelineNode<
-                IUpdatePasswordRequestContract, 
-                IUpdatePasswordResultContract> nextNode)
+            IPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IUpdatePasswordResultContract> Ask(
-            IUpdatePasswordRequestContract input)
+        public override Task<IUpdatePasswordResultContract> Ask(IUpdatePasswordRequestContract input)
         {
             _logger.LogInformation($"UpdatePasswordLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"UpdatePasswordLogger ends on: {DateTime.Now}");
             return result;
         }

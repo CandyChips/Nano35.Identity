@@ -10,20 +10,16 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.UpdatePassword
 {
     public class UpdatePasswordRequest :
-        IPipelineNode<
-            IUpdatePasswordRequestContract, 
-            IUpdatePasswordResultContract>
+        EndPointNodeBase<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
         private readonly IBus _bus;
 
-        public UpdatePasswordRequest(
-            IBus bus)
+        public UpdatePasswordRequest(IBus bus)
         {
             _bus = bus;
         }
         
-        public async Task<IUpdatePasswordResultContract> Ask(
-            IUpdatePasswordRequestContract input)
+        public override async Task<IUpdatePasswordResultContract> Ask(IUpdatePasswordRequestContract input)
         {
             var client = _bus.CreateRequestClient<IUpdatePasswordRequestContract>(TimeSpan.FromSeconds(10));
             

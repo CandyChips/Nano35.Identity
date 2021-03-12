@@ -8,42 +8,32 @@ namespace Nano35.Identity.Api.Requests.CreateUser
     public class ValidatedCreateUserRequestErrorResult :
         ICreateUserErrorResultContract
     {
-        public string Error { get; set; }
+        public string Message { get; set; }
     }
     
     public class ValidatedCreateUserRequest:
-        IPipelineNode<
-            ICreateUserRequestContract,
-            ICreateUserResultContract>
+        PipeNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
         private readonly IValidator<ICreateUserRequestContract> _validator;
         
-        private readonly IPipelineNode<
-            ICreateUserRequestContract, 
-            ICreateUserResultContract> _nextNode;
-        
         public ValidatedCreateUserRequest(
             IValidator<ICreateUserRequestContract> validator,
-            IPipelineNode<
-                ICreateUserRequestContract, 
-                ICreateUserResultContract> nextNode)
+            IPipeNode<ICreateUserRequestContract, ICreateUserResultContract> next) :
+            base(next)
         {   
             _validator = validator;
-            _nextNode = nextNode;
-            
         }
 
-        public async Task<ICreateUserResultContract> Ask(
-            ICreateUserRequestContract input)
+        public override Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result = _validator.ValidateAsync(input).Result;
 
             if (!result.IsValid)
             {
-                return new ValidatedCreateUserRequestErrorResult()
-                    { Error = result.Errors.FirstOrDefault()?.ErrorMessage };
+                return Task.Run(() => new ValidatedCreateUserRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as ICreateUserResultContract);
             }
-            return await _nextNode.Ask(input);
+            return DoNext(input);
         }
     }
 }

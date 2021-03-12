@@ -10,40 +10,32 @@ namespace Nano35.Identity.Api.Requests.Register
         IRegisterErrorResultContract
     {
         public string Error { get; set; }
+        public string Message { get; set; }
     }
     
     public class ValidatedRegisterRequest:
-        IPipelineNode<
-            IRegisterRequestContract, 
-            IRegisterResultContract>
+        PipeNodeBase<IRegisterRequestContract, IRegisterResultContract>
     {
         private readonly IValidator<IRegisterRequestContract> _validator;
-        
-        private readonly IPipelineNode<
-            IRegisterRequestContract, 
-            IRegisterResultContract> _nextNode;
 
         public ValidatedRegisterRequest(
             IValidator<IRegisterRequestContract> validator,
-            IPipelineNode<
-                IRegisterRequestContract,
-                IRegisterResultContract> nextNode)
+            IPipeNode<IRegisterRequestContract, IRegisterResultContract> next) :
+            base(next)
         {
             _validator = validator;
-            _nextNode = nextNode;
         }
 
-        public async Task<IRegisterResultContract> Ask(
-            IRegisterRequestContract input)
+        public override async Task<IRegisterResultContract> Ask(IRegisterRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result = _validator.ValidateAsync(input).Result;
             
             if (!result.IsValid)
             {
                 return new ValidatedRegisterRequestErrorResult() 
                     {Error = result.Errors.FirstOrDefault()?.ErrorMessage};
             }
-            return await _nextNode.Ask(input);
+            return await DoNext(input);
         }
     }
 }

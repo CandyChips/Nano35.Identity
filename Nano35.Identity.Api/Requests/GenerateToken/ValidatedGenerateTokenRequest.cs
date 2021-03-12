@@ -12,38 +12,28 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
     }
     
     public class ValidatedGenerateTokenRequest:
-        IPipelineNode<
-            IGenerateTokenRequestContract,
-            IGenerateTokenResultContract>
+        PipeNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
         private readonly IValidator<IGenerateTokenRequestContract> _validator;
         
-        private readonly IPipelineNode<
-            IGenerateTokenRequestContract,
-            IGenerateTokenResultContract> _nextNode;
-        
         public ValidatedGenerateTokenRequest(
             IValidator<IGenerateTokenRequestContract> validator,
-            IPipelineNode<
-                IGenerateTokenRequestContract,
-                IGenerateTokenResultContract> nextNode)
+            IPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> next) :
+            base(next)
         {   
             _validator = validator;
-            _nextNode = nextNode;
-            
         }
 
-        public async Task<IGenerateTokenResultContract> Ask(
-            IGenerateTokenRequestContract input)
+        public override Task<IGenerateTokenResultContract> Ask(IGenerateTokenRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result =  _validator.ValidateAsync(input).Result;
 
             if (!result.IsValid)
             {
-                return new ValidatedGenerateTokenRequestErrorResult()
-                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return Task.Run(() => new ValidatedGenerateTokenRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as IGenerateTokenResultContract);
             }
-            return await _nextNode.Ask(input);
+            return DoNext(input);
         }
     }
 }

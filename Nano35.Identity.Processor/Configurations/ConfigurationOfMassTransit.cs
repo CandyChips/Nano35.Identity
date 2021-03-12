@@ -2,7 +2,10 @@ using System;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts;
-using Nano35.Identity.Processor.Consumers;
+using Nano35.Identity.Processor.UseCase.GenerateToken;
+using Nano35.Identity.Processor.UseCase.GetAllUsers;
+using Nano35.Identity.Processor.UseCase.GetUserById;
+using Nano35.Identity.Processor.UseCase.Register;
 
 namespace Nano35.Identity.Processor.Configurations
 {

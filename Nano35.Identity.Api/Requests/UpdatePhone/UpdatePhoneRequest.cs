@@ -10,20 +10,16 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
     public class UpdatePhoneRequest :
-        IPipelineNode<
-            IUpdatePhoneRequestContract, 
-            IUpdatePhoneResultContract>
+        EndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
         private readonly IBus _bus;
 
-        public UpdatePhoneRequest(
-            IBus bus)
+        public UpdatePhoneRequest(IBus bus)
         {
             _bus = bus;
         }
         
-        public async Task<IUpdatePhoneResultContract> Ask(
-            IUpdatePhoneRequestContract input)
+        public override async Task<IUpdatePhoneResultContract> Ask(IUpdatePhoneRequestContract input)
         {
             
             input.Phone = PhoneConverter.RuPhoneConverter(input.Phone);

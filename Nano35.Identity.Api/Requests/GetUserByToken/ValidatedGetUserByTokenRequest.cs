@@ -13,36 +13,28 @@ namespace Nano35.Identity.Api.Requests.GetUserByToken
     }
     
     public class ValidatedGetUserByTokenRequest:
-        IPipelineNode<
-            IGetUserByIdRequestContract,
-            IGetUserByIdResultContract>
+        PipeNodeBase<IGetUserByIdRequestContract, IGetUserByIdResultContract>
     {
         private readonly IValidator<IGetUserByIdRequestContract> _validator;
-        private readonly IPipelineNode<
-            IGetUserByIdRequestContract, 
-            IGetUserByIdResultContract> _nextNode;
 
         public ValidatedGetUserByTokenRequest(
             IValidator<IGetUserByIdRequestContract> validator,
-            IPipelineNode<
-                IGetUserByIdRequestContract,
-                IGetUserByIdResultContract> nextNode)
+            IPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> next) :
+            base(next)
         {
             _validator = validator;
-            _nextNode = nextNode;
         }
 
-        public async Task<IGetUserByIdResultContract> Ask(
-            IGetUserByIdRequestContract input)
+        public override Task<IGetUserByIdResultContract> Ask(IGetUserByIdRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result =  _validator.ValidateAsync(input).Result;
 
             if (!result.IsValid)
             {
-                return new ValidatedGetUserByTokenRequestErrorResult() 
-                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return Task.Run(() => new ValidatedGetUserByTokenRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as IGetUserByIdResultContract);
             }
-            return await _nextNode.Ask(input);
+            return DoNext(input);
         }
     }
 }

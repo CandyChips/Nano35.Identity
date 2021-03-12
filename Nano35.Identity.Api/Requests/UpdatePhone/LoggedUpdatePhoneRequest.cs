@@ -6,31 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
     public class LoggedUpdatePhoneRequest :
-        IPipelineNode<
-            IUpdatePhoneRequestContract,
-            IUpdatePhoneResultContract>
+        PipeNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
         private readonly ILogger<LoggedUpdatePhoneRequest> _logger;
         
-        private readonly IPipelineNode<
-            IUpdatePhoneRequestContract, 
-            IUpdatePhoneResultContract> _nextNode;
-
         public LoggedUpdatePhoneRequest(
             ILogger<LoggedUpdatePhoneRequest> logger,
-            IPipelineNode<
-                IUpdatePhoneRequestContract, 
-                IUpdatePhoneResultContract> nextNode)
+            IPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IUpdatePhoneResultContract> Ask(
-            IUpdatePhoneRequestContract input)
+        public override Task<IUpdatePhoneResultContract> Ask(IUpdatePhoneRequestContract input)
         {
             _logger.LogInformation($"UpdatePhoneLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"UpdatePhoneLogger ends on: {DateTime.Now}");
             return result;
         }

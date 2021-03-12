@@ -10,20 +10,16 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.UpdateEmail
 {
     public class UpdateEmailRequest :
-        IPipelineNode<
-            IUpdateEmailRequestContract, 
-            IUpdateEmailResultContract>
+        EndPointNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
     {
         private readonly IBus _bus;
 
-        public UpdateEmailRequest(
-            IBus bus)
+        public UpdateEmailRequest(IBus bus)
         {
             _bus = bus;
         }
         
-        public async Task<IUpdateEmailResultContract> Ask(
-            IUpdateEmailRequestContract input)
+        public override async Task<IUpdateEmailResultContract> Ask(IUpdateEmailRequestContract input)
         {
             var client = _bus.CreateRequestClient<IUpdateEmailRequestContract>(TimeSpan.FromSeconds(10));
             

@@ -9,20 +9,16 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.CreateUser
 {
     public class CreateUserRequest :
-        IPipelineNode<
-            ICreateUserRequestContract, 
-            ICreateUserResultContract>
+        EndPointNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
         private readonly IBus _bus;
 
-        public CreateUserRequest(
-            IBus bus)
+        public CreateUserRequest(IBus bus)
         {
             _bus = bus;
         }
         
-        public async Task<ICreateUserResultContract> Ask(
-            ICreateUserRequestContract input)
+        public override async Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input)
         {
             var client = _bus.CreateRequestClient<ICreateUserRequestContract>(TimeSpan.FromSeconds(10));
                 

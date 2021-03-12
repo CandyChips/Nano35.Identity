@@ -10,30 +10,18 @@ namespace Nano35.Identity.Api.Requests.GetAllUsers
     }
     
     public class ValidatedGetAllUsersRequest:
-        IPipelineNode<
-            IGetAllUsersRequestContract, 
-            IGetAllUsersResultContract>
+        PipeNodeBase<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
-        private readonly IPipelineNode<
-            IGetAllUsersRequestContract, 
-            IGetAllUsersResultContract> _nextNode;
-
         public ValidatedGetAllUsersRequest(
-            IPipelineNode<
-                IGetAllUsersRequestContract,
-                IGetAllUsersResultContract> nextNode)
+            IPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
+            
         }
 
-        public async Task<IGetAllUsersResultContract> Ask(
-            IGetAllUsersRequestContract input)
+        public override Task<IGetAllUsersResultContract> Ask(IGetAllUsersRequestContract input)
         {
-            if (false)
-            {
-                return new ValidatedGetAllUsersRequestErrorResult() {Message = "Ошибка валидации"};
-            }
-            return await _nextNode.Ask(input);
+            return DoNext(input);
         }
     }
 }

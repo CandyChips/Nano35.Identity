@@ -8,41 +8,33 @@ namespace Nano35.Identity.Api.Requests.UpdateName
     public class ValidatedUpdateNameRequestErrorResult :
         IUpdateNameErrorResultContract
     {
-        public string Error { get; set; }
+        public string Message { get; set; }
     }
     
     public class ValidatedUpdateNameRequest:
-        IPipelineNode<
-            IUpdateNameRequestContract,
-            IUpdateNameResultContract>
+        PipeNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
     {
         private readonly IValidator<IUpdateNameRequestContract> _validator;
         
-        private readonly IPipelineNode<
-            IUpdateNameRequestContract, 
-            IUpdateNameResultContract> _nextNode;
-
         public ValidatedUpdateNameRequest(
             IValidator<IUpdateNameRequestContract> validator,
-            IPipelineNode<
-                IUpdateNameRequestContract,
-                IUpdateNameResultContract> nextNode)
+            IPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract> next) :
+            base(next)
         {
             _validator = validator;
-            _nextNode = nextNode;
         }
 
-        public async Task<IUpdateNameResultContract> Ask(
-            IUpdateNameRequestContract input)
+        public override Task<IUpdateNameResultContract> Ask(IUpdateNameRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result = _validator.ValidateAsync(input).Result;
             
             if (!result.IsValid)
             {
-                return new ValidatedUpdateNameRequestErrorResult() 
-                    {Error = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return Task.Run(() => new ValidatedUpdateNameRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as IUpdateNameResultContract);
             }
-            return await _nextNode.Ask(input);
+            
+            return DoNext(input);
         }
     }
 }

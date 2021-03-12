@@ -12,37 +12,29 @@ namespace Nano35.Identity.Api.Requests.ConfirmEmailOfUser
     }
     
     public class ValidatedConfirmEmailOfUserRequest:
-        IPipelineNode<
-            IConfirmEmailOfUserRequestContract, 
-            IConfirmEmailOfUserResultContract>
+        PipeNodeBase<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>
     {
         private readonly IValidator<IConfirmEmailOfUserRequestContract> _validator;
         
-        private readonly IPipelineNode<
-            IConfirmEmailOfUserRequestContract, 
-            IConfirmEmailOfUserResultContract> _nextNode;
-        
         public ValidatedConfirmEmailOfUserRequest(
             IValidator<IConfirmEmailOfUserRequestContract> validator,
-            IPipelineNode<
-                IConfirmEmailOfUserRequestContract,
-                IConfirmEmailOfUserResultContract> nextNode)
+            IPipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract> next) :
+            base(next)
         {   
             _validator = validator;
-            _nextNode = nextNode;
         }
 
-        public async Task<IConfirmEmailOfUserResultContract> Ask(
-            IConfirmEmailOfUserRequestContract input)
+        public override Task<IConfirmEmailOfUserResultContract> Ask(IConfirmEmailOfUserRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result = _validator.ValidateAsync(input).Result;
 
             if (!result.IsValid)
             {
-                return new ValidatedConfirmEmailOfUserRequestErrorResult()
-                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return Task.Run(() => new ValidatedConfirmEmailOfUserRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as IConfirmEmailOfUserResultContract);
             }
-            return await _nextNode.Ask(input);
+
+            return DoNext(input);
         }
     }
 }

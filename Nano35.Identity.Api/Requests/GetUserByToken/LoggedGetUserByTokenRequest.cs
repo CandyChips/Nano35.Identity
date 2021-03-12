@@ -6,31 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.GetUserByToken
 {
     public class LoggedGetUserByTokenRequest :
-        IPipelineNode<
-            IGetUserByIdRequestContract,
-            IGetUserByIdResultContract>
+        PipeNodeBase<IGetUserByIdRequestContract, IGetUserByIdResultContract>
     {
         private readonly ILogger<LoggedGetUserByTokenRequest> _logger;
-        
-        private readonly IPipelineNode<
-            IGetUserByIdRequestContract,
-            IGetUserByIdResultContract> _nextNode;
 
         public LoggedGetUserByTokenRequest(
             ILogger<LoggedGetUserByTokenRequest> logger,
-            IPipelineNode<
-                IGetUserByIdRequestContract,
-                IGetUserByIdResultContract> nextNode)
+            IPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<IGetUserByIdResultContract> Ask(
-            IGetUserByIdRequestContract input)
+        public override Task<IGetUserByIdResultContract> Ask(IGetUserByIdRequestContract input)
         {
             _logger.LogInformation($"GetUserByTokenLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"GetUserByTokenLogger ends on: {DateTime.Now}");
             return result;
         }

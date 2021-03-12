@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Api.Validators;
+using Nano35.Identity.Api.Requests.GenerateToken;
+using Nano35.Identity.Api.Requests.GetUserById;
+using Nano35.Identity.Api.Requests.Register;
 
 namespace Nano35.Identity.Api.Configurations
 {

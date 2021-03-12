@@ -6,31 +6,22 @@ using Nano35.Contracts.Identity.Artifacts;
 namespace Nano35.Identity.Api.Requests.CreateUser
 {
     public class LoggedCreateUserRequest :
-        IPipelineNode<
-            ICreateUserRequestContract,
-            ICreateUserResultContract>
+        PipeNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
         private readonly ILogger<LoggedCreateUserRequest> _logger;
-        
-        private readonly IPipelineNode<
-            ICreateUserRequestContract, 
-            ICreateUserResultContract> _nextNode;
 
         public LoggedCreateUserRequest(
             ILogger<LoggedCreateUserRequest> logger,
-            IPipelineNode<
-                ICreateUserRequestContract,
-                ICreateUserResultContract> nextNode)
+            IPipeNode<ICreateUserRequestContract,ICreateUserResultContract> next) :
+            base(next)
         {
-            _nextNode = nextNode;
             _logger = logger;
         }
 
-        public async Task<ICreateUserResultContract> Ask(
-            ICreateUserRequestContract input)
+        public override Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input)
         {
             _logger.LogInformation($"CreateUserLogger starts on: {DateTime.Now}");
-            var result = await _nextNode.Ask(input);
+            var result = DoNext(input);
             _logger.LogInformation($"CreateUserLogger ends on: {DateTime.Now}");
             return result;
         }

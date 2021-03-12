@@ -8,41 +8,33 @@ namespace Nano35.Identity.Api.Requests.UpdateEmail
     public class ValidatedUpdateEmailRequestErrorResult :
         IUpdateEmailErrorResultContract
     {
-        public string Error { get; set; }
+        public string Message { get; set; }
     }
     
     public class ValidatedUpdateEmailRequest:
-        IPipelineNode<
-            IUpdateEmailRequestContract,
-            IUpdateEmailResultContract>
+        PipeNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
     {
         private readonly IValidator<IUpdateEmailRequestContract> _validator;
-        
-        private readonly IPipelineNode<
-            IUpdateEmailRequestContract, 
-            IUpdateEmailResultContract> _nextNode;
 
         public ValidatedUpdateEmailRequest(
             IValidator<IUpdateEmailRequestContract> validator,
-            IPipelineNode<
-                IUpdateEmailRequestContract,
-                IUpdateEmailResultContract> nextNode)
+            IPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract> next) :
+            base(next)
         {
             _validator = validator;
-            _nextNode = nextNode;
         }
 
-        public async Task<IUpdateEmailResultContract> Ask(
-            IUpdateEmailRequestContract input)
+        public override Task<IUpdateEmailResultContract> Ask(IUpdateEmailRequestContract input)
         {
-            var result = await _validator.ValidateAsync(input);
+            var result = _validator.ValidateAsync(input).Result;
             
             if (!result.IsValid)
             {
-                return new ValidatedUpdateEmailRequestErrorResult() 
-                    {Error = result.Errors.FirstOrDefault()?.ErrorMessage};
+                return Task.Run(() => new ValidatedUpdateEmailRequestErrorResult()
+                    {Message = result.Errors.FirstOrDefault()?.ErrorMessage} as IUpdateEmailResultContract);
             }
-            return await _nextNode.Ask(input);
+            
+            return DoNext(input);
         }
     }
 }

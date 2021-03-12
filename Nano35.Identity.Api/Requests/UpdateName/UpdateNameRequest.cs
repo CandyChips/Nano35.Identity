@@ -10,9 +10,7 @@ using Nano35.Identity.Api.Helpers;
 namespace Nano35.Identity.Api.Requests.UpdateName
 {
     public class UpdateNameRequest :
-        IPipelineNode<
-            IUpdateNameRequestContract, 
-            IUpdateNameResultContract>
+        EndPointNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
     {
         private readonly IBus _bus;
 
@@ -22,8 +20,7 @@ namespace Nano35.Identity.Api.Requests.UpdateName
             _bus = bus;
         }
         
-        public async Task<IUpdateNameResultContract> Ask(
-            IUpdateNameRequestContract input)
+        public override async Task<IUpdateNameResultContract> Ask(IUpdateNameRequestContract input)
         {
             var client = _bus.CreateRequestClient<IUpdateNameRequestContract>(TimeSpan.FromSeconds(10));
             
