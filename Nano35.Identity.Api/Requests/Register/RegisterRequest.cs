@@ -29,8 +29,10 @@ namespace Nano35.Identity.Api.Requests.Register
                 .GetResponse<IRegisterSuccessResultContract, IRegisterErrorResultContract>(input);
             
             if (response.Is(out Response<IRegisterSuccessResultContract> successResponse))
+            {
                 return successResponse.Message;
-            
+            }
+
             if (response.Is(out Response<IRegisterErrorResultContract> errorResponse))
                 return errorResponse.Message;
             

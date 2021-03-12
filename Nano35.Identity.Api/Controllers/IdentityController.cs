@@ -41,13 +41,11 @@ namespace Nano35.Identity.Api.Controllers
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
-            var validator =
-                (IValidator<IGetUserByIdRequestContract>) _services.GetService(
-                    typeof(IValidator<IGetUserByIdRequestContract>));
+            var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
 
             var request = new GetUserByIdRequestContract()
             {
-                UserId = message.UserId
+                UserId = message.Id
             };
             
             var result = 
@@ -74,9 +72,7 @@ namespace Nano35.Identity.Api.Controllers
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
-            var validator =
-                (IValidator<IGetUserByIdRequestContract>) _services.GetService(
-                    typeof(IValidator<IGetUserByIdRequestContract>));
+            var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
 
             var request = new GetAllUsersRequestContract();
             
@@ -123,8 +119,7 @@ namespace Nano35.Identity.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IRegisterSuccessResultContract))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IRegisterErrorResultContract))] 
         public async Task<IActionResult> Register(
-            [FromBody] RegisterHttpBody body,
-            [FromHeader] RegisterHttpHeader head)
+            [FromBody] RegisterHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
@@ -132,7 +127,7 @@ namespace Nano35.Identity.Api.Controllers
 
             var request = new RegisterRequestContract()
             {
-                NewUserId = head.NewId,
+                NewUserId = body.NewId,
                 Phone = body.Phone,
                 Email = body.Email,
                 Password = body.Password,

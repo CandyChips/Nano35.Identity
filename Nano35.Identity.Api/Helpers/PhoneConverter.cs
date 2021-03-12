@@ -12,7 +12,5 @@
             result = result.Substring(1); // 8005553535
             return result; 
         }
-        
     }
-
 }
