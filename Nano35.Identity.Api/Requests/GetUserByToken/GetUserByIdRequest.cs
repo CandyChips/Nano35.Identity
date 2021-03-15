@@ -1,7 +1,7 @@
 using MassTransit;
 using Nano35.Contracts.Identity.Artifacts;
 
-namespace Nano35.Identity.Api.Requests.GetUserById
+namespace Nano35.Identity.Api.Requests.GetUserByToken
 {
     public class GetUserByIdRequest : 
         MasstransitRequest

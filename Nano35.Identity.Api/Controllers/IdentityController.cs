@@ -51,7 +51,7 @@ namespace Nano35.Identity.Api.Controllers
             var result = 
                 await new LoggedGetUserByIdRequest(logger,
                     new ValidatedGetUserByIdRequest(validator,
-                        new GetUserByIdRequest(bus))
+                        new GetUserByIdUseCase(bus))
                 ).Ask(request);
 
             return result switch
@@ -78,7 +78,7 @@ namespace Nano35.Identity.Api.Controllers
             
             var result = 
                 await new LoggedGetAllUsersRequest(logger,
-                    new GetAllUsersRequest(bus))
+                    new GetAllUsersUseCase(bus))
                     .Ask(request);
 
             return result switch
@@ -102,7 +102,7 @@ namespace Nano35.Identity.Api.Controllers
 
             var result =
                 await new LoggedGetUserByTokenRequest(logger,
-                    new GetUserByTokenRequest(bus, auth))
+                    new GetUserByTokenUseCase(bus, auth))
                     .Ask(new GetUserByIdRequestContract());
 
             return result switch
@@ -137,7 +137,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedRegisterRequest(logger,
                         new ValidatedRegisterRequest(validator,
-                            new RegisterRequest(bus)))
+                            new RegisterUseCase(bus)))
                     .Ask(request);
             
             return result switch
@@ -169,7 +169,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedGenerateTokenRequest(logger,
                         new ValidatedGenerateTokenRequest(validator,
-                            new GenerateTokenRequest(bus)))
+                            new GenerateTokenUseCase(bus)))
                     .Ask(request);
             
             return result switch
@@ -201,7 +201,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedUpdatePhoneRequest(logger,
                         new ValidatedUpdatePhoneRequest(validator,
-                            new UpdatePhoneRequest(bus)))
+                            new UpdatePhoneUseCase(bus)))
                     .Ask(request);
             
             return result switch
@@ -233,7 +233,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedUpdatePasswordRequest(logger,
                         new ValidatedUpdatePasswordRequest(validator,
-                            new UpdatePasswordRequest(bus)))
+                            new UpdatePasswordUseCase(bus)))
                     .Ask(request);
             
             return result switch
@@ -265,7 +265,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedUpdateNameRequest(logger,
                         new ValidatedUpdateNameRequest(validator,
-                            new UpdateNameRequest(bus)))
+                            new UpdateNameUseCase(bus)))
                     .Ask(request);
             
             return result switch
@@ -297,7 +297,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedUpdateEmailRequest(logger,
                         new ValidatedUpdateEmailRequest(validator,
-                            new UpdateEmailRequest(bus)))
+                            new UpdateEmailUseCase(bus)))
                     .Ask(request);
             
             return result switch

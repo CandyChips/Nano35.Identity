@@ -1,36 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
 using MassTransit;
 using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.ConfirmEmailOfUser
 {
-    public class ConfirmEmailOfUserRequest :
-        EndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+    public class ConfirmEmailOfUserRequest : 
+        MasstransitRequest
+        <IConfirmEmailOfUserRequestContract, 
+            IConfirmEmailOfUserResultContract,
+            IConfirmEmailOfUserSuccessResultContract, 
+            IConfirmEmailOfUserErrorResultContract>
     {
-        private readonly IBus _bus;
-
-        public ConfirmEmailOfUserRequest(IBus bus)
-        {
-            _bus = bus;
-        }
-        
-        public override async Task<IGenerateTokenResultContract> Ask(IGenerateTokenRequestContract input)
-        {
-            var client = _bus.CreateRequestClient<IGenerateTokenRequestContract>(TimeSpan.FromSeconds(10));
-                
-            var response = await client
-                .GetResponse<
-                    IGenerateTokenSuccessResultContract, 
-                    IGenerateTokenErrorResultContract>(input);
-                
-            if (response.Is(out Response<IGenerateTokenSuccessResultContract> successResponse))
-                return successResponse.Message;
-                
-            if (response.Is(out Response<IGenerateTokenErrorResultContract> errorResponse))
-                return errorResponse.Message;
-                
-            throw new InvalidOperationException();
-        }
+        public ConfirmEmailOfUserRequest(IBus bus, IConfirmEmailOfUserRequestContract request) : base(bus, request) {}
     }
 }
