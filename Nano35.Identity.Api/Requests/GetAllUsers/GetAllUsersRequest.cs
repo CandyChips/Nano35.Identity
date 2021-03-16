@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.GetAllUsers
             IGetAllUsersSuccessResultContract, 
             IGetAllUsersErrorResultContract>
     {
-        public GetAllUsersRequest(IBus bus, IGetAllUsersRequestContract request) : base(bus, request) {}
+        public GetAllUsersRequest(IBus bus, IGetAllUsersRequestContract request) : base(bus) {}
     }
 }

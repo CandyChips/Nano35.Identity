@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.UpdateEmail
             IUpdateEmailSuccessResultContract, 
             IUpdateEmailErrorResultContract>
     {
-        public UpdateEmailRequest(IBus bus, IUpdateEmailRequestContract request) : base(bus, request) {}
+        public UpdateEmailRequest(IBus bus, IUpdateEmailRequestContract request) : base(bus) {}
     }
 }

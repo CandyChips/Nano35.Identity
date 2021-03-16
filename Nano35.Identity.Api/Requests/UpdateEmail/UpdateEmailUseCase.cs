@@ -16,6 +16,7 @@ namespace Nano35.Identity.Api.Requests.UpdateEmail
 
         public UpdateEmailUseCase(IBus bus) { _bus = bus; }
         
-        public override async Task<IUpdateEmailResultContract> Ask(IUpdateEmailRequestContract input) => (await (new UpdateEmailRequest(_bus, input)).GetResponse());
+        public override async Task<IUpdateEmailResultContract> Ask(IUpdateEmailRequestContract input) =>
+            (await (new UpdateEmailRequest(_bus, input)).GetResponse(input));
     }
 }

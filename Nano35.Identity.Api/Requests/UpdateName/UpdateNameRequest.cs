@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.UpdateName
             IUpdateNameSuccessResultContract, 
             IUpdateNameErrorResultContract>
     {
-        public UpdateNameRequest(IBus bus, IUpdateNameRequestContract request) : base(bus, request) {}
+        public UpdateNameRequest(IBus bus, IUpdateNameRequestContract request) : base(bus) {}
     }
 }

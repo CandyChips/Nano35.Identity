@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
             IUpdatePasswordSuccessResultContract, 
             IUpdatePasswordErrorResultContract>
     {
-        public UpdatePasswordRequest(IBus bus, IUpdatePasswordRequestContract request) : base(bus, request) {}
+        public UpdatePasswordRequest(IBus bus, IUpdatePasswordRequestContract request) : base(bus) {}
     }
 }

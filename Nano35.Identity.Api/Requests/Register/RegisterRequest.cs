@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.Register
             IRegisterSuccessResultContract, 
             IRegisterErrorResultContract>
     {
-        public RegisterRequest(IBus bus, IRegisterRequestContract request) : base(bus, request) {}
+        public RegisterRequest(IBus bus, IRegisterRequestContract request) : base(bus) {}
     }
 }

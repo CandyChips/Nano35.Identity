@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.ConfirmEmailOfUser
             IConfirmEmailOfUserSuccessResultContract, 
             IConfirmEmailOfUserErrorResultContract>
     {
-        public ConfirmEmailOfUserRequest(IBus bus, IConfirmEmailOfUserRequestContract request) : base(bus, request) {}
+        public ConfirmEmailOfUserRequest(IBus bus, IConfirmEmailOfUserRequestContract request) : base(bus) {}
     }
 }

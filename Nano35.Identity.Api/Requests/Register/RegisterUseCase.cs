@@ -23,7 +23,7 @@ namespace Nano35.Identity.Api.Requests.Register
         {
             input.Phone = PhoneConverter.RuPhoneConverter(input.Phone);
             var request = new RegisterRequest(_bus, input);
-            return (await request.GetResponse());
+            return (await request.GetResponse(input));
         }
     }
 }

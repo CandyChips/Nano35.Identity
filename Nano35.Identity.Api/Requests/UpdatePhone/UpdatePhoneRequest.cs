@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
             IUpdatePhoneSuccessResultContract, 
             IUpdatePhoneErrorResultContract>
     {
-        public UpdatePhoneRequest(IBus bus, IUpdatePhoneRequestContract request) : base(bus, request) {}
+        public UpdatePhoneRequest(IBus bus, IUpdatePhoneRequestContract request) : base(bus) {}
     }
 }

@@ -24,7 +24,7 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
             
             input.Phone = PhoneConverter.RuPhoneConverter(input.Phone);
             var request = new UpdatePhoneRequest(_bus, input);
-            return (await request.GetResponse());
+            return (await request.GetResponse(input));
         }
     }
 }

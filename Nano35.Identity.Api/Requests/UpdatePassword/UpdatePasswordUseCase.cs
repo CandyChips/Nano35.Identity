@@ -22,7 +22,7 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
         public override async Task<IUpdatePasswordResultContract> Ask(IUpdatePasswordRequestContract input)
         {
             var request = new UpdatePasswordRequest(_bus, input);
-            return (await request.GetResponse());
+            return (await request.GetResponse(input));
         }
     }
 }

@@ -21,12 +21,33 @@ namespace Nano35.Identity.Api.Requests
         public abstract Task<TOut> Ask(TIn input);
     }
 
+    public abstract class PipeInConvert <TFrom, TTo, In, TOut> : 
+        IPipeNode<TFrom, TTo>
+    {
+        private readonly IPipeNode<In, TOut> _next;
+        protected PipeInConvert(IPipeNode<In, TOut> next) { _next = next; }
+        protected Task<TOut> DoNext(In input) { return _next.Ask(input); }
+        public abstract Task<TTo> Ask(TFrom input);
+    }
+
     public abstract class EndPointNodeBase<TIn, TOut> : 
         IPipeNode<TIn, TOut>
         where TIn : IRequest
         where TOut : IResponse
     {
         public abstract Task<TOut> Ask(TIn input);
+    }
+
+    public abstract class EndPointRequestNodeBase<TMessage, TResponse, TSuccess, TError>  : 
+        MasstransitRequest<TMessage, TResponse, TSuccess, TError>,
+        IPipeNode<TMessage, TResponse>
+        where TMessage : class, IRequest
+        where TResponse : class, IResponse
+        where TSuccess : class, ISuccess, TResponse
+        where TError : class, IError, TResponse
+    {
+        protected EndPointRequestNodeBase(IBus bus) : base(bus) {}
+        public async Task<TResponse> Ask(TMessage input) => await GetResponse(input);
     }
 
     /// <summary>
@@ -44,17 +65,15 @@ namespace Nano35.Identity.Api.Requests
         where TError : class, IError, TResponse
     {
         private readonly IRequestClient<TMessage> _requestClient;
-        private readonly TMessage _request;
 
-        protected MasstransitRequest(IBus bus, TMessage request)
+        protected MasstransitRequest(IBus bus)
         {
             _requestClient = bus.CreateRequestClient<TMessage>(TimeSpan.FromSeconds(10));
-            _request = request;
         }
 
-        public async Task<TResponse> GetResponse()
+        public async Task<TResponse> GetResponse(TMessage request)
         {
-            var responseGetClientString = await _requestClient.GetResponse<TSuccess, TError>(_request);
+            var responseGetClientString = await _requestClient.GetResponse<TSuccess, TError>(request);
             if (responseGetClientString.Is(out Response<TSuccess> successResponse))
                 return successResponse.Message;
             if (responseGetClientString.Is(out Response<TError> errorResponse))

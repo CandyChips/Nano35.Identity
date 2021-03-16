@@ -124,28 +124,14 @@ namespace Nano35.Identity.Api.Controllers
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
             var validator = (IValidator<IRegisterRequestContract>) _services.GetService(typeof(IValidator<IRegisterRequestContract>));
-
-            var request = new RegisterRequestContract()
-            {
-                NewUserId = body.NewId,
-                Phone = body.Phone,
-                Email = body.Email,
-                Password = body.Password,
-                PasswordConfirm = body.PasswordConfirm
-            };
-                
-            var result =
-                await new LoggedRegisterRequest(logger,
-                        new ValidatedRegisterRequest(validator,
-                            new RegisterUseCase(bus)))
-                    .Ask(request);
             
-            return result switch
-            {
-                IRegisterSuccessResultContract success => Ok(success),
-                IRegisterErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+            return await
+                new ConvertedRegisterOnHttpContext(
+                    new LoggedRegisterRequest(logger,
+                        new ValidatedRegisterRequest(validator,
+                            new RegisterUseCase(bus)))) 
+                    .Ask(body);
+            
         }
         
         [HttpPost]
@@ -160,24 +146,13 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
             var validator = (IValidator<IGenerateTokenRequestContract>) _services.GetService(typeof(IValidator<IGenerateTokenRequestContract>));
             
-            var request = new GenerateTokenRequestContract()
-            {
-                Login = body.Login,
-                Password = body.Password
-            };
-            
-            var result =
-                await new LoggedGenerateTokenRequest(logger,
-                        new ValidatedGenerateTokenRequest(validator,
-                            new GenerateTokenUseCase(bus)))
-                    .Ask(request);
-            
-            return result switch
-            {
-                IGenerateTokenSuccessResultContract success => Ok(success),
-                IGenerateTokenErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+            return await 
+                new ConvertedGenerateTokenOnHttpContext(
+                    new LoggedGenerateTokenRequest(logger,
+                        new ValidatedGenerateTokenRequest(validator, 
+                            new GenerateTokenUseCase(bus))))
+                    .Ask(body);
+
         }
 
         [HttpPatch]

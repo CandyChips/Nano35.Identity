@@ -15,6 +15,7 @@ namespace Nano35.Identity.Api.Requests.GetUserById
 
         public GetUserByIdUseCase(IBus bus) { _bus = bus; }
 
-        public override async Task<IGetUserByIdResultContract> Ask(IGetUserByIdRequestContract input) => (await (new GetUserByIdRequest(_bus, input)).GetResponse());
+        public override async Task<IGetUserByIdResultContract> Ask(IGetUserByIdRequestContract input) =>
+            (await (new GetUserByIdRequest(_bus, input)).GetResponse(input));
     }
 }

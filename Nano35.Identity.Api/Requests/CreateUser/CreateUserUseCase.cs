@@ -18,6 +18,7 @@ namespace Nano35.Identity.Api.Requests.CreateUser
             _bus = bus;
         }
         
-        public override async Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input) => (await (new CreateUserRequest(_bus, input)).GetResponse());
+        public override async Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input) => 
+            (await (new CreateUserRequest(_bus, input)).GetResponse(input));
     }
 }

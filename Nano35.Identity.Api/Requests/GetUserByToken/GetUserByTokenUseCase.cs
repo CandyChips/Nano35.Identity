@@ -22,7 +22,7 @@ namespace Nano35.Identity.Api.Requests.GetUserByToken
         {
             input.UserId = _auth.CurrentUserId;
             var request = new GetUserByIdRequest(_bus, input);
-            return (await request.GetResponse());
+            return (await request.GetResponse(input));
         }
     }
 }

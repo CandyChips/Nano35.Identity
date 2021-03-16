@@ -12,6 +12,7 @@ namespace Nano35.Identity.Api.Requests.ConfirmEmailOfUser
 
         public ConfirmEmailOfUserUseCase(IBus bus) { _bus = bus; }
         
-        public override async Task<IConfirmEmailOfUserResultContract> Ask(IConfirmEmailOfUserRequestContract input) => (await (new ConfirmEmailOfUserRequest(_bus, input)).GetResponse());
+        public override async Task<IConfirmEmailOfUserResultContract> Ask(IConfirmEmailOfUserRequestContract input) => 
+            (await (new ConfirmEmailOfUserRequest(_bus, input)).GetResponse(input));
     }
 }

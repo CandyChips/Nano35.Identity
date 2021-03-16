@@ -10,6 +10,6 @@ namespace Nano35.Identity.Api.Requests.CreateUser
             ICreateUserSuccessResultContract, 
             ICreateUserErrorResultContract>
     {
-        public CreateUserRequest(IBus bus, ICreateUserRequestContract request) : base(bus, request) {}
+        public CreateUserRequest(IBus bus, ICreateUserRequestContract request) : base(bus) {}
     }
 }
