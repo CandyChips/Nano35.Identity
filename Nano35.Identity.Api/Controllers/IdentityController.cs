@@ -131,7 +131,6 @@ namespace Nano35.Identity.Api.Controllers
                         new ValidatedRegisterRequest(validator,
                             new RegisterUseCase(bus)))) 
                     .Ask(body);
-            
         }
         
         [HttpPost]
@@ -152,7 +151,6 @@ namespace Nano35.Identity.Api.Controllers
                         new ValidatedGenerateTokenRequest(validator, 
                             new GenerateTokenUseCase(bus))))
                     .Ask(body);
-
         }
 
         [HttpPatch]
