@@ -125,12 +125,11 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
             var validator = (IValidator<IRegisterRequestContract>) _services.GetService(typeof(IValidator<IRegisterRequestContract>));
             
-            return await
+            return await 
                 new ConvertedRegisterOnHttpContext(
                     new LoggedRegisterRequest(logger,
                         new ValidatedRegisterRequest(validator,
-                            new RegisterUseCase(bus)))) 
-                    .Ask(body);
+                            new RegisterUseCase(bus)))).Ask(body);
         }
         
         [HttpPost]
@@ -149,8 +148,7 @@ namespace Nano35.Identity.Api.Controllers
                 new ConvertedGenerateTokenOnHttpContext(
                     new LoggedGenerateTokenRequest(logger,
                         new ValidatedGenerateTokenRequest(validator, 
-                            new GenerateTokenUseCase(bus))))
-                    .Ask(body);
+                            new GenerateTokenUseCase(bus)))).Ask(body);
         }
 
         [HttpPatch]
@@ -174,8 +172,7 @@ namespace Nano35.Identity.Api.Controllers
             var result =
                 await new LoggedUpdatePhoneRequest(logger,
                         new ValidatedUpdatePhoneRequest(validator,
-                            new UpdatePhoneUseCase(bus)))
-                    .Ask(request);
+                            new UpdatePhoneUseCase(bus))).Ask(request);
             
             return result switch
             {
@@ -205,9 +202,8 @@ namespace Nano35.Identity.Api.Controllers
             
             var result =
                 await new LoggedUpdatePasswordRequest(logger,
-                        new ValidatedUpdatePasswordRequest(validator,
-                            new UpdatePasswordUseCase(bus)))
-                    .Ask(request);
+                    new ValidatedUpdatePasswordRequest(validator,
+                        new UpdatePasswordUseCase(bus))).Ask(request);
             
             return result switch
             {

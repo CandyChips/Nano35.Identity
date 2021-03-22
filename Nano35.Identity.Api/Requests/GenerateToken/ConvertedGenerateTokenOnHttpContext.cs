@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.HttpContext.identity;

@@ -1,8 +1,6 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Api.Configurations;
 using Nano35.Identity.Api.Middlewares;
 

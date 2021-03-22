@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using FluentValidation;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Api.Requests.GenerateToken;
 
 namespace Nano35.Identity.Api.Requests.GetUserByToken
 {

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MassTransit;
-using MediatR;
-using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.CreateUser
@@ -17,8 +13,8 @@ namespace Nano35.Identity.Api.Requests.CreateUser
         {
             _bus = bus;
         }
-        
-        public override async Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input) => 
+
+        public override async Task<ICreateUserResultContract> Ask(ICreateUserRequestContract input) =>
             (await (new CreateUserRequest(_bus, input)).GetResponse(input));
     }
 }

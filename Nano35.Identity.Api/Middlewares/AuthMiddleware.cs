@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Nano35.Identity.Api.Helpers;
 
 namespace Nano35.Identity.Api.Middlewares
 {
@@ -24,7 +23,7 @@ namespace Nano35.Identity.Api.Middlewares
             var token = context.Request.Headers["Authorization"]!.ToString().Split(' ').Last();
             if (token != "")
             {
-                this._logger.Log(LogLevel.Information, token);
+                _logger.Log(LogLevel.Information, token);
             }
             await _next.Invoke(context);
         }
