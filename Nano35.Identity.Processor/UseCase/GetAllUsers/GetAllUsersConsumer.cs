@@ -32,7 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
             var result = 
                 await new LoggedGetAllUsersRequest(logger,  
                     new ValidatedGetAllUsersRequest(
-                        new GetAllUsersRequest(userManager))
+                        new GetAllUsersUseCase(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

@@ -36,7 +36,7 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             var result = 
                 await new LoggedGenerateTokenRequest(logger,  
                     new ValidatedGenerateTokenRequest(
-                        new GenerateTokenRequest(userManager, signInManager, jwtGenerator))
+                        new GenerateTokenUseCase(userManager, signInManager, jwtGenerator))
                 ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

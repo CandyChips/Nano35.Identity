@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
 using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.UpdatePhone
 {
-    public class UpdatePhoneRequest :
+    public class UpdatePhoneUseCase :
         EndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
         private readonly UserManager<User> _userManager;
 
-        public UpdatePhoneRequest(
+        public UpdatePhoneUseCase(
             UserManager<User> userManager)
         {
             _userManager = userManager;
@@ -32,11 +33,18 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
             public string Message { get; set; }
         }
 
-        public override Task<IUpdatePhoneResultContract> Ask(
+        public override async Task<IUpdatePhoneResultContract> Ask(
             IUpdatePhoneRequestContract request,
             CancellationToken cancellationToken)
-        {   
-            throw new NotImplementedException();
+        {
+            var result =
+                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
+                    cancellationToken));
+            result.PhoneNumber = request.Phone;
+
+            return new UpdatePhoneSuccessResultContract();
         }
+
+
     }
 }

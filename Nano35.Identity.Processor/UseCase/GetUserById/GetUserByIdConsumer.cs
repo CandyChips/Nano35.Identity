@@ -31,7 +31,7 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
             var result = 
                 await new LoggedGetUserByIdRequest(logger,  
                     new ValidatedGetUserByIdRequest(
-                        new GetUserByIdRequest(dbContext))
+                        new GetUserByIdUseCase(dbContext))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

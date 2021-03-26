@@ -33,7 +33,7 @@ namespace Nano35.Identity.Processor.UseCase.Register
             var result = 
                 await new LoggedRegisterRequest(logger,
                     new ValidatedRegisterRequest(
-                        new RegisterRequest(userManager))
+                        new RegisterUseCase(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

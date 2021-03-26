@@ -42,24 +42,13 @@ namespace Nano35.Identity.Api.Controllers
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
             var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
-
-            var request = new GetUserByIdRequestContract()
-            {
-                UserId = message.Id
-            };
             
-            var result = 
-                await new LoggedGetUserByIdRequest(logger,
+            return await
+                new ConvertedGetUserByIdOnHttpContext(
+                new LoggedGetUserByIdRequest(logger,
                     new ValidatedGetUserByIdRequest(validator,
-                        new GetUserByIdUseCase(bus))
-                ).Ask(request);
-
-            return result switch
-            {
-                IGetUserByIdSuccessResultContract success => Ok(success),
-                IGetUserByIdErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+                        new GetUserByIdUseCase(bus)))
+                ).Ask(message);
         }
         
         [HttpGet]
@@ -72,21 +61,13 @@ namespace Nano35.Identity.Api.Controllers
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
             var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
-            var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
+            //var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
 
-            var request = new GetAllUsersRequestContract();
-            
-            var result = 
-                await new LoggedGetAllUsersRequest(logger,
-                    new GetAllUsersUseCase(bus))
-                    .Ask(request);
-
-            return result switch
-            {
-                IGetAllUsersSuccessResultContract success => Ok(success),
-                IGetAllUsersErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+            return await
+                new ConvertedGetAllUsersOnHttpContext(
+                        new LoggedGetAllUsersRequest(logger,
+                            new GetAllUsersUseCase(bus)))
+                    .Ask(message);
         }
 
         [HttpGet]
@@ -100,17 +81,11 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedGetUserByTokenRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByTokenRequest>));
             var auth = (ICustomAuthStateProvider) _services.GetService(typeof(ICustomAuthStateProvider));
 
-            var result =
-                await new LoggedGetUserByTokenRequest(logger,
-                    new GetUserByTokenUseCase(bus, auth))
+            return await
+                new ConvertedGetUserByTokenOnHttpContext(
+                new LoggedGetUserByTokenRequest(logger,
+                    new GetUserByTokenUseCase(bus, auth)))
                     .Ask(new GetUserByIdRequestContract());
-
-            return result switch
-            {
-                IGetUserByIdSuccessResultContract success => Ok(success),
-                IGetUserByIdErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
         }
         
         [HttpPost]
@@ -163,23 +138,13 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedUpdatePhoneRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePhoneRequest>));
             var validator = (IValidator<IUpdatePhoneRequestContract>) _services.GetService(typeof(IValidator<IUpdatePhoneRequestContract>));
 
-            var request = new UpdatePhoneRequestContract()
-            {
-                UserId = body.UserId,
-                Phone = body.Phone
-            };
             
-            var result =
-                await new LoggedUpdatePhoneRequest(logger,
-                        new ValidatedUpdatePhoneRequest(validator,
-                            new UpdatePhoneUseCase(bus))).Ask(request);
-            
-            return result switch
-            {
-                IUpdatePhoneSuccessResultContract success => Ok(success),
-                IUpdatePhoneErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+            return await
+                new ConvertedUpdatePhoneOnHttpContext(
+                        new LoggedUpdatePhoneRequest(logger,
+                            new ValidatedUpdatePhoneRequest(validator,
+                                new UpdatePhoneUseCase(bus))))
+                    .Ask(body);
         }
 
         [HttpPatch]
@@ -194,23 +159,13 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedUpdatePasswordRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePasswordRequest>));
             var validator = (IValidator<IUpdatePasswordRequestContract>) _services.GetService(typeof(IValidator<IUpdatePasswordRequestContract>));
 
-            var request = new UpdatePasswordRequestContract()
-            {
-                UserId = body.UserId,
-                Password = body.Password
-            };
             
-            var result =
-                await new LoggedUpdatePasswordRequest(logger,
-                    new ValidatedUpdatePasswordRequest(validator,
-                        new UpdatePasswordUseCase(bus))).Ask(request);
-            
-            return result switch
-            {
-                IUpdatePasswordSuccessResultContract success => Ok(success),
-                IUpdatePasswordErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+            return await
+                new ConvertedUpdatePasswordOnHttpContext(
+                        new LoggedUpdatePasswordRequest(logger,
+                            new ValidatedUpdatePasswordRequest(validator,
+                                new UpdatePasswordUseCase(bus))))
+                    .Ask(body);
         }
 
         [HttpPatch]
@@ -225,24 +180,12 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedUpdateNameRequest>) _services.GetService(typeof(ILogger<LoggedUpdateNameRequest>));
             var validator = (IValidator<IUpdateNameRequestContract>) _services.GetService(typeof(IValidator<IUpdateNameRequestContract>));
 
-            var request = new UpdateNameRequestContract()
-            {
-                UserId = body.UserId,
-                Name = body.Name
-            };
-            
-            var result =
-                await new LoggedUpdateNameRequest(logger,
-                        new ValidatedUpdateNameRequest(validator,
-                            new UpdateNameUseCase(bus)))
-                    .Ask(request);
-            
-            return result switch
-            {
-                IUpdateNameSuccessResultContract success => Ok(success),
-                IUpdateNameErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+            return await
+                new ConvertedUpdateNameOnHttpContext(
+                        new LoggedUpdateNameRequest(logger,
+                            new ValidatedUpdateNameRequest(validator,
+                                new UpdateNameUseCase(bus))))
+                    .Ask(body);
         }
 
         [HttpPatch]
@@ -257,24 +200,12 @@ namespace Nano35.Identity.Api.Controllers
             var logger = (ILogger<LoggedUpdateEmailRequest>) _services.GetService(typeof(ILogger<LoggedUpdateEmailRequest>));
             var validator = (IValidator<IUpdateEmailRequestContract>) _services.GetService(typeof(IValidator<IUpdateEmailRequestContract>));
 
-            var request = new UpdateEmailRequestContract()
-            {
-                UserId = body.UserId,
-                Email = body.Email
-            };
-            
-            var result =
-                await new LoggedUpdateEmailRequest(logger,
+            return await
+                new ConvertedUpdateEmailOnHttpContext(
+                new LoggedUpdateEmailRequest(logger,
                         new ValidatedUpdateEmailRequest(validator,
-                            new UpdateEmailUseCase(bus)))
-                    .Ask(request);
-            
-            return result switch
-            {
-                IUpdateEmailSuccessResultContract success => Ok(success),
-                IUpdateEmailErrorResultContract error => BadRequest(error),
-                _ => BadRequest()
-            };
+                            new UpdateEmailUseCase(bus))))
+                    .Ask(body);
         }
     }
 }

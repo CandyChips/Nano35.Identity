@@ -8,12 +8,12 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 
 namespace Nano35.Identity.Processor.UseCase.GetUserById
 {
-    public class GetUserByIdRequest :
+    public class GetUserByIdUseCase :
         EndPointNodeBase<IGetUserByIdRequestContract, IGetUserByIdResultContract>
     {
         private readonly ApplicationContext _context;
 
-        public GetUserByIdRequest(
+        public GetUserByIdUseCase(
             ApplicationContext context)
         {
             _context = context;
