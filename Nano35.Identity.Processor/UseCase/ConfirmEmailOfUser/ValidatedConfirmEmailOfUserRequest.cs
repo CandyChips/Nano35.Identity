@@ -17,12 +17,9 @@ namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
         private readonly IValidator<IConfirmEmailOfUserRequestContract> _validator;
         
         public ValidatedConfirmEmailOfUserRequest(
-            IValidator<IConfirmEmailOfUserRequestContract> validator,
             IPipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract> next) :
             base(next)
-        {   
-            _validator = validator;
-        }
+        { }
 
         public override Task<IConfirmEmailOfUserResultContract> Ask(
             IConfirmEmailOfUserRequestContract input,

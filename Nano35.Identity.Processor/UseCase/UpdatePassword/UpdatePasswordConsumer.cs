@@ -33,7 +33,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
             var result = 
                 await new LoggedUpdatePasswordRequest(logger,
                     new ValidatedUpdatePasswordRequest(
-                        new UpdatePasswordRequest(userManager))
+                        new UpdatePasswordUseCase(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request
