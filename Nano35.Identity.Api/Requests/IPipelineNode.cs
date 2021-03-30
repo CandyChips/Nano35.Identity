@@ -10,15 +10,31 @@ namespace Nano35.Identity.Api.Requests
         Task<TOut> Ask(TIn input);
     }
 
-    public abstract class PipeNodeBase<TIn, TOut> : 
-        IPipeNode<TIn, TOut>
-        where TIn : IRequest
-        where TOut : IResponse
+    public static class MonadicMaybe
     {
-        private readonly IPipeNode<TIn, TOut> _next;
-        protected PipeNodeBase(IPipeNode<TIn, TOut> next) { _next = next; }
-        protected Task<TOut> DoNext(TIn input) { return _next.Ask(input); }
-        public abstract Task<TOut> Ask(TIn input);
+        public static TResult With<TInput, TResult>(this TInput input,Func<TInput, TResult> evaluator)
+            where TInput : class where TResult : class => 
+            input == null ? null : evaluator(input);
+
+        public static TResult Return<TInput, TResult>(this TInput input, Func<TInput, TResult> evaluator, TResult failure)
+            where TInput : class where TResult : class =>
+            input == null ? failure : evaluator(input);
+
+        public static bool ReturnSuccess<TInput>(this TInput input)
+            where TInput : class =>
+            input != null;
+
+        public static TInput If<TInput>(this TInput input, Predicate<TInput> evaluator)
+            where TInput : class =>
+            input == null ? null : evaluator(input) ? input : null;
+        
+        public static TInput Do<TInput>(this TInput input, Action<TInput> evaluator)
+            where TInput : class
+        {
+            if (input == null) return null;
+            evaluator(input);
+            return input;
+        }
     }
 
     public abstract class PipeInConvert <TFrom, TTo, In, TOut> : 
@@ -28,6 +44,17 @@ namespace Nano35.Identity.Api.Requests
         protected PipeInConvert(IPipeNode<In, TOut> next) { _next = next; }
         protected Task<TOut> DoNext(In input) { return _next.Ask(input); }
         public abstract Task<TTo> Ask(TFrom input);
+    }
+
+    public abstract class PipeNodeBase<TIn, TOut> : 
+        IPipeNode<TIn, TOut>
+        where TIn : IRequest
+        where TOut : IResponse
+    {
+        private readonly IPipeNode<TIn, TOut> _next;
+        protected PipeNodeBase(IPipeNode<TIn, TOut> next) { _next = next; }
+        protected Task<TOut> DoNext(TIn input) { return _next.Ask(input); }
+        public abstract Task<TOut> Ask(TIn input);
     }
 
     public abstract class EndPointNodeBase<TIn, TOut> : 

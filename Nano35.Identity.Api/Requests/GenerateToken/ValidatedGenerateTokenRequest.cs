@@ -26,7 +26,7 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
 
         public override Task<IGenerateTokenResultContract> Ask(IGenerateTokenRequestContract input)
         {
-            var result =  _validator.ValidateAsync(input).Result;
+            var result = _validator.ValidateAsync(input).Result;
 
             if (!result.IsValid)
             {
