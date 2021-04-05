@@ -19,13 +19,12 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
         
         public async Task Consume(ConsumeContext<IGetUserByIdRequestContract> context)
         {
-            var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
-            var logger = (ILogger<IGetUserByIdRequestContract>) _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>));
-            var message = context.Message;
             var result = 
-                await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(logger,  
+                await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+                    _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,  
                     new ValidatedGetUserByIdRequest(
-                        new GetUserByIdUseCase(dbContext))).Ask(message, context.CancellationToken);
+                        new GetUserByIdUseCase(
+                            _services.GetService(typeof(ApplicationContext)) as ApplicationContext))).Ask(context.Message, context.CancellationToken);
             switch (result)
             {
                 case IGetUserByIdSuccessResultContract:

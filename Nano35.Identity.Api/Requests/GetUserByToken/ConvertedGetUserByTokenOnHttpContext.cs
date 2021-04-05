@@ -12,13 +12,13 @@ namespace Nano35.Identity.Api.Requests.GetUserByToken
             IGetUserByIdRequestContract, 
             IGetUserByIdResultContract>
     {
-        public ConvertedGetUserByTokenOnHttpContext(IPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> next) : base(next) {}
+        public ConvertedGetUserByTokenOnHttpContext(
+            IPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(GetUserByIdRequestContract input)
         {
-            var response = await DoNext(input);
-            
-            return response switch
+            return await DoNext(input) switch
             {
                 IGetUserByIdSuccessResultContract success => new OkObjectResult(success),
                 IGetUserByIdErrorResultContract error => new BadRequestObjectResult(error),

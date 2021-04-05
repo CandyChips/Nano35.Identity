@@ -12,7 +12,9 @@ namespace Nano35.Identity.Api.Requests.UpdateEmail
             IUpdateEmailRequestContract, 
             IUpdateEmailResultContract>
     {
-        public ConvertedUpdateEmailOnHttpContext(IPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract> next) : base(next) {}
+        public ConvertedUpdateEmailOnHttpContext(
+            IPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(UpdateEmailHttpBody input)
         {
@@ -21,10 +23,7 @@ namespace Nano35.Identity.Api.Requests.UpdateEmail
                 UserId = input.UserId,
                 Email = input.Email
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IUpdateEmailSuccessResultContract success => new OkObjectResult(success),
                 IUpdateEmailErrorResultContract error => new BadRequestObjectResult(error),

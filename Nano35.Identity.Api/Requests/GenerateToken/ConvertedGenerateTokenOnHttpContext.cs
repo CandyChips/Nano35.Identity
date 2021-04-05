@@ -13,7 +13,9 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
             IGenerateTokenRequestContract, 
             IGenerateTokenResultContract>
     {
-        public ConvertedGenerateTokenOnHttpContext(IPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> next) : base(next) {}
+        public ConvertedGenerateTokenOnHttpContext(
+            IPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(GenerateUserTokenHttpBody input)
         {
@@ -28,10 +30,7 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
                     .If(x => x != "")
                     .Do(Console.WriteLine)
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IGenerateTokenSuccessResultContract success => new OkObjectResult(success),
                 IGenerateTokenErrorResultContract error => new BadRequestObjectResult(error),

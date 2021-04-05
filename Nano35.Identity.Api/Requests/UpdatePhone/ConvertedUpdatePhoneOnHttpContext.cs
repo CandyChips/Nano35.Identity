@@ -12,7 +12,9 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
             IUpdatePhoneRequestContract, 
             IUpdatePhoneResultContract>
     {
-        public ConvertedUpdatePhoneOnHttpContext(IPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> next) : base(next) {}
+        public ConvertedUpdatePhoneOnHttpContext(
+            IPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(UpdatePhoneHttpBody input)
         {
@@ -21,10 +23,7 @@ namespace Nano35.Identity.Api.Requests.UpdatePhone
                 UserId = input.UserId,
                 Phone = input.Phone
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IUpdatePhoneSuccessResultContract success => new OkObjectResult(success),
                 IUpdatePhoneErrorResultContract error => new BadRequestObjectResult(error),

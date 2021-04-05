@@ -12,7 +12,9 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
             IUpdatePasswordRequestContract, 
             IUpdatePasswordResultContract>
     {
-        public ConvertedUpdatePasswordOnHttpContext(IPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> next) : base(next) {}
+        public ConvertedUpdatePasswordOnHttpContext(
+            IPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(UpdatePasswordHttpBody input)
         {
@@ -21,10 +23,7 @@ namespace Nano35.Identity.Api.Requests.UpdatePassword
                 UserId = input.UserId,
                 Password = input.Password,
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IUpdatePasswordSuccessResultContract success => new OkObjectResult(success),
                 IUpdatePasswordErrorResultContract error => new BadRequestObjectResult(error),

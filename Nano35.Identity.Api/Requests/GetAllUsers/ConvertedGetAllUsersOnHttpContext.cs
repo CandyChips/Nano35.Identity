@@ -12,15 +12,14 @@ namespace Nano35.Identity.Api.Requests.GetAllUsers
             IGetAllUsersRequestContract, 
             IGetAllUsersResultContract>
     {
-        public ConvertedGetAllUsersOnHttpContext(IPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> next) : base(next) {}
+        public ConvertedGetAllUsersOnHttpContext(
+            IPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(GetAllUsersHttpQuery input)
         {
             var converted = new GetAllUsersRequestContract();
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IGetAllUsersSuccessResultContract success => new OkObjectResult(success),
                 IGetAllUsersErrorResultContract error => new BadRequestObjectResult(error),

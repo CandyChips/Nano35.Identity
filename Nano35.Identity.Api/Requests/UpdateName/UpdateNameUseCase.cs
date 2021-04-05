@@ -11,7 +11,8 @@ namespace Nano35.Identity.Api.Requests.UpdateName
 
         public UpdateNameUseCase(IBus bus) { _bus = bus; }
 
-        public override async Task<IUpdateNameResultContract> Ask(IUpdateNameRequestContract input) => 
+        public override async Task<IUpdateNameResultContract> Ask(
+            IUpdateNameRequestContract input) => 
             (await (new UpdateNameRequest(_bus, input)).GetResponse(input));
     }
 }

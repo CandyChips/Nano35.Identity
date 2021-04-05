@@ -12,7 +12,9 @@ namespace Nano35.Identity.Api.Requests.GetUserById
             IGetUserByIdRequestContract, 
             IGetUserByIdResultContract>
     {
-        public ConvertedGetUserByIdOnHttpContext(IPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> next) : base(next) {}
+        public ConvertedGetUserByIdOnHttpContext(
+            IPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(GetUserByIdHttpQuery input)
         {
@@ -20,10 +22,7 @@ namespace Nano35.Identity.Api.Requests.GetUserById
             {
                 UserId = input.Id
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IGetUserByIdSuccessResultContract success => new OkObjectResult(success),
                 IGetUserByIdErrorResultContract error => new BadRequestObjectResult(error),

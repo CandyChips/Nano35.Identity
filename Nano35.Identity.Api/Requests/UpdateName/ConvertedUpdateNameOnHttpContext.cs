@@ -12,7 +12,9 @@ namespace Nano35.Identity.Api.Requests.UpdateName
             IUpdateNameRequestContract, 
             IUpdateNameResultContract>
     {
-        public ConvertedUpdateNameOnHttpContext(IPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract> next) : base(next) {}
+        public ConvertedUpdateNameOnHttpContext(
+            IPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(UpdateNameHttpBody input)
         {
@@ -21,10 +23,7 @@ namespace Nano35.Identity.Api.Requests.UpdateName
                 UserId = input.UserId,
                 Name = input.Name
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IUpdateNameSuccessResultContract success => new OkObjectResult(success),
                 IUpdateNameErrorResultContract error => new BadRequestObjectResult(error),

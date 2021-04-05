@@ -12,7 +12,9 @@ namespace Nano35.Identity.Api.Requests.Register
             IRegisterRequestContract, 
             IRegisterResultContract>
     {
-        public ConvertedRegisterOnHttpContext(IPipeNode<IRegisterRequestContract, IRegisterResultContract> next) : base(next) {}
+        public ConvertedRegisterOnHttpContext(
+            IPipeNode<IRegisterRequestContract, IRegisterResultContract> next) :
+            base(next) {}
 
         public override async Task<IActionResult> Ask(RegisterHttpBody input)
         {
@@ -24,10 +26,7 @@ namespace Nano35.Identity.Api.Requests.Register
                 Password = input.Password,
                 PasswordConfirm = input.PasswordConfirm
             };
-
-            var response = await DoNext(converted);
-            
-            return response switch
+            return await DoNext(converted) switch
             {
                 IRegisterSuccessResultContract success => new OkObjectResult(success),
                 IRegisterErrorResultContract error => new BadRequestObjectResult(error),
