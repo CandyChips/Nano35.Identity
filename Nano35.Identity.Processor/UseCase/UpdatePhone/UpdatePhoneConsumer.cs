@@ -27,9 +27,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
             var message = context.Message;
             var result = 
                 await new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(logger,
-                    new ValidatedUpdatePhoneRequest(
-                        new UpdatePhoneUseCase(userManager))
-                    ).Ask(message, context.CancellationToken);
+                    new UpdatePhoneUseCase(userManager)).Ask(message, context.CancellationToken);
             switch (result)
             {
                 case IUpdatePhoneSuccessResultContract:

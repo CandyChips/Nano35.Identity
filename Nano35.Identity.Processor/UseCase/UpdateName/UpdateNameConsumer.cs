@@ -22,14 +22,10 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
         public async Task Consume(
             ConsumeContext<IUpdateNameRequestContract> context)
         {
-            var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<IUpdateNameRequestContract>) _services.GetService(typeof(ILogger<IUpdateNameRequestContract>));
-            var message = context.Message;
             var result = 
-                await new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(logger,
-                    new ValidatedUpdateNameRequest(
-                        new UpdateNameUseCase(userManager))
-                    ).Ask(message, context.CancellationToken);
+                await new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
+                    _services.GetService(typeof(ILogger<IUpdateNameRequestContract>)) as ILogger<IUpdateNameRequestContract>,
+                    new UpdateNameUseCase(_services.GetService(typeof(UserManager<User>)) as UserManager<User>)).Ask(context.Message, context.CancellationToken);
             switch (result)
             {
                 case IUpdateNameSuccessResultContract:

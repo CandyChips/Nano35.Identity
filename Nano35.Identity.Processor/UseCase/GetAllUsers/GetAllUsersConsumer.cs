@@ -21,21 +21,10 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
         
         public async Task Consume(ConsumeContext<IGetAllUsersRequestContract> context)
         {
-            // Setup configuration of pipeline
-            var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<IGetAllUsersRequestContract>) _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>));
-
-            // Explore message of request
-            var message = context.Message;
-
-            // Send request to pipeline
             var result = 
-                await new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(logger,  
-                    new ValidatedGetAllUsersRequest(
-                        new GetAllUsersUseCase(userManager))
-                    ).Ask(message, context.CancellationToken);
-            
-            // Check response of create client request
+                await new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
+                    _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>)) as ILogger<IGetAllUsersRequestContract>,  
+                    new GetAllUsersUseCase(_services.GetService(typeof(UserManager<User>)) as UserManager<User>)).Ask(context.Message, context.CancellationToken);
             switch (result)
             {
                 case IGetAllUsersSuccessResultContract:

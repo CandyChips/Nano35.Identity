@@ -23,23 +23,17 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
         public async Task Consume(
             ConsumeContext<IGenerateTokenRequestContract> context)
         {
-            // Setup configuration of pipeline
-            var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var signInManager = (SignInManager<User>) _services.GetService(typeof(SignInManager<User>));
-            var jwtGenerator = (IJwtGenerator) _services.GetService(typeof(IJwtGenerator));
-            var logger = (ILogger<IGenerateTokenRequestContract>) _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>));
-
-            // Explore message of request
-            var message = context.Message;
-
-            // Send request to pipeline
             var result = 
-                await new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(logger,  
-                    new ValidatedGenerateTokenRequest(
-                        new GenerateTokenUseCase(userManager, signInManager, jwtGenerator))
-                ).Ask(message, context.CancellationToken);
-            
-            // Check response of create client request
+                await new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
+                    _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,  
+                    new GenerateTokenUseCase(
+                        _services.GetService(typeof(UserManager<User>)) 
+                            as UserManager<User>, 
+                        _services.GetService(typeof(SignInManager<User>)) 
+                            as SignInManager<User>, 
+                        _services.GetService(typeof(IJwtGenerator)) 
+                            as IJwtGenerator))
+                    .Ask(context.Message, context.CancellationToken);
             switch (result)
             {
                 case IGenerateTokenSuccessResultContract:

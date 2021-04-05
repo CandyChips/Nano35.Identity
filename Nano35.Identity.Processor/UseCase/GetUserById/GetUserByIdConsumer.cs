@@ -22,9 +22,8 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
             var result = 
                 await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
                     _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,  
-                    new ValidatedGetUserByIdRequest(
-                        new GetUserByIdUseCase(
-                            _services.GetService(typeof(ApplicationContext)) as ApplicationContext))).Ask(context.Message, context.CancellationToken);
+                    new GetUserByIdUseCase(
+                        _services.GetService(typeof(ApplicationContext)) as ApplicationContext)).Ask(context.Message, context.CancellationToken);
             switch (result)
             {
                 case IGetUserByIdSuccessResultContract:

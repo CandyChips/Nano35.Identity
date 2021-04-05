@@ -26,6 +26,10 @@ namespace Nano35.Identity.Api.Requests
         public override async Task<TOut> Ask(TIn input)
         {
             var result = _validator.ValidateAsync(input).Result;
+            if (!result.IsValid)
+            {
+                return (TOut) (IResponse) new Error() {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
+            }
             return await DoNext(input);
         }
     }
