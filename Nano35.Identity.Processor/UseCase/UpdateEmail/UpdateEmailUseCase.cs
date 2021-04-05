@@ -15,22 +15,9 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
     {
         private readonly UserManager<User> _userManager;
 
-        public UpdateEmailUseCase(
-            UserManager<User> userManager)
+        public UpdateEmailUseCase(UserManager<User> userManager)
         {
             _userManager = userManager;
-        }
-
-        private class UpdateEmailSuccessResultContract : 
-            IUpdateEmailSuccessResultContract
-        {
-            public IEnumerable<IUserViewModel> Data { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IUpdateEmailErrorResultContract
-        {
-            public string Message { get; set; }
         }
 
         public override async Task<IUpdateEmailResultContract> Ask(

@@ -4,12 +4,6 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase.Register
 {
-    public class ValidatedRegisterRequestErrorResult :
-        IRegisterErrorResultContract
-    {
-        public string Message { get; set; }
-    }
-    
     public class ValidatedRegisterRequest:
         PipeNodeBase<IRegisterRequestContract, IRegisterResultContract>
     {

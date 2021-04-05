@@ -19,18 +19,6 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
         {
             _userManager = userManager;
         }
-        
-        private class GetAllUsersSuccessResultContract : 
-            IGetAllUsersSuccessResultContract
-        {
-            public IEnumerable<IUserViewModel> Data { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IGetAllUsersErrorResultContract
-        {
-            public string Message { get; set; }
-        }
 
         public override async Task<IGetAllUsersResultContract> Ask(
             IGetAllUsersRequestContract request,
@@ -39,7 +27,7 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
             var result = await _userManager.Users.MapAllToAsync<IUserViewModel>();
             
             if (result.Count == 0)
-                return new GetAllClientStatesErrorResultContract() {Message = "Не найдено ни одной записи"};
+                return new GetAllUsersErrorResultContract() {Message = "Не найдено ни одной записи"};
                 
             return new GetAllUsersSuccessResultContract() {Data = result};
         }

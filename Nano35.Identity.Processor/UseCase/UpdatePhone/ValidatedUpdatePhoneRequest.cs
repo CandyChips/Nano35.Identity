@@ -4,12 +4,6 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdatePhone
 {
-    public class ValidatedUpdatePhoneRequestErrorResult : 
-        IUpdatePhoneErrorResultContract
-    {
-        public string Message { get; set; }
-    }
-    
     public class ValidatedUpdatePhoneRequest:
         PipeNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {

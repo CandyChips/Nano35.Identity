@@ -4,12 +4,6 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdateName
 {
-    public class ValidatedUpdateNameRequestErrorResult : 
-        IUpdateNameErrorResultContract
-    {
-        public string Message { get; set; }
-    }
-    
     public class ValidatedUpdateNameRequest:
         PipeNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
     {

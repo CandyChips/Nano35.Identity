@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="FluentValidation" Version="9.3.0" />
+    <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
     <PackageReference Include="MassTransit" Version="7.1.3-develop.3218" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.1.3-develop.3218" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.3-develop.3218" />
@@ -13,7 +14,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
-    <PackageReference Include="Nano35.Contracts" Version="1.8.8" />
+    <PackageReference Include="Nano35.Contracts" Version="2.1.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Requests\CreateUser" />

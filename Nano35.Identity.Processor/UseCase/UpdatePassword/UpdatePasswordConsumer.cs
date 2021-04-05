@@ -22,21 +22,13 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
         public async Task Consume(
             ConsumeContext<IUpdatePasswordRequestContract> context)
         {
-            // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedUpdatePasswordRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePasswordRequest>));
-
-            // Explore message of request
+            var logger = (ILogger<IUpdatePasswordRequestContract>) _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>));
             var message = context.Message;
-
-            // Send request to pipeline
             var result = 
-                await new LoggedUpdatePasswordRequest(logger,
+                await new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(logger,
                     new ValidatedUpdatePasswordRequest(
-                        new UpdatePasswordUseCase(userManager))
-                    ).Ask(message, context.CancellationToken);
-            
-            // Check response of create client request
+                        new UpdatePasswordUseCase(userManager))).Ask(message, context.CancellationToken);
             switch (result)
             {
                 case IUpdatePasswordSuccessResultContract:

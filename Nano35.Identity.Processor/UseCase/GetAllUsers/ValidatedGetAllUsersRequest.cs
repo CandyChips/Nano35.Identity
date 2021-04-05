@@ -4,12 +4,6 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase.GetAllUsers
 {
-    public class ValidatedGetAllUsersRequestErrorResult : 
-        IGetAllUsersErrorResultContract
-    {
-        public string Message { get; set; }
-    }
-    
     public class ValidatedGetAllUsersRequest:
         PipeNodeBase<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {

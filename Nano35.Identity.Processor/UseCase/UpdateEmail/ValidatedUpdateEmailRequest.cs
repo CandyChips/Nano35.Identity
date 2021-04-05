@@ -4,12 +4,6 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdateEmail
 {
-    public class ValidatedUpdateEmailRequestErrorResult : 
-        IUpdateEmailErrorResultContract
-    {
-        public string Message { get; set; }
-    }
-    
     public class ValidatedUpdateEmailRequest:
         PipeNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
     {

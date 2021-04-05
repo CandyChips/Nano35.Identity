@@ -21,18 +21,6 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
             _userManager = userManager;
         }
 
-        private class UpdatePhoneSuccessResultContract : 
-            IUpdatePhoneSuccessResultContract
-        {
-            public IEnumerable<IUserViewModel> Data { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IUpdatePhoneErrorResultContract
-        {
-            public string Message { get; set; }
-        }
-
         public override async Task<IUpdatePhoneResultContract> Ask(
             IUpdatePhoneRequestContract request,
             CancellationToken cancellationToken)

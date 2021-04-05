@@ -16,22 +16,9 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
     {
         private readonly UserManager<User> _userManager;
 
-        public UpdateNameUseCase(
-            UserManager<User> userManager)
+        public UpdateNameUseCase(UserManager<User> userManager)
         {
             _userManager = userManager;
-        }
-
-        private class UpdateNameSuccessResultContract : 
-            IUpdateNameSuccessResultContract
-        {
-            public IEnumerable<IUserViewModel> Data { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IUpdateNameErrorResultContract
-        {
-            public string Message { get; set; }
         }
 
         public override async Task<IUpdateNameResultContract> Ask(

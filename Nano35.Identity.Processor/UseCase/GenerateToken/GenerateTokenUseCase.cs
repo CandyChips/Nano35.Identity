@@ -23,18 +23,6 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             _signInManager = signInManager;
             _jwtGenerator = jwtGenerator;
         }
-        
-        private class GenerateTokenSuccessResultContract : 
-            IGenerateTokenSuccessResultContract
-        {
-            public string Token { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IGenerateTokenErrorResultContract
-        {
-            public string Message { get; set; }
-        }
 
         public override async Task<IGenerateTokenResultContract> Ask(
             IGenerateTokenRequestContract request,
@@ -43,19 +31,19 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             var user = await _userManager.FindByNameAsync(request.Login);
             if (user == null)
             {
-                return new GetAllClientStatesErrorResultContract() {Message = "Пользователь не найден"};
+                return new GenerateTokenErrorResultContract() {Message = "Пользователь не найден"};
             }
 
             var checkPasswordSignInAsyncResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!checkPasswordSignInAsyncResult.Succeeded)
             {
-                return new GetAllClientStatesErrorResultContract() {Message = "Неверный пароль"};
+                return new GenerateTokenErrorResultContract() {Message = "Неверный пароль"};
             }
 
             var isEmailConfirmedAsyncResult = await _userManager.IsEmailConfirmedAsync(user);
             if (!isEmailConfirmedAsyncResult)
             {
-                return new GetAllClientStatesErrorResultContract() {Message = "Подтвердите почту"};
+                return new GenerateTokenErrorResultContract() {Message = "Подтвердите почту"};
             }
 
             return new GenerateTokenSuccessResultContract() {Token = _jwtGenerator.CreateToken(user)};

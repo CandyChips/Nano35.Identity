@@ -15,24 +15,11 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
     {
         private readonly UserManager<User> _userManager;
 
-        public UpdatePasswordUseCase(
-            UserManager<User> userManager)
+        public UpdatePasswordUseCase(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
         
-        private class UpdatePasswordSuccessResultContract : 
-            IUpdatePasswordSuccessResultContract
-        {
-            public IEnumerable<IUserViewModel> Data { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IUpdatePasswordErrorResultContract
-        {
-            public string Message { get; set; }
-        }
-
         public override async Task<IUpdatePasswordResultContract> Ask(
             IUpdatePasswordRequestContract request,
             CancellationToken cancellationToken)

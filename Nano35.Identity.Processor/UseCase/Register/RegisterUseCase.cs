@@ -14,31 +14,11 @@ namespace Nano35.Identity.Processor.UseCase.Register
     {
         private readonly UserManager<User> _userManager;
 
-        public RegisterUseCase(
-            UserManager<User> userManager)
+        public RegisterUseCase(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
         
-        private class RegisterSuccessResultContract : 
-            IRegisterSuccessResultContract
-        {
-            public IUserViewModel Data { get; set; }
-        }
-
-        private class ConfirmEmailOfUserRequestContract :
-            IConfirmEmailOfUserRequestContract
-        {
-            public Guid UserId { get; set; }
-            public string Key { get; set; }
-        }
-
-        private class RegisterErrorResultContract : 
-            IRegisterErrorResultContract
-        {
-            public string Message { get; set; }
-        }
-
         public override async Task<IRegisterResultContract> Ask(
             IRegisterRequestContract request, 
             CancellationToken cancellationToken)

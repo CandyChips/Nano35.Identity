@@ -22,21 +22,13 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
         public async Task Consume(
             ConsumeContext<IUpdateEmailRequestContract> context)
         {
-            // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedUpdateEmailRequest>) _services.GetService(typeof(ILogger<LoggedUpdateEmailRequest>));
-
-            // Explore message of request
+            var logger = (ILogger<IUpdateEmailRequestContract>) _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>));
             var message = context.Message;
-
-            // Send request to pipeline
             var result = 
-                await new LoggedUpdateEmailRequest(logger,
+                await new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(logger,
                     new ValidatedUpdateEmailRequest(
-                        new UpdateEmailUseCase(userManager))
-                    ).Ask(message, context.CancellationToken);
-            
-            // Check response of create client request
+                        new UpdateEmailUseCase(userManager))).Ask(message, context.CancellationToken);
             switch (result)
             {
                 case IUpdateEmailSuccessResultContract:

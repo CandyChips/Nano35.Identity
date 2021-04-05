@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Api.Helpers;
 using Nano35.HttpContext.identity;
+using Nano35.Identity.Api.Requests;
 using Nano35.Identity.Api.Requests.GenerateToken;
 using Nano35.Identity.Api.Requests.GetAllUsers;
 using Nano35.Identity.Api.Requests.GetUserById;
@@ -40,13 +41,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromQuery]GetUserByIdHttpQuery message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
+            var logger = (ILogger<IGetUserByIdRequestContract>) _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>));
             var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
             
             return await
                 new ConvertedGetUserByIdOnHttpContext(
-                new LoggedGetUserByIdRequest(logger,
-                    new ValidatedGetUserByIdRequest(validator,
+                new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(logger,
+                    new ValidatedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(validator,
                         new GetUserByIdUseCase(bus)))
                 ).Ask(message);
         }
@@ -60,13 +61,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromQuery]GetAllUsersHttpQuery message)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
+            var logger = (ILogger<IGetAllUsersRequestContract>) _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>));
             //var validator = (IValidator<IGetUserByIdRequestContract>) _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>));
 
             return await
                 new ConvertedGetAllUsersOnHttpContext(
-                        new LoggedGetAllUsersRequest(logger,
-                            new GetAllUsersUseCase(bus)))
+                    new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(logger,
+                        new GetAllUsersUseCase(bus)))
                     .Ask(message);
         }
 
@@ -78,12 +79,12 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GetUserFromToken()
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedGetUserByTokenRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByTokenRequest>));
+            var logger = (ILogger<IGetUserByIdRequestContract>) _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>));
             var auth = (ICustomAuthStateProvider) _services.GetService(typeof(ICustomAuthStateProvider));
 
             return await
                 new ConvertedGetUserByTokenOnHttpContext(
-                new LoggedGetUserByTokenRequest(logger,
+                new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(logger,
                     new GetUserByTokenUseCase(bus, auth)))
                     .Ask(new GetUserByIdRequestContract());
         }
@@ -97,13 +98,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] RegisterHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
+            var logger = (ILogger<IRegisterRequestContract>) _services.GetService(typeof(ILogger<IRegisterRequestContract>));
             var validator = (IValidator<IRegisterRequestContract>) _services.GetService(typeof(IValidator<IRegisterRequestContract>));
             
             return await 
                 new ConvertedRegisterOnHttpContext(
-                    new LoggedRegisterRequest(logger,
-                        new ValidatedRegisterRequest(validator,
+                    new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger,
+                        new ValidatedPipeNode<IRegisterRequestContract, IRegisterResultContract>(validator,
                             new RegisterUseCase(bus)))).Ask(body);
         }
         
@@ -116,13 +117,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] GenerateUserTokenHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
+            var logger = (ILogger<IGenerateTokenRequestContract>) _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>));
             var validator = (IValidator<IGenerateTokenRequestContract>) _services.GetService(typeof(IValidator<IGenerateTokenRequestContract>));
             
             return await 
                 new ConvertedGenerateTokenOnHttpContext(
-                    new LoggedGenerateTokenRequest(logger,
-                        new ValidatedGenerateTokenRequest(validator, 
+                    new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(logger,
+                        new ValidatedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(validator, 
                             new GenerateTokenUseCase(bus)))).Ask(body);
         }
 
@@ -135,14 +136,14 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] UpdatePhoneHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedUpdatePhoneRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePhoneRequest>));
+            var logger = (ILogger<IUpdatePhoneRequestContract>) _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>));
             var validator = (IValidator<IUpdatePhoneRequestContract>) _services.GetService(typeof(IValidator<IUpdatePhoneRequestContract>));
 
             
             return await
                 new ConvertedUpdatePhoneOnHttpContext(
-                        new LoggedUpdatePhoneRequest(logger,
-                            new ValidatedUpdatePhoneRequest(validator,
+                        new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(logger,
+                            new ValidatedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(validator,
                                 new UpdatePhoneUseCase(bus))))
                     .Ask(body);
         }
@@ -156,14 +157,14 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] UpdatePasswordHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedUpdatePasswordRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePasswordRequest>));
+            var logger = (ILogger<IUpdatePasswordRequestContract>) _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>));
             var validator = (IValidator<IUpdatePasswordRequestContract>) _services.GetService(typeof(IValidator<IUpdatePasswordRequestContract>));
 
             
             return await
                 new ConvertedUpdatePasswordOnHttpContext(
-                        new LoggedUpdatePasswordRequest(logger,
-                            new ValidatedUpdatePasswordRequest(validator,
+                        new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(logger,
+                            new ValidatedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(validator,
                                 new UpdatePasswordUseCase(bus))))
                     .Ask(body);
         }
@@ -177,13 +178,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] UpdateNameHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedUpdateNameRequest>) _services.GetService(typeof(ILogger<LoggedUpdateNameRequest>));
+            var logger = (ILogger<IUpdateNameRequestContract>) _services.GetService(typeof(ILogger<IUpdateNameRequestContract>));
             var validator = (IValidator<IUpdateNameRequestContract>) _services.GetService(typeof(IValidator<IUpdateNameRequestContract>));
 
             return await
                 new ConvertedUpdateNameOnHttpContext(
-                        new LoggedUpdateNameRequest(logger,
-                            new ValidatedUpdateNameRequest(validator,
+                        new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(logger,
+                            new ValidatedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(validator,
                                 new UpdateNameUseCase(bus))))
                     .Ask(body);
         }
@@ -197,13 +198,13 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] UpdateEmailHttpBody body)
         {
             var bus = (IBus) _services.GetService((typeof(IBus)));
-            var logger = (ILogger<LoggedUpdateEmailRequest>) _services.GetService(typeof(ILogger<LoggedUpdateEmailRequest>));
+            var logger = (ILogger<IUpdateEmailRequestContract>) _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>));
             var validator = (IValidator<IUpdateEmailRequestContract>) _services.GetService(typeof(IValidator<IUpdateEmailRequestContract>));
 
             return await
                 new ConvertedUpdateEmailOnHttpContext(
-                new LoggedUpdateEmailRequest(logger,
-                        new ValidatedUpdateEmailRequest(validator,
+                new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(logger,
+                        new ValidatedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(validator,
                             new UpdateEmailUseCase(bus))))
                     .Ask(body);
         }

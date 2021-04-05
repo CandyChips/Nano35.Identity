@@ -22,21 +22,13 @@ namespace Nano35.Identity.Processor.UseCase.Register
         public async Task Consume(
             ConsumeContext<IRegisterRequestContract> context)
         {
-            // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
-
-            // Explore message of request
+            var logger = (ILogger<IRegisterRequestContract>) _services.GetService(typeof(ILogger<IRegisterRequestContract>));
             var message = context.Message;
-
-            // Send request to pipeline
             var result = 
-                await new LoggedRegisterRequest(logger,
+                await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger,
                     new ValidatedRegisterRequest(
-                        new RegisterUseCase(userManager))
-                    ).Ask(message, context.CancellationToken);
-            
-            // Check response of create client request
+                        new RegisterUseCase(userManager))).Ask(message, context.CancellationToken);
             switch (result)
             {
                 case IRegisterSuccessResultContract:

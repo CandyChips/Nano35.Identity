@@ -18,18 +18,6 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
         {
             _context = context;
         }
-        
-        private class GetUserByIdSuccessResultContract : 
-            IGetUserByIdSuccessResultContract
-        {
-            public IUserViewModel Data { get; set; }
-        }
-
-        private class GetAllClientStatesErrorResultContract : 
-            IGetUserByIdErrorResultContract
-        {
-            public string Message { get; set; }
-        }
 
         public override async Task<IGetUserByIdResultContract> Ask(
             IGetUserByIdRequestContract request,
@@ -38,7 +26,7 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
             var result = (await _context.Users.FirstOrDefaultAsync(f => f.Id == request.UserId.ToString(), cancellationToken: cancellationToken)).MapTo<IUserViewModel>();
 
             if (result == null)
-                return new GetAllClientStatesErrorResultContract() {Message = "Не найдено"};
+                return new GetUserByIdErrorResultContract() {Message = "Не найдено"};
                 
             return new GetUserByIdSuccessResultContract() {Data = result};
         }
