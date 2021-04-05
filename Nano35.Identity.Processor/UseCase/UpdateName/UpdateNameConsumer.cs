@@ -33,7 +33,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
             var result = 
                 await new LoggedUpdateNameRequest(logger,
                     new ValidatedUpdateNameRequest(
-                        new UpdateNameRequest(userManager))
+                        new UpdateNameUseCase(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

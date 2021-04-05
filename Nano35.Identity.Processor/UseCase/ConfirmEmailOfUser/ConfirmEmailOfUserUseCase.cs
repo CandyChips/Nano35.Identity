@@ -6,14 +6,14 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
 {
-    public class ConfirmEmailOfUserRequest :
+    public class ConfirmEmailOfUserUseCase :
         EndPointNodeBase<
             IConfirmEmailOfUserRequestContract,
             IConfirmEmailOfUserResultContract>
     {
         private readonly UserManager<User> _userManager;
 
-        public ConfirmEmailOfUserRequest(
+        public ConfirmEmailOfUserUseCase(
             UserManager<User> userManager)
         {
             _userManager = userManager;

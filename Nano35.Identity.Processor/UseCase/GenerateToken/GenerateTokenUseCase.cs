@@ -7,14 +7,14 @@ using Nano35.Identity.Processor.Services.Helpers;
 
 namespace Nano35.Identity.Processor.UseCase.GenerateToken
 {
-    public class GenerateTokenRequest :
+    public class GenerateTokenUseCase :
         EndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtGenerator _jwtGenerator;
 
-        public GenerateTokenRequest(
+        public GenerateTokenUseCase(
             UserManager<User> userManager, 
             SignInManager<User> signInManager,
             IJwtGenerator jwtGenerator)

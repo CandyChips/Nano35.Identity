@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using AutoMapper;
@@ -13,6 +14,7 @@ namespace Nano35.Identity.Processor.Models
         public string Name { get; set; }
         [Required]
         public bool Deleted { get; set; }
+        
     }
 
     public class UsersAutoMapperProfile : Profile

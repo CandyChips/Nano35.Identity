@@ -11,6 +11,8 @@ namespace Nano35.Identity.Api.Requests.GetAllUsers
 
         public GetAllUsersUseCase(IBus bus) { _bus = bus; }
         
-        public override async Task<IGetAllUsersResultContract> Ask(IGetAllUsersRequestContract input) => (await (new GetAllUsersRequest(_bus, input)).GetResponse(input));
+        public override async Task<IGetAllUsersResultContract> Ask
+            (IGetAllUsersRequestContract input) => 
+            (await (new GetAllUsersRequest(_bus, input)).GetResponse(input));
     }
 }

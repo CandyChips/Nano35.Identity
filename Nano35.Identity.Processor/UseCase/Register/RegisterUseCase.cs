@@ -9,12 +9,12 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.Register
 {
-    public class RegisterRequest :
+    public class RegisterUseCase :
         EndPointNodeBase<IRegisterRequestContract, IRegisterResultContract>
     {
         private readonly UserManager<User> _userManager;
 
-        public RegisterRequest(
+        public RegisterUseCase(
             UserManager<User> userManager)
         {
             _userManager = userManager;

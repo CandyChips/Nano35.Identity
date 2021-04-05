@@ -9,12 +9,12 @@ using Nano35.Identity.Processor.Services.MappingProfiles;
 
 namespace Nano35.Identity.Processor.UseCase.GetAllUsers
 {
-    public class GetAllUsersRequest :
+    public class GetAllUsersUseCase :
         EndPointNodeBase<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
         private readonly UserManager<User> _userManager;
 
-        public GetAllUsersRequest(
+        public GetAllUsersUseCase(
             UserManager<User> userManager)
         {
             _userManager = userManager;

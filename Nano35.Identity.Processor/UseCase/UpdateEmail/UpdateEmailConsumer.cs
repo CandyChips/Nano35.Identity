@@ -33,7 +33,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
             var result = 
                 await new LoggedUpdateEmailRequest(logger,
                     new ValidatedUpdateEmailRequest(
-                        new UpdateEmailRequest(userManager))
+                        new UpdateEmailUseCase(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

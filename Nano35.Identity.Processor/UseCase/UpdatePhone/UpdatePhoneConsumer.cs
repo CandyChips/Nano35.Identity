@@ -33,7 +33,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
             var result = 
                 await new LoggedUpdatePhoneRequest(logger,
                     new ValidatedUpdatePhoneRequest(
-                        new UpdatePhoneRequest(userManager))
+                        new UpdatePhoneUseCase(userManager))
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request
