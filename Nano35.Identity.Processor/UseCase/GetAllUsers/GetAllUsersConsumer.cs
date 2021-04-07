@@ -31,8 +31,7 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(logger, 
-                    new ValidatedGetAllUsersRequest(
-                        new GetAllUsersUseCase(userManager))
+                        new GetAllUsersUseCase(userManager)
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

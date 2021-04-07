@@ -32,8 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(logger,
-                    new ValidatedUpdatePasswordRequest(
-                        new UpdatePasswordUseCase(userManager))
+                        new UpdatePasswordUseCase(userManager)
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

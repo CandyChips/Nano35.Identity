@@ -35,8 +35,7 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             // Send request to pipeline
             var result = 
                 await new  LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(logger, 
-                    new ValidatedGenerateTokenRequest(
-                        new GenerateTokenUseCase(userManager, signInManager, jwtGenerator))
+                        new GenerateTokenUseCase(userManager, signInManager, jwtGenerator)
                 ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

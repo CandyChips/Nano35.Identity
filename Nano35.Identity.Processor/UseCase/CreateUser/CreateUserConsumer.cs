@@ -34,8 +34,7 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<ICreateUserRequestContract, ICreateUserResultContract>(logger,
-                    new ValidatedCreateUserRequest(
-                        new CreateUserUseCase(userManager))
+                        new CreateUserUseCase(userManager)
                 ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

@@ -32,8 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(logger,
-                    new ValidatedUpdateNameRequest(
-                        new UpdateNameUseCase(userManager))
+                        new UpdateNameUseCase(userManager)
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

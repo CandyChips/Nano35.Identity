@@ -32,8 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(logger,
-                    new ValidatedUpdatePhoneRequest(
-                        new UpdatePhoneUseCase(userManager))
+                        new UpdatePhoneUseCase(userManager)
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

@@ -33,8 +33,7 @@ namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>(logger,
-                    new ValidatedConfirmEmailOfUserRequest(
-                        new ConfirmEmailOfUserUseCase(userManager))
+                        new ConfirmEmailOfUserUseCase(userManager)
                 ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

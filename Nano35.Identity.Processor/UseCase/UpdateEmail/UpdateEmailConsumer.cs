@@ -32,8 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(logger,
-                    new ValidatedUpdateEmailRequest(
-                        new UpdateEmailUseCase(userManager))
+                        new UpdateEmailUseCase(userManager)
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request

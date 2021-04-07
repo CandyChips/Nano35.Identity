@@ -32,8 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.Register
             // Send request to pipeline
             var result = 
                 await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger,
-                    new ValidatedRegisterRequest(
-                        new RegisterUseCase(userManager))
+                        new RegisterUseCase(userManager)
                     ).Ask(message, context.CancellationToken);
             
             // Check response of create client request
