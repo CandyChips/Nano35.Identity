@@ -24,14 +24,14 @@ namespace Nano35.Identity.Processor.UseCase.Register
         {
             // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedRegisterRequest>) _services.GetService(typeof(ILogger<LoggedRegisterRequest>));
+            var logger = (ILogger<IRegisterRequestContract>) _services.GetService(typeof(ILogger<IRegisterRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedRegisterRequest(logger,
+                await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger,
                     new ValidatedRegisterRequest(
                         new RegisterUseCase(userManager))
                     ).Ask(message, context.CancellationToken);

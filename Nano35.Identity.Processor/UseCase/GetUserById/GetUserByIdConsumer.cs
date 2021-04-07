@@ -22,14 +22,14 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
         {
             // Setup configuration of pipeline
             var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
-            var logger = (ILogger<LoggedGetUserByIdRequest>) _services.GetService(typeof(ILogger<LoggedGetUserByIdRequest>));
+            var logger = (ILogger<IGetUserByIdRequestContract>) _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedGetUserByIdRequest(logger,  
+                await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(logger,
                     new ValidatedGetUserByIdRequest(
                         new GetUserByIdUseCase(dbContext))
                     ).Ask(message, context.CancellationToken);

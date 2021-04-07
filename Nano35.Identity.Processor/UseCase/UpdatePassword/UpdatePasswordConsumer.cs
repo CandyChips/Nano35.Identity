@@ -24,14 +24,14 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
         {
             // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedUpdatePasswordRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePasswordRequest>));
+            var logger = (ILogger<IUpdatePasswordRequestContract>) _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedUpdatePasswordRequest(logger,
+                await new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(logger,
                     new ValidatedUpdatePasswordRequest(
                         new UpdatePasswordUseCase(userManager))
                     ).Ask(message, context.CancellationToken);

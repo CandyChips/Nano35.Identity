@@ -6,13 +6,13 @@ using Nano35.Contracts.Identity.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase.CreateUser
 {
-    public class LoggedGetUserByRoleIdRequest :
+    public class LoggedCreateUserRequest :
         PipeNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
-        private readonly ILogger<LoggedGetUserByRoleIdRequest> _logger;
+        private readonly ILogger<LoggedCreateUserRequest> _logger;
         
-        public LoggedGetUserByRoleIdRequest(
-            ILogger<LoggedGetUserByRoleIdRequest> logger,
+        public LoggedCreateUserRequest(
+            ILogger<LoggedCreateUserRequest> logger,
             IPipeNode<ICreateUserRequestContract, ICreateUserResultContract> next) :
             base(next)
         {
@@ -23,9 +23,9 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
             ICreateUserRequestContract input,
             CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"GetUserByRoleIdLogger starts on: {DateTime.Now}");
+            _logger.LogInformation($"CreateUserLogger starts on: {DateTime.Now}");
             var result = DoNext(input, cancellationToken);
-            _logger.LogInformation($"GetUserByRoleIdLogger ends on: {DateTime.Now}");
+            _logger.LogInformation($"CreateUserLogger ends on: {DateTime.Now}");
             return result;
         }
     }

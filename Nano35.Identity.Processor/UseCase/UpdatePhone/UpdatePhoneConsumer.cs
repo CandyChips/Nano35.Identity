@@ -24,14 +24,14 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
         {
             // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedUpdatePhoneRequest>) _services.GetService(typeof(ILogger<LoggedUpdatePhoneRequest>));
+            var logger = (ILogger<IUpdatePhoneRequestContract>) _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedUpdatePhoneRequest(logger,
+                await new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(logger,
                     new ValidatedUpdatePhoneRequest(
                         new UpdatePhoneUseCase(userManager))
                     ).Ask(message, context.CancellationToken);

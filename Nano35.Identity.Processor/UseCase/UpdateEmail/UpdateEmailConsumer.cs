@@ -24,14 +24,14 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
         {
             // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedUpdateEmailRequest>) _services.GetService(typeof(ILogger<LoggedUpdateEmailRequest>));
+            var logger = (ILogger<IUpdateEmailRequestContract>) _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedUpdateEmailRequest(logger,
+                await new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(logger,
                     new ValidatedUpdateEmailRequest(
                         new UpdateEmailUseCase(userManager))
                     ).Ask(message, context.CancellationToken);

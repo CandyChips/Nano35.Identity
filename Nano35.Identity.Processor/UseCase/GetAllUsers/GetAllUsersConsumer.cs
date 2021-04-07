@@ -23,14 +23,14 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
         {
             // Setup configuration of pipeline
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<LoggedGetAllUsersRequest>) _services.GetService(typeof(ILogger<LoggedGetAllUsersRequest>));
+            var logger = (ILogger<IGetAllUsersRequestContract>) _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedGetAllUsersRequest(logger,  
+                await new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(logger, 
                     new ValidatedGetAllUsersRequest(
                         new GetAllUsersUseCase(userManager))
                     ).Ask(message, context.CancellationToken);

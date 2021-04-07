@@ -10,10 +10,10 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
         public string Message { get; set; }
     }
     
-    public class CreateUserValidator:
+    public class ValidatedCreateUserRequest:
         PipeNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
-        public CreateUserValidator(
+        public ValidatedCreateUserRequest(
             IPipeNode<ICreateUserRequestContract, ICreateUserResultContract> next) :
             base(next) {}
 

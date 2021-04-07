@@ -27,14 +27,14 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
             var signInManager = (SignInManager<User>) _services.GetService(typeof(SignInManager<User>));
             var jwtGenerator = (IJwtGenerator) _services.GetService(typeof(IJwtGenerator));
-            var logger = (ILogger<LoggedGenerateTokenRequest>) _services.GetService(typeof(ILogger<LoggedGenerateTokenRequest>));
+            var logger = (ILogger<IGenerateTokenRequestContract>) _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>));
 
             // Explore message of request
             var message = context.Message;
 
             // Send request to pipeline
             var result = 
-                await new LoggedGenerateTokenRequest(logger,  
+                await new  LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(logger, 
                     new ValidatedGenerateTokenRequest(
                         new GenerateTokenUseCase(userManager, signInManager, jwtGenerator))
                 ).Ask(message, context.CancellationToken);

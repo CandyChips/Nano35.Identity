@@ -14,15 +14,12 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
     public class CreateUserUseCase :
         EndPointNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
-        private readonly ApplicationContext _context;
         private readonly UserManager<User> _userManager;
 
 
         public CreateUserUseCase(
-            ApplicationContext context,
             UserManager<User> userManager)
         {
-            _context = context;
             _userManager = userManager;
         }
         
