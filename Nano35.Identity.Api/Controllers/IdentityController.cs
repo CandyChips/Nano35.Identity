@@ -22,6 +22,7 @@ using Nano35.Identity.Api.Requests.UpdatePhone;
 namespace Nano35.Identity.Api.Controllers
 {
     [ApiController]
+    [ApiVersion("1.0")]
     [Route("[controller]")]
     public class IdentityController : ControllerBase
     {
