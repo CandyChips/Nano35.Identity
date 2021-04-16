@@ -37,12 +37,12 @@ namespace Nano35.Identity.Api.Requests
         }
     }
 
-    public abstract class PipeInConvert <TFrom, TTo, In, TOut> : 
+    public abstract class PipeInConvert <TFrom, TTo, TIn, TOut> : 
         IPipeNode<TFrom, TTo>
     {
-        private readonly IPipeNode<In, TOut> _next;
-        protected PipeInConvert(IPipeNode<In, TOut> next) { _next = next; }
-        protected Task<TOut> DoNext(In input) { return _next.Ask(input); }
+        private readonly IPipeNode<TIn, TOut> _next;
+        protected PipeInConvert(IPipeNode<TIn, TOut> next) { _next = next; }
+        protected Task<TOut> DoNext(TIn input) { return _next.Ask(input); }
         public abstract Task<TTo> Ask(TFrom input);
     }
 

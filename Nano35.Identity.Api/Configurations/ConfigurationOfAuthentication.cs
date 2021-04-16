@@ -18,8 +18,9 @@ namespace Nano35.Identity.Api.Configurations
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidIssuer = AuthOptions.Issuer,
                         ValidateIssuerSigningKey = true,
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         ValidateAudience = false,
                         ValidateLifetime = false
                     };
