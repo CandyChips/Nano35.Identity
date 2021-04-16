@@ -27,10 +27,7 @@ namespace Nano35.Identity.Api.Controllers
     {
         private readonly IServiceProvider  _services;
 
-        public IdentityController(IServiceProvider  services)
-        {
-            _services = services;
-        }
+        public IdentityController(IServiceProvider  services) { _services = services; }
         
         [HttpGet]
         [Route("GetUserById")]
@@ -40,13 +37,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GetUserById(
             [FromQuery]GetUserByIdHttpQuery message)
         {
-            return await
-                new ConvertedGetUserByIdOnHttpContext(
+            return await new ConvertedGetUserByIdOnHttpContext(
                 new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
                     _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
                     new ValidatedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
                         _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>)) as IValidator<IGetUserByIdRequestContract>,
-                        new GetUserByIdUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(message);
+                        new GetUserByIdUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(message);
         }
         
         [HttpGet]
@@ -57,11 +55,12 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GetAllUsers(
             [FromQuery]GetAllUsersHttpQuery message)
         {
-            return await
-                new ConvertedGetAllUsersOnHttpContext(
-                    new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
-                        _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>)) as ILogger<IGetAllUsersRequestContract>,
-                        new GetAllUsersUseCase(_services.GetService((typeof(IBus))) as IBus))).Ask(message);
+            return await new ConvertedGetAllUsersOnHttpContext(
+                new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
+                    _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>)) as ILogger<IGetAllUsersRequestContract>,
+                    new GetAllUsersUseCase(
+                        _services.GetService((typeof(IBus))) as IBus)))
+                .Ask(message);
         }
 
         [HttpGet]
@@ -71,13 +70,13 @@ namespace Nano35.Identity.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetUserByIdErrorResultContract))] 
         public async Task<IActionResult> GetUserFromToken()
         {
-            return await
-                new ConvertedGetUserByTokenOnHttpContext(
-                    new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
-                        _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
-                        new GetUserByTokenUseCase(
-                            _services.GetService((typeof(IBus))) as IBus, 
-                            _services.GetService(typeof(ICustomAuthStateProvider)) as ICustomAuthStateProvider))).Ask(new GetUserByIdRequestContract());
+            return await new ConvertedGetUserByTokenOnHttpContext(
+                new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+                    _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
+                    new GetUserByTokenUseCase(
+                        _services.GetService((typeof(IBus))) as IBus, 
+                        _services.GetService(typeof(ICustomAuthStateProvider)) as ICustomAuthStateProvider)))
+                .Ask(new GetUserByIdRequestContract());
         }
         
         [HttpPost]
@@ -88,13 +87,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> Register(
             [FromBody] RegisterHttpBody body)
         {
-            return await 
-                new ConvertedRegisterOnHttpContext(
-                    new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
-                        _services.GetService(typeof(ILogger<IRegisterRequestContract>)) as ILogger<IRegisterRequestContract>,
-                        new ValidatedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
-                            _services.GetService(typeof(IValidator<IRegisterRequestContract>)) as IValidator<IRegisterRequestContract>,
-                            new RegisterUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(body);
+            return await new ConvertedRegisterOnHttpContext(
+                new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
+                    _services.GetService(typeof(ILogger<IRegisterRequestContract>)) as ILogger<IRegisterRequestContract>,
+                    new ValidatedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
+                        _services.GetService(typeof(IValidator<IRegisterRequestContract>)) as IValidator<IRegisterRequestContract>,
+                        new RegisterUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(body);
         }
         
         [HttpPost]
@@ -105,13 +105,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GenerateUserToken(
             [FromBody] GenerateUserTokenHttpBody body)
         {
-            return await 
-                new ConvertedGenerateTokenOnHttpContext(
-                    new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
-                        _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,
-                        new ValidatedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
-                            _services.GetService(typeof(IValidator<IGenerateTokenRequestContract>)) as IValidator<IGenerateTokenRequestContract>, 
-                            new GenerateTokenUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(body);
+            return await new ConvertedGenerateTokenOnHttpContext(
+                new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
+                    _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,
+                    new ValidatedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
+                        _services.GetService(typeof(IValidator<IGenerateTokenRequestContract>)) as IValidator<IGenerateTokenRequestContract>, 
+                        new GenerateTokenUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(body);
         }
 
         [HttpPatch]
@@ -122,13 +123,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdatePhone(
             [FromBody] UpdatePhoneHttpBody body)
         {
-            return await
-                new ConvertedUpdatePhoneOnHttpContext(
-                    new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
-                        _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
-                        new ValidatedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
-                            _services.GetService(typeof(IValidator<IUpdatePhoneRequestContract>)) as IValidator<IUpdatePhoneRequestContract>,
-                            new UpdatePhoneUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(body);
+            return await new ConvertedUpdatePhoneOnHttpContext(
+                new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+                    _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
+                    new ValidatedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+                        _services.GetService(typeof(IValidator<IUpdatePhoneRequestContract>)) as IValidator<IUpdatePhoneRequestContract>,
+                        new UpdatePhoneUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(body);
         }
 
         [HttpPatch]
@@ -139,13 +141,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdatePassword(
             [FromBody] UpdatePasswordHttpBody body)
         {
-            return await
-                new ConvertedUpdatePasswordOnHttpContext(
-                    new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
-                        _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>)) as ILogger<IUpdatePasswordRequestContract>,
-                        new ValidatedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
-                            _services.GetService(typeof(IValidator<IUpdatePasswordRequestContract>)) as IValidator<IUpdatePasswordRequestContract>,
-                            new UpdatePasswordUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(body);
+            return await new ConvertedUpdatePasswordOnHttpContext(
+                new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
+                    _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>)) as ILogger<IUpdatePasswordRequestContract>,
+                    new ValidatedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
+                        _services.GetService(typeof(IValidator<IUpdatePasswordRequestContract>)) as IValidator<IUpdatePasswordRequestContract>,
+                        new UpdatePasswordUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(body);
         }
 
         [HttpPatch]
@@ -156,13 +159,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdateName(
             [FromBody] UpdateNameHttpBody body)
         {
-            return await
-                new ConvertedUpdateNameOnHttpContext(
-                    new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
-                        _services.GetService(typeof(ILogger<IUpdateNameRequestContract>)) as ILogger<IUpdateNameRequestContract>,
-                        new ValidatedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
-                            _services.GetService(typeof(IValidator<IUpdateNameRequestContract>)) as IValidator<IUpdateNameRequestContract>,
-                            new UpdateNameUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(body);
+            return await new ConvertedUpdateNameOnHttpContext(
+                new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
+                    _services.GetService(typeof(ILogger<IUpdateNameRequestContract>)) as ILogger<IUpdateNameRequestContract>,
+                    new ValidatedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
+                        _services.GetService(typeof(IValidator<IUpdateNameRequestContract>)) as IValidator<IUpdateNameRequestContract>,
+                        new UpdateNameUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(body);
         }
 
         [HttpPatch]
@@ -173,13 +177,14 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdateEmail(
             [FromBody] UpdateEmailHttpBody body)
         {
-            return await
-                new ConvertedUpdateEmailOnHttpContext(
+            return await new ConvertedUpdateEmailOnHttpContext(
                 new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>( 
                     _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>)) as ILogger<IUpdateEmailRequestContract>,
                     new ValidatedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
                         _services.GetService(typeof(IValidator<IUpdateEmailRequestContract>)) as IValidator<IUpdateEmailRequestContract>,
-                        new UpdateEmailUseCase(_services.GetService((typeof(IBus))) as IBus)))).Ask(body);
+                        new UpdateEmailUseCase(
+                            _services.GetService((typeof(IBus))) as IBus))))
+                .Ask(body);
         }
     }
 }

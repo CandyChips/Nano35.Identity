@@ -22,15 +22,13 @@ namespace Nano35.Identity.Api.Helpers
     {
         private Guid WorkerId { get; set;}
 
-        public Guid CurrentUserId => this.WorkerId;
+        public Guid CurrentUserId => WorkerId;
 
-        public CookiesAuthStateProvider(
-            IHttpContextAccessor httpContextAccessor)
+        public CookiesAuthStateProvider(IHttpContextAccessor httpContextAccessor)
         {
             var jwtEncoded = httpContextAccessor.HttpContext.Request.Headers["authorization"]!.ToString().Split(' ').Last();
-            if (jwtEncoded == null) return;
             var jwt = new JwtSecurityTokenHandler().ReadJwtToken(jwtEncoded);
-            this.WorkerId = Guid.Parse(jwt.Claims.First().Value);
+            WorkerId = Guid.Parse(jwt.Claims.First().Value);
         }
     }
     public interface ICustomAuthStateProvider
