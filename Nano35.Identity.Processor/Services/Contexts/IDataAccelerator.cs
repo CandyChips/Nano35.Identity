@@ -13,26 +13,27 @@ namespace Nano35.Identity.Processor.Services.Contexts
     public class EntityFrameworkAccelerator : IDataAccelerator
     {
         private ApplicationContext _context;
+        
         public ApplicationContext Context { get => _context; protected set => _context = value; }
 
         public EntityFrameworkAccelerator(ApplicationContext context)
         {
-            this.Context = context;
+            Context = context;
         }
 
         public IDbContextTransaction BeginTransaction()
         {
-            return this.Context.Database.BeginTransaction();
+            return Context.Database.BeginTransaction();
         }
 
         public void SaveChanges()
         {
-            this.Context.SaveChanges();
+            Context.SaveChanges();
         }
 
         public async Task SaveChangesAsync()
         {
-            await this.Context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
     }
 }

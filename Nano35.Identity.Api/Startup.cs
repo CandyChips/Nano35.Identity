@@ -8,7 +8,7 @@ namespace Nano35.Identity.Api
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
         
         public Startup(IConfiguration configuration)
         {
