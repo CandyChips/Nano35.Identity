@@ -18,46 +18,51 @@ namespace Nano35.Identity.Processor.UseCase.Register
         {
             _userManager = userManager;
         }
-        
-        public override async Task<IRegisterResultContract> Ask(
-            IRegisterRequestContract request, 
-            CancellationToken cancellationToken)
-            {
-                var isUsersPasswordCorrect = request.Password != request.PasswordConfirm;
-                if (isUsersPasswordCorrect)
-                {
-                    return new RegisterErrorResultContract() {Message = "Пароли не совпадают"};
-                }
 
-                if (_userManager.Users.Select(a => a.Id).Contains(request.NewUserId.ToString()))
-                {
-                    return new RegisterErrorResultContract() {Message = "Повторите попытку"};
-                }
-                var isUsersPhoneExist = await _userManager.FindByNameAsync(request.Phone);
-                if (isUsersPhoneExist != null)
-                {
-                    return new RegisterErrorResultContract() {Message = "Данный номер телефона уже существует в системе"};
-                }
-                var isUsersEmailExist = await _userManager.FindByEmailAsync(request.Email);
-                if (isUsersEmailExist != null)
-                {
-                    return new RegisterErrorResultContract() {Message = "Данная электронная почта уже существует в системе"};
-                }
-                var worker = new User()
-                {
-                    Id = request.NewUserId.ToString(),
-                    UserName = request.Phone,
-                    Email = request.Email,
-                    Name = "Оператор системы",
-                    Deleted = false,
-                    EmailConfirmed = true
-                };
+        public override async Task<IRegisterResultContract> Ask(
+            IRegisterRequestContract request,
+            CancellationToken cancellationToken)
+        {
+            var isUsersPasswordCorrect = request.Password != request.PasswordConfirm;
+            if (isUsersPasswordCorrect)
+            {
+                return new RegisterErrorResultContract() {Message = "Пароли не совпадают"};
+            }
+
+            if (_userManager.Users.Select(a => a.Id).Contains(request.NewUserId.ToString()))
+            {
+                return new RegisterErrorResultContract() {Message = "Повторите попытку"};
+            }
+
+            var isUsersPhoneExist = await _userManager.FindByNameAsync(request.Phone);
+            if (isUsersPhoneExist != null)
+            {
+                return new RegisterErrorResultContract() {Message = "Данный номер телефона уже существует в системе"};
+            }
+
+            var isUsersEmailExist = await _userManager.FindByEmailAsync(request.Email);
+            if (isUsersEmailExist != null)
+            {
+                return new RegisterErrorResultContract()
+                    {Message = "Данная электронная почта уже существует в системе"};
+            }
+
+            var worker = new User()
+            {
+                Id = request.NewUserId.ToString(),
+                UserName = request.Phone,
+                Email = request.Email,
+                Name = "Оператор системы",
+                Deleted = false,
+                EmailConfirmed = true
+            };
+           
                 var createAsyncResult = await _userManager.CreateAsync(worker, request.Password);
                 if (!createAsyncResult.Succeeded)
                 {
                     return new RegisterErrorResultContract() {Message = "Пароли не совпадают"};
                 }
-                
+
 
                 //var client = _bus.CreateRequestClient<IConfirmEmailOfUserRequestContract>(TimeSpan.FromSeconds(10));
                 //var response = await client

@@ -26,9 +26,10 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
             CancellationToken cancellationToken)
         {
             var result =
-                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
+                await (_userManager.Users.FirstOrDefaultAsync(a => a.Id == request.UserId.ToString(),
                     cancellationToken));
             result.PhoneNumber = request.Phone;
+            await _userManager.UpdateAsync(result);
 
             return new UpdatePhoneSuccessResultContract();
         }

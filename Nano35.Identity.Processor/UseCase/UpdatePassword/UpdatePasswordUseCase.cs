@@ -25,11 +25,11 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
             CancellationToken cancellationToken)
         {
             var result =
-                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
-                    cancellationToken));
-            var user = _userManager.FindByIdAsync(request.UserId.ToString()).Result;
-            result.PasswordHash = _userManager.PasswordHasher.HashPassword(user ,request.Password);
-
+                await _userManager.Users.FirstOrDefaultAsync(a => a.Id == request.UserId.ToString(),
+                    cancellationToken);
+            result.PasswordHash = _userManager.PasswordHasher.HashPassword(result ,request.Password);
+            await _userManager.UpdateAsync(result);
+            
             return new UpdatePasswordSuccessResultContract();
         }
     }

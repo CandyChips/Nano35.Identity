@@ -26,9 +26,10 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
             CancellationToken cancellationToken)
         {
             var result =
-                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
-                    cancellationToken));
+                await _userManager.Users.FirstOrDefaultAsync(a => a.Id == request.UserId.ToString(),
+                    cancellationToken);
             result.Name = request.Name;
+            await _userManager.UpdateAsync(result);
 
             return new UpdateNameSuccessResultContract();
         }

@@ -7,11 +7,26 @@ namespace Nano35.Identity.Processor.Configurations
     public class EntityFrameworkConfiguration : 
         IConfigurationOfService
     {
+        private readonly string _dbServer;
+        private readonly string _catalog;
+        private readonly string _login;
+        private readonly string _password;
+        public EntityFrameworkConfiguration(
+            string dbServer, 
+            string catalog, 
+            string login,
+            string password)
+        {
+            _dbServer = dbServer;
+            _catalog = catalog;
+            _login = login;
+            _password = password;
+        }
         public void AddToServices(
             IServiceCollection services)
         {
             services.AddDbContext<ApplicationContext>(options => 
-                options.UseSqlServer("server=192.168.100.120; Initial Catalog=Nano35.Identity.DB; User id=sa; Password=Cerber666;"));
+                options.UseSqlServer($"server={_dbServer}; Initial Catalog={_catalog}; User id={_login}; Password={_password};"));
             services.AddScoped<IDataAccelerator, EntityFrameworkAccelerator>();
         }
     }

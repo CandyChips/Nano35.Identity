@@ -18,7 +18,7 @@ namespace Nano35.Identity.Processor
         {
             new Configurator(services, new IdentityConfiguration()).Configure();
             new Configurator(services, new AutoMapperConfiguration()).Configure();
-            new Configurator(services, new EntityFrameworkConfiguration()).Configure();
+            new Configurator(services, new EntityFrameworkConfiguration("192.168.100.120", "Nano35.Identity.DB", "sa", "Cerber666")).Configure();
             new Configurator(services, new MassTransitConfiguration()).Configure();
             new Configurator(services, new JWTGeneratorConfiguration()).Configure();
         }

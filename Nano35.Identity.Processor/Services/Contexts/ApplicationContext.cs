@@ -9,13 +9,13 @@ namespace Nano35.Identity.Processor.Services.Contexts
 {
     public class ApplicationContext : IdentityDbContext<User>
     {
-        public DbSet<User> AppUsers {get;set;}
+        public DbSet<User> AppUsers { get; set; }
         public DbSet<Role> AppRoles { get; set; }
         
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
             Update();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

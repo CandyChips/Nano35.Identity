@@ -25,9 +25,10 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
             CancellationToken cancellationToken)
         {
             var result =
-                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
+                await (_userManager.Users.FirstOrDefaultAsync(a => a.Id == request.UserId.ToString(),
                     cancellationToken));
             result.Email = request.Email;
+            await _userManager.UpdateAsync(result);
 
             return new UpdateEmailSuccessResultContract();
         }
