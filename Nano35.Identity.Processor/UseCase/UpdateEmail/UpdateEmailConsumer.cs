@@ -12,29 +12,18 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
         IConsumer<IUpdateEmailRequestContract>
     {
         private readonly IServiceProvider  _services;
-        
-        public UpdateEmailConsumer(
-            IServiceProvider services)
-        {
-            _services = services;
-        }
-        
-        public async Task Consume(
-            ConsumeContext<IUpdateEmailRequestContract> context)
+        public UpdateEmailConsumer(IServiceProvider services) { _services = services; }
+        public async Task Consume(ConsumeContext<IUpdateEmailRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
+                await new LoggedRailPipeNode<IUpdateEmailRequestContract, IUpdateEmailSuccessResultContract>(
                     _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>)) as ILogger<IUpdateEmailRequestContract>,
                     new UpdateEmailUseCase(_services.GetService(typeof(UserManager<User>)) as UserManager<User>)).Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IUpdateEmailSuccessResultContract:
-                    await context.RespondAsync<IUpdateEmailSuccessResultContract>(result);
-                    break;
-                case IUpdateEmailErrorResultContract:
-                    await context.RespondAsync<IUpdateEmailErrorResultContract>(result);
-                    break;
-            }
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IUpdateEmailErrorResultContract>(e));
         }
     }
 }

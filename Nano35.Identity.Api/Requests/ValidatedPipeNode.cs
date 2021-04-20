@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using LanguageExt;
 using Nano35.Contracts;
 
 namespace Nano35.Identity.Api.Requests
@@ -30,6 +32,28 @@ namespace Nano35.Identity.Api.Requests
             {
                 return (TOut) (IResponse) new Error() {Message = result.Errors.FirstOrDefault()?.ErrorMessage};
             }
+            return await DoNext(input);
+        }
+    }
+    public class ValidatedRailPipeNode<TIn, TOut> : 
+        RailPipeNodeBase<TIn, TOut>
+        where TIn : IRequest
+        where TOut : ISuccess
+    {
+        private readonly IValidator<TIn> _validator;
+
+        public ValidatedRailPipeNode(
+            IValidator<TIn> validator,
+            IRailPipeNode<TIn, TOut> next) : base(next)
+        {
+            _validator = validator;
+        }
+
+        public override async Task<Either<string, TOut>> Ask(TIn input)
+        {
+            var result = _validator.ValidateAsync(input).Result;
+            if (!result.IsValid)
+                return result.Errors.FirstOrDefault()?.ErrorMessage;
             return await DoNext(input);
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using LanguageExt;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
@@ -12,7 +13,7 @@ using Nano35.Identity.Processor.UseCase.UpdatePassword;
 namespace Nano35.Identity.Processor.UseCase.UpdateName
 {
     public class UpdateNameUseCase :
-        EndPointNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
+        RailEndPointNodeBase<IUpdateNameRequestContract, IUpdateNameSuccessResultContract>
     {
         private readonly UserManager<User> _userManager;
 
@@ -21,13 +22,12 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
             _userManager = userManager;
         }
 
-        public override async Task<IUpdateNameResultContract> Ask(
+        public override async Task<Either<string, IUpdateNameSuccessResultContract>> Ask(
             IUpdateNameRequestContract request,
             CancellationToken cancellationToken)
         {
-            var result =
-                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
-                    cancellationToken));
+            var result = await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId, cancellationToken));
+            
             result.Name = request.Name;
 
             return new UpdateNameSuccessResultContract();

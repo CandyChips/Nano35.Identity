@@ -12,29 +12,20 @@ namespace Nano35.Identity.Processor.UseCase.Register
         IConsumer<IRegisterRequestContract>
     {
         private readonly IServiceProvider  _services;
-        
-        public RegisterConsumer(
-            IServiceProvider services)
-        {
-            _services = services;
-        }
-        
-        public async Task Consume(
-            ConsumeContext<IRegisterRequestContract> context)
+        public RegisterConsumer(IServiceProvider services) { _services = services; }
+        public async Task Consume(ConsumeContext<IRegisterRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
+                await new LoggedRailPipeNode<IRegisterRequestContract, IRegisterSuccessResultContract>(
                     _services.GetService(typeof(ILogger<IRegisterRequestContract>)) as ILogger<IRegisterRequestContract>,
-                    new RegisterUseCase(_services.GetService(typeof(UserManager<User>)) as UserManager<User>)).Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IRegisterSuccessResultContract:
-                    await context.RespondAsync<IRegisterSuccessResultContract>(result);
-                    break;
-                case IRegisterErrorResultContract:
-                    await context.RespondAsync<IRegisterErrorResultContract>(result);
-                    break;
-            }
+                    new RegisterUseCase(
+                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
+                    .Ask(context.Message, context.CancellationToken);
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IRegisterErrorResultContract>(e));
         }
     }
 }

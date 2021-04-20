@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using LanguageExt;
 using Microsoft.AspNetCore.Identity;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Models;
@@ -8,7 +9,7 @@ using Nano35.Identity.Processor.Services.Helpers;
 namespace Nano35.Identity.Processor.UseCase.GenerateToken
 {
     public class GenerateTokenUseCase :
-        EndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+        RailEndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenSuccessResultContract>
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -24,26 +25,26 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             _jwtGenerator = jwtGenerator;
         }
 
-        public override async Task<IGenerateTokenResultContract> Ask(
+        public override async Task<Either<string, IGenerateTokenSuccessResultContract>> Ask(
             IGenerateTokenRequestContract request,
             CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByNameAsync(request.Login);
             if (user == null)
             {
-                return new GenerateTokenErrorResultContract() {Message = "Пользователь не найден"};
+                return "Пользователь не найден";
             }
 
             var checkPasswordSignInAsyncResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!checkPasswordSignInAsyncResult.Succeeded)
             {
-                return new GenerateTokenErrorResultContract() {Message = "Неверный пароль"};
+                return "Неверный пароль";
             }
 
             var isEmailConfirmedAsyncResult = await _userManager.IsEmailConfirmedAsync(user);
             if (!isEmailConfirmedAsyncResult)
             {
-                return new GenerateTokenErrorResultContract() {Message = "Подтвердите почту"};
+                return "Подтвердите почту";
             }
 
             return new GenerateTokenSuccessResultContract() {Token = _jwtGenerator.CreateToken(user)};

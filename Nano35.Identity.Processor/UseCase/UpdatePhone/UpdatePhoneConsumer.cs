@@ -22,21 +22,18 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
         public async Task Consume(
             ConsumeContext<IUpdatePhoneRequestContract> context)
         {
-            var userManager = (UserManager<User>) _services.GetService(typeof(UserManager<User>));
-            var logger = (ILogger<IUpdatePhoneRequestContract>) _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>));
-            var message = context.Message;
             var result = 
-                await new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(logger,
-                    new UpdatePhoneUseCase(userManager)).Ask(message, context.CancellationToken);
-            switch (result)
-            {
-                case IUpdatePhoneSuccessResultContract:
-                    await context.RespondAsync<IUpdatePhoneSuccessResultContract>(result);
-                    break;
-                case IUpdatePhoneErrorResultContract:
-                    await context.RespondAsync<IUpdatePhoneErrorResultContract>(result);
-                    break;
-            }
+                await new LoggedRailPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneSuccessResultContract>(
+                    _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
+                    new UpdatePhoneUseCase(
+                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
+                    .Ask(context.Message, context.CancellationToken);
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IUpdatePhoneErrorResultContract>(e));
+
         }
     }
 }

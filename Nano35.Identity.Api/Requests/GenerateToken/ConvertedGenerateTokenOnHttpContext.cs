@@ -21,14 +21,8 @@ namespace Nano35.Identity.Api.Requests.GenerateToken
         {
             var converted = new GenerateTokenRequestContract()
             {
-                Login = input
-                    .With(x => x.Login)
-                    .If(x => x != "")
-                    .Do(Console.WriteLine),
-                Password = input
-                    .With(x => x.Password)
-                    .If(x => x != "")
-                    .Do(Console.WriteLine)
+                Login = input.Login,
+                Password = input.Password
             };
             return await DoNext(converted) switch
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using LanguageExt;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
@@ -11,7 +12,7 @@ using Nano35.Identity.Processor.Models;
 namespace Nano35.Identity.Processor.UseCase.UpdateEmail
 {
     public class UpdateEmailUseCase :
-        EndPointNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
+        RailEndPointNodeBase<IUpdateEmailRequestContract, IUpdateEmailSuccessResultContract>
     {
         private readonly UserManager<User> _userManager;
 
@@ -20,15 +21,12 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
             _userManager = userManager;
         }
 
-        public override async Task<IUpdateEmailResultContract> Ask(
+        public override async Task<Either<string, IUpdateEmailSuccessResultContract>> Ask(
             IUpdateEmailRequestContract request,
             CancellationToken cancellationToken)
         {
-            var result =
-                await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId,
-                    cancellationToken));
+            var result = await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId, cancellationToken));
             result.Email = request.Email;
-
             return new UpdateEmailSuccessResultContract();
         }
     }

@@ -23,22 +23,16 @@ namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
             ConsumeContext<IConfirmEmailOfUserRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>(
-                    _services.GetService(typeof(ILogger<IConfirmEmailOfUserRequestContract>)) 
-                        as ILogger<IConfirmEmailOfUserRequestContract>,  
+                await new LoggedRailPipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserSuccessResultContract>(
+                    _services.GetService(typeof(ILogger<IConfirmEmailOfUserRequestContract>)) as ILogger<IConfirmEmailOfUserRequestContract>,  
                     new ConfirmEmailOfUserUseCase(
-                        _services.GetService(typeof(UserManager<User>))
-                            as UserManager<User>))
+                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
                     .Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IConfirmEmailOfUserSuccessResultContract:
-                    await context.RespondAsync<IConfirmEmailOfUserSuccessResultContract>(result);
-                    break;
-                case IConfirmEmailOfUserErrorResultContract:
-                    await context.RespondAsync<IConfirmEmailOfUserErrorResultContract>(result);
-                    break;
-            }
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IConfirmEmailOfUserErrorResultContract>(e));
         }
     }
 }

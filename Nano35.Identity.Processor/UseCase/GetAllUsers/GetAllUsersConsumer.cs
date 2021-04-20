@@ -22,18 +22,16 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
         public async Task Consume(ConsumeContext<IGetAllUsersRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
+                await new LoggedRailPipeNode<IGetAllUsersRequestContract, IGetAllUsersSuccessResultContract>(
                     _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>)) as ILogger<IGetAllUsersRequestContract>,  
-                    new GetAllUsersUseCase(_services.GetService(typeof(UserManager<User>)) as UserManager<User>)).Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IGetAllUsersSuccessResultContract:
-                    await context.RespondAsync<IGetAllUsersSuccessResultContract>(result);
-                    break;
-                case IGetAllUsersErrorResultContract:
-                    await context.RespondAsync<IGetAllUsersErrorResultContract>(result);
-                    break;
-            }
+                    new GetAllUsersUseCase(
+                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
+                    .Ask(context.Message, context.CancellationToken);
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IGetAllUsersErrorResultContract>(e));
         }
     }
 }

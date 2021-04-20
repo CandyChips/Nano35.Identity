@@ -19,22 +19,18 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
         public async Task Consume(ConsumeContext<IGenerateTokenRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
+                await new LoggedRailPipeNode<IGenerateTokenRequestContract, IGenerateTokenSuccessResultContract>(
                     _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,  
                     new GenerateTokenUseCase(
                         _services.GetService(typeof(UserManager<User>)) as UserManager<User>, 
                         _services.GetService(typeof(SignInManager<User>)) as SignInManager<User>, 
                         _services.GetService(typeof(IJwtGenerator)) as IJwtGenerator))
                     .Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IGenerateTokenSuccessResultContract:
-                    await context.RespondAsync<IGenerateTokenSuccessResultContract>(result);
-                    break;
-                case IGenerateTokenErrorResultContract:
-                    await context.RespondAsync<IGenerateTokenErrorResultContract>(result);
-                    break;
-            }
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IGenerateTokenErrorResultContract>(e));
         }
     }
 }

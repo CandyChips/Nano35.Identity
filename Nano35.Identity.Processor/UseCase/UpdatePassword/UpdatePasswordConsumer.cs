@@ -23,18 +23,16 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
             ConsumeContext<IUpdatePasswordRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
+                await new LoggedRailPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordSuccessResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>)) as ILogger<IUpdatePasswordRequestContract>,
-                    new UpdatePasswordUseCase(_services.GetService(typeof(UserManager<User>)) as UserManager<User>)).Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IUpdatePasswordSuccessResultContract:
-                    await context.RespondAsync<IUpdatePasswordSuccessResultContract>(result);
-                    break;
-                case IUpdatePasswordErrorResultContract:
-                    await context.RespondAsync<IUpdatePasswordErrorResultContract>(result);
-                    break;
-            }
+                    new UpdatePasswordUseCase(
+                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
+                    .Ask(context.Message, context.CancellationToken);
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IUpdatePasswordErrorResultContract>(e));
         }
     }
 }

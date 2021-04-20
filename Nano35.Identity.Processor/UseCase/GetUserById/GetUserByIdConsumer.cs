@@ -11,28 +11,20 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
         IConsumer<IGetUserByIdRequestContract>
     {
         private readonly IServiceProvider  _services;
-        
-        public GetUserByIdConsumer(IServiceProvider services)
-        {
-            _services = services;
-        }
-        
+        public GetUserByIdConsumer(IServiceProvider services) { _services = services; }
         public async Task Consume(ConsumeContext<IGetUserByIdRequestContract> context)
         {
             var result = 
-                await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+                await new LoggedRailPipeNode<IGetUserByIdRequestContract, IGetUserByIdSuccessResultContract>(
                     _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,  
                     new GetUserByIdUseCase(
-                        _services.GetService(typeof(ApplicationContext)) as ApplicationContext)).Ask(context.Message, context.CancellationToken);
-            switch (result)
-            {
-                case IGetUserByIdSuccessResultContract:
-                    await context.RespondAsync<IGetUserByIdSuccessResultContract>(result);
-                    break;
-                case IGetUserByIdErrorResultContract:
-                    await context.RespondAsync<IGetUserByIdErrorResultContract>(result);
-                    break;
-            }
+                        _services.GetService(typeof(ApplicationContext)) as ApplicationContext))
+                    .Ask(context.Message, context.CancellationToken);
+            await result.Match(
+                async r => 
+                    await context.RespondAsync(r),
+                async e => 
+                    await context.RespondAsync<IGetUserByIdErrorResultContract>(e));
         }
     }
 }

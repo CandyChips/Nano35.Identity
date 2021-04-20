@@ -23,7 +23,6 @@ namespace Nano35.Identity.Api
             new Configurator(services, new MassTransitConfiguration()).Configure();
             new Configurator(services, new ConfigurationOfAuthStateProvider()).Configure();
             new Configurator(services, new ConfigurationOfControllers()).Configure();
-            new Configurator(services, new ConfigurationOfFluidValidator()).Configure();
             
             services.AddHealthChecks();
         }
