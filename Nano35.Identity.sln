@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano35.Identity.Api", "Nano
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano35.Identity.Processor", "Nano35.Identity.Processor\Nano35.Identity.Processor.csproj", "{9EDA5E88-727D-4790-836B-785EF3FDCDC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nano35.Identity.Tests", "Nano35.Identity.Tests\Nano35.Identity.Tests.csproj", "{7E6162C8-B1F4-495A-AE5F-162991031A72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{9EDA5E88-727D-4790-836B-785EF3FDCDC4}.Release|x64.Build.0 = Release|Any CPU
 		{9EDA5E88-727D-4790-836B-785EF3FDCDC4}.Release|x86.ActiveCfg = Release|Any CPU
 		{9EDA5E88-727D-4790-836B-785EF3FDCDC4}.Release|x86.Build.0 = Release|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Debug|x64.Build.0 = Debug|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Debug|x86.Build.0 = Debug|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Release|x64.ActiveCfg = Release|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Release|x64.Build.0 = Release|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Release|x86.ActiveCfg = Release|Any CPU
+		{7E6162C8-B1F4-495A-AE5F-162991031A72}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
