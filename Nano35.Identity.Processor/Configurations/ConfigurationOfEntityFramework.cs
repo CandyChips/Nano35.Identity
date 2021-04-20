@@ -19,6 +19,13 @@ namespace Nano35.Identity.Processor.Configurations
             _login = configuration["services:EntityFramework:Login"];
             _password = configuration["services:EntityFramework:Password"];
         }
+        public EntityFrameworkConfiguration(string host, string db, string login, string password)
+        {
+            _dbServer = host;
+            _catalog = db;
+            _login = login;
+            _password = password;
+        }
         public void AddToServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationContext>(options => 

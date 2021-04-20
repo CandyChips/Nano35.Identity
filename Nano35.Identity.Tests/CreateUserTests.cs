@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LanguageExt;
 using MassTransit;
+using MassTransit.Testing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -94,7 +95,7 @@ namespace Nano35.Identity.Tests
 
             //Act
             var result = await
-                new LoggedPipeNode<ICreateUserRequestContract,ICreateUserResultContract>(logger,
+                new LoggedRailPipeNode<ICreateUserRequestContract,ICreateUserSuccessResultContract>(logger,
                 new CreateUserUseCase(_db.UserManager)).Ask(input, context.CancellationToken);
 
             var res = _db.Context.Users.Select(a =>
@@ -128,28 +129,35 @@ namespace Nano35.Identity.Tests
         public async Task Register()
         {
             // Arrange
-            Guid testId = Guid.NewGuid();
-
+            var testId = Guid.NewGuid();
             var input = new RegisterRequestContract()
-            {
-                //input values
-                NewUserId = testId,
-                Phone = "88005553535",
-                Email = "Sasha@ya.ru",
-                Password = "qwerty",
-                PasswordConfirm = "qwerty"
-            };
+            {NewUserId = testId,
+             Phone = "88005553535",
+             Email = "Sasha@ya.ru",
+             Password = "qwerty",
+             PasswordConfirm = "qwerty"};
 
+            var services = new ServiceCollection();
+            services.AddMassTransit(x =>
+            {
+                x.AddBus(provider => Bus.Factory.CreateUsingInMemory(cfg =>
+                {
+
+                    cfg.ReceiveEndpoint("IRegisterRequestContract", e =>
+                    {
+                        e.Consumer<RegisterConsumer>(provider);
+                    });
+                }));
+                x.AddConsumer<RegisterConsumer>();
+            });
+            
             var source = new CancellationTokenSource();
             var cancellationToken = source.Token;
-            var context = Mock.Of<ConsumeContext<IRegisterRequestContract>>(_ =>
-                _.CancellationToken == cancellationToken);
+            var context = Mock.Of<ConsumeContext<IRegisterRequestContract>>(o => o.CancellationToken == cancellationToken);
             var logger = Mock.Of<ILogger<IRegisterRequestContract>>();
 
             //Act
-
-            var result = await
-                new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger, 
+            var result = await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger, 
                 new RegisterUseCase(_db.UserManager)).Ask(input, context.CancellationToken);
 
             var res = _db.Context.Users.Select(a =>
