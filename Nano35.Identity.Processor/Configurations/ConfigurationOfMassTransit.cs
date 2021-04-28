@@ -5,6 +5,7 @@ using Nano35.Contracts;
 using Nano35.Identity.Processor.UseCase.GenerateToken;
 using Nano35.Identity.Processor.UseCase.GetAllUsers;
 using Nano35.Identity.Processor.UseCase.GetUserById;
+using Nano35.Identity.Processor.UseCase.GetUserByName;
 using Nano35.Identity.Processor.UseCase.Register;
 
 namespace Nano35.Identity.Processor.Configurations
@@ -35,6 +36,10 @@ namespace Nano35.Identity.Processor.Configurations
                     {
                         e.Consumer<GetUserByIdConsumer>(provider);
                     });
+                    cfg.ReceiveEndpoint("IGetUserByNameRequestContract", e =>
+                    {
+                        e.Consumer<GetUserByNameConsumer>(provider);
+                    });
                     
                     cfg.ReceiveEndpoint("IRegisterRequestContract", e =>
                     {
@@ -48,6 +53,7 @@ namespace Nano35.Identity.Processor.Configurations
                 }));
                 x.AddConsumer<GetAllUsersConsumer>();
                 x.AddConsumer<GetUserByIdConsumer>();
+                x.AddConsumer<GetUserByNameConsumer>();
                 x.AddConsumer<RegisterConsumer>();
                 x.AddConsumer<GenerateTokenConsumer>();
             });

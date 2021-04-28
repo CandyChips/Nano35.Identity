@@ -9,8 +9,10 @@
                 .Replace("-", "")
                 .Replace("(", "")
                 .Replace(")", ""); // 78005553535
-            result = result.Substring(1); // 8005553535
+            if(result.Length == 11)
+                result = result.Substring(1); // 8005553535
             return result; 
         }
     }
+    
 }
