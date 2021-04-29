@@ -41,7 +41,6 @@ namespace Nano35.Identity.Tests
         public void ConfigureServices(IServiceCollection services)
         {
             new Configurator(services, new IdentityConfiguration()).Configure();
-            new Configurator(services, new AutoMapperConfiguration()).Configure();
             new Configurator(services,
                     new EntityFrameworkConfiguration("192.168.100.120", "Nano35.Identity.Test.DB", "sa", "Cerber666"))
                 .Configure();

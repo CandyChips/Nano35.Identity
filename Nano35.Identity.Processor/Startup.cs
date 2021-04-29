@@ -18,7 +18,6 @@ namespace Nano35.Identity.Processor
         public void ConfigureServices(IServiceCollection services)
         {
             new Configurator(services, new IdentityConfiguration()).Configure();
-            new Configurator(services, new AutoMapperConfiguration()).Configure();
             new Configurator(services, new EntityFrameworkConfiguration(Configuration)).Configure();
             new Configurator(services, new MassTransitConfiguration()).Configure();
             new Configurator(services, new JWTGeneratorConfiguration()).Configure();
