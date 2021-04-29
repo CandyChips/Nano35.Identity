@@ -2,6 +2,7 @@ using System;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Nano35.Contracts;
+using Nano35.Identity.Processor.UseCase.CreateUser;
 using Nano35.Identity.Processor.UseCase.GenerateToken;
 using Nano35.Identity.Processor.UseCase.GetAllUsers;
 using Nano35.Identity.Processor.UseCase.GetUserById;
@@ -50,8 +51,13 @@ namespace Nano35.Identity.Processor.Configurations
                     {
                         e.Consumer<GenerateTokenConsumer>(provider);
                     });
+                    cfg.ReceiveEndpoint("ICreateUserRequestContract", e =>
+                    {
+                        e.Consumer<CreateUserConsumer>(provider);
+                    });
                 }));
                 x.AddConsumer<GetAllUsersConsumer>();
+                x.AddConsumer<CreateUserConsumer>();
                 x.AddConsumer<GetUserByIdConsumer>();
                 x.AddConsumer<GetUserByNameConsumer>();
                 x.AddConsumer<RegisterConsumer>();
