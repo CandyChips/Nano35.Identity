@@ -1,33 +1,35 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
+using Nano35.Contracts.Instance.Artifacts;
 using Nano35.Identity.Processor.Services.Contexts;
-using Nano35.Identity.Processor.Services.MappingProfiles;
 
 namespace Nano35.Identity.Processor.UseCase.GetUserByName
 {
-    public class GetUserByNameUseCase :
-        RailEndPointNodeBase<IGetUserByNameRequestContract, IGetUserByNameSuccessResultContract>
+    public class GetUserByNameUseCase : UseCaseEndPointNodeBase<IGetUserByNameRequestContract, IGetUserByNameResultContract>
     {
         private readonly ApplicationContext _context;
-
-        public GetUserByNameUseCase(ApplicationContext context)
-        {
-            _context = context;
-        }
-
-        public override async Task<Either<string, IGetUserByNameSuccessResultContract>> Ask(
+        public GetUserByNameUseCase(ApplicationContext context) => _context = context;
+        public override async Task<UseCaseResponse<IGetUserByNameResultContract>> Ask(
             IGetUserByNameRequestContract request,
             CancellationToken cancellationToken)
         {
-            var result = (await _context.Users.FirstOrDefaultAsync(f => f.UserName == request.UserName, cancellationToken: cancellationToken)).MapTo<IUserViewModel>();
-
-            if (result == null) return "Не найдено";
-                
-            return new GetUserByNameSuccessResultContract() { Data = result };
+            var tmp = await _context
+                .Users
+                .FirstAsync(f => f.UserName == request.UserName, cancellationToken: cancellationToken);
+            return tmp == null ?
+                new UseCaseResponse<IGetUserByNameResultContract>("Пользователь не найден") :
+                new UseCaseResponse<IGetUserByNameResultContract>(new GetUserByNameResultContract() { Data = 
+                    new UserViewModel()
+                    {
+                        Email = tmp.Email,
+                        Id = Guid.Parse(tmp.Id),
+                        Name = tmp.Name,
+                        Phone = tmp.PhoneNumber
+                    }});
         }
     }
 }

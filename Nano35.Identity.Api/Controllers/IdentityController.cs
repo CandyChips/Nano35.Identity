@@ -26,165 +26,165 @@ namespace Nano35.Identity.Api.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IServiceProvider  _services;
+        public IdentityController(IServiceProvider  services) => _services = services;
 
-        public IdentityController(IServiceProvider  services) { _services = services; }
-        
-        [HttpGet]
-        [Route("GetUserById")]
+        [HttpGet("{id}")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetUserByIdSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetUserByIdErrorResultContract))]    
-        public async Task<IActionResult> GetUserById(
-            [FromQuery]GetUserByIdHttpQuery message)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetUserByIdResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]    
+        public async Task<IActionResult> GetUserById(Guid id)
         {
-            return await new ConvertedGetUserByIdOnHttpContext(
-                new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
-                    _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
-                    new ValidatedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
-                        _services.GetService(typeof(IValidator<IGetUserByIdRequestContract>)) as IValidator<IGetUserByIdRequestContract>,
+            var result =
+                await new LoggedUseCasePipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+                        _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
                         new GetUserByIdUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(message);
+                            _services.GetService((typeof(IBus))) as IBus))
+                    .Ask(new GetUserByIdRequestContract() {UserId = id});
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
         
         [HttpGet]
-        [Route("GetAllUsers")]
+        [Route("All")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetAllUsersSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetAllUsersErrorResultContract))]    
-        public async Task<IActionResult> GetAllUsers(
-            [FromQuery]GetAllUsersHttpQuery message)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetAllUsersResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]    
+        public async Task<IActionResult> GetAllUsers()
         {
-            return await new ConvertedGetAllUsersOnHttpContext(
-                new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
+            var result = 
+                await new LoggedUseCasePipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
                     _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>)) as ILogger<IGetAllUsersRequestContract>,
                     new GetAllUsersUseCase(
-                        _services.GetService((typeof(IBus))) as IBus)))
-                .Ask(message);
+                        _services.GetService((typeof(IBus))) as IBus))
+                    .Ask(new GetAllUsersRequestContract());
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
         [HttpGet]
-        [Route("GetUserFromToken")]
+        [Route("FromToken")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetUserByIdSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGetUserByIdErrorResultContract))] 
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGetUserByIdResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
         public async Task<IActionResult> GetUserFromToken()
         {
-            return await new ConvertedGetUserByTokenOnHttpContext(
-                new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+            var result =
+                await new LoggedUseCasePipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
                     _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
                     new GetUserByTokenUseCase(
                         _services.GetService((typeof(IBus))) as IBus, 
-                        _services.GetService(typeof(ICustomAuthStateProvider)) as ICustomAuthStateProvider)))
+                        _services.GetService(typeof(ICustomAuthStateProvider)) as ICustomAuthStateProvider))
                 .Ask(new GetUserByIdRequestContract());
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
         
         [HttpPost]
-        [Route("Register")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IRegisterSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IRegisterErrorResultContract))] 
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IRegisterResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
         public async Task<IActionResult> Register(
             [FromBody] RegisterHttpBody body)
         {
-            return await new ConvertedRegisterOnHttpContext(
-                new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
+            var result =
+                await new LoggedUseCasePipeNode<IRegisterRequestContract, IRegisterResultContract>(
                     _services.GetService(typeof(ILogger<IRegisterRequestContract>)) as ILogger<IRegisterRequestContract>,
-                    new ValidatedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
-                        _services.GetService(typeof(IValidator<IRegisterRequestContract>)) as IValidator<IRegisterRequestContract>,
-                        new RegisterUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(body);
+                    new RegisterUseCase(
+                        _services.GetService((typeof(IBus))) as IBus))
+                .Ask(new RegisterRequestContract()
+                    {Email = body.Email,
+                     NewUserId = body.NewId,
+                     Password = body.Password,
+                     PasswordConfirm = body.PasswordConfirm,
+                     Phone = body.Phone});
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
         
         [HttpPost]
         [Route("Authenticate")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGenerateTokenSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IGenerateTokenErrorResultContract))] 
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IGenerateTokenResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
         public async Task<IActionResult> GenerateUserToken(
             [FromBody] GenerateUserTokenHttpBody body)
         {
-            return await new ConvertedGenerateTokenOnHttpContext(
-                new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
+            var result =
+                await new LoggedUseCasePipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
                     _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,
-                    new ValidatedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
-                        _services.GetService(typeof(IValidator<IGenerateTokenRequestContract>)) as IValidator<IGenerateTokenRequestContract>, 
-                        new GenerateTokenUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(body);
+                    new GenerateTokenUseCase(
+                        _services.GetService((typeof(IBus))) as IBus))
+                .Ask(new GenerateTokenRequestContract() {Login = body.Login, Password = body.Password});
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
         [HttpPatch]
-        [Route("UpdatePhone")]
+        [Route("{id}/Phone")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdatePhoneSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdatePhoneErrorResultContract))] 
-        public async Task<IActionResult> UpdatePhone(
-            [FromBody] UpdatePhoneHttpBody body)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdatePhoneResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
+        public async Task<IActionResult> UpdatePhone([FromBody] UpdatePhoneHttpBody body, Guid id)
         {
-            return await new ConvertedUpdatePhoneOnHttpContext(
-                new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+            var result =
+                await new LoggedUseCasePipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
-                    new ValidatedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
-                        _services.GetService(typeof(IValidator<IUpdatePhoneRequestContract>)) as IValidator<IUpdatePhoneRequestContract>,
-                        new UpdatePhoneUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(body);
+                    new UpdatePhoneUseCase(
+                        _services.GetService((typeof(IBus))) as IBus))
+                .Ask(new UpdatePhoneRequestContract() { UserId = id , Phone = body.Phone });
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
         [HttpPatch]
-        [Route("UpdatePassword")]
+        [Route("{id}/Password")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdatePasswordSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdatePasswordErrorResultContract))] 
-        public async Task<IActionResult> UpdatePassword(
-            [FromBody] UpdatePasswordHttpBody body)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdatePasswordResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordHttpBody body, Guid id)
         {
-            return await new ConvertedUpdatePasswordOnHttpContext(
-                new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
+            var result =
+                await new LoggedUseCasePipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>)) as ILogger<IUpdatePasswordRequestContract>,
-                    new ValidatedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
-                        _services.GetService(typeof(IValidator<IUpdatePasswordRequestContract>)) as IValidator<IUpdatePasswordRequestContract>,
-                        new UpdatePasswordUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(body);
+                    new UpdatePasswordUseCase(
+                        _services.GetService(typeof(IBus)) as IBus))
+                .Ask(new UpdatePasswordRequestContract() { UserId =  id, Password = body.Password });
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
         [HttpPatch]
-        [Route("UpdateName")]
+        [Route("{id}/Name")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdateNameSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdateNameErrorResultContract))] 
-        public async Task<IActionResult> UpdateName(
-            [FromBody] UpdateNameHttpBody body)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdateNameResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
+        public async Task<IActionResult> UpdateName([FromBody] UpdateNameHttpBody body, Guid id)
         {
-            return await new ConvertedUpdateNameOnHttpContext(
-                new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
+            var result =
+                await new LoggedUseCasePipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
                     _services.GetService(typeof(ILogger<IUpdateNameRequestContract>)) as ILogger<IUpdateNameRequestContract>,
-                    new ValidatedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
-                        _services.GetService(typeof(IValidator<IUpdateNameRequestContract>)) as IValidator<IUpdateNameRequestContract>,
-                        new UpdateNameUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(body);
+                    new UpdateNameUseCase(
+                        _services.GetService((typeof(IBus))) as IBus))
+                .Ask(new UpdateNameRequestContract() { UserId = id, Name = body.Name });
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
         [HttpPatch]
-        [Route("UpdateEmail")]
+        [Route("{id}/Email")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdateEmailSuccessResultContract))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IUpdateEmailErrorResultContract))] 
-        public async Task<IActionResult> UpdateEmail(
-            [FromBody] UpdateEmailHttpBody body)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IUpdateEmailResultContract))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))] 
+        public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailHttpBody body, Guid id)
         {
-            return await new ConvertedUpdateEmailOnHttpContext(
-                new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>( 
+            var result =
+                await new LoggedUseCasePipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>( 
                     _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>)) as ILogger<IUpdateEmailRequestContract>,
-                    new ValidatedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
-                        _services.GetService(typeof(IValidator<IUpdateEmailRequestContract>)) as IValidator<IUpdateEmailRequestContract>,
-                        new UpdateEmailUseCase(
-                            _services.GetService((typeof(IBus))) as IBus))))
-                .Ask(body);
+                    new UpdateEmailUseCase(
+                        _services.GetService(typeof(IBus)) as IBus))
+                .Ask(new UpdateEmailRequestContract() { UserId = id, Email = body.Email });
+            
+            return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
     }
 }

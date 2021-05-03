@@ -1,6 +1,4 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Nano35.Contracts.Identity.Models;
 
 namespace Nano35.Identity.Processor.Models
 {

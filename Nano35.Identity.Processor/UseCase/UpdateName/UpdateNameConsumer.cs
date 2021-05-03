@@ -1,38 +1,29 @@
 using System;
 using System.Threading.Tasks;
 using MassTransit;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Identity.Processor.Models;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdateName
 {
-    public class UpdateNameConsumer : 
-        IConsumer<IUpdateNameRequestContract>
+    public class UpdateNameConsumer : IConsumer<IUpdateNameRequestContract>
     {
         private readonly IServiceProvider  _services;
-        
-        public UpdateNameConsumer(
-            IServiceProvider services)
+        public UpdateNameConsumer(IServiceProvider services) => _services = services;
+        public async Task Consume(ConsumeContext<IUpdateNameRequestContract> context)
         {
-            _services = services;
-        }
-        
-        public async Task Consume(
-            ConsumeContext<IUpdateNameRequestContract> context)
-        {
+            var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
             var result = 
-                await new LoggedRailPipeNode<IUpdateNameRequestContract, IUpdateNameSuccessResultContract>(
+                await new LoggedUseCasePipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
                     _services.GetService(typeof(ILogger<IUpdateNameRequestContract>)) as ILogger<IUpdateNameRequestContract>,
-                    new UpdateNameUseCase(
-                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
+                    new TransactedUseCasePipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
+                        dbContext,
+                        new UpdateNameUseCase(
+                            dbContext))
+                    )
                     .Ask(context.Message, context.CancellationToken);
-            await result.Match(
-                async r => 
-                    await context.RespondAsync(r),
-                async e => 
-                    await context.RespondAsync<IUpdateNameErrorResultContract>(e));
+            await context.RespondAsync(result);
 
         }
     }

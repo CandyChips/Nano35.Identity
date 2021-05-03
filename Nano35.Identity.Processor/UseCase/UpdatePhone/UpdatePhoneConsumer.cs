@@ -5,35 +5,26 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Identity.Processor.Models;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdatePhone
 {
-    public class UpdatePhoneConsumer : 
-        IConsumer<IUpdatePhoneRequestContract>
+    public class UpdatePhoneConsumer : IConsumer<IUpdatePhoneRequestContract>
     {
         private readonly IServiceProvider  _services;
-        
-        public UpdatePhoneConsumer(
-            IServiceProvider services)
-        {
-            _services = services;
-        }
-        
+        public UpdatePhoneConsumer(IServiceProvider services) => _services = services;
         public async Task Consume(
             ConsumeContext<IUpdatePhoneRequestContract> context)
         {
+            var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
             var result = 
-                await new LoggedRailPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneSuccessResultContract>(
+                await new LoggedUseCasePipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
-                    new UpdatePhoneUseCase(
-                        _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
+                    new TransactedUseCasePipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+                        dbContext,
+                        new UpdatePhoneUseCase(dbContext)))
                     .Ask(context.Message, context.CancellationToken);
-            await result.Match(
-                async r => 
-                    await context.RespondAsync(r),
-                async e => 
-                    await context.RespondAsync<IUpdatePhoneErrorResultContract>(e));
-
+            await context.RespondAsync(result);
         }
     }
 }

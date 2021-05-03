@@ -1,15 +1,16 @@
-﻿using MassTransit;
+﻿using System.Threading.Tasks;
+using MassTransit;
 using Nano35.Contracts.Identity.Artifacts;
+using Nano35.Contracts.Instance.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.GenerateToken
 {
-    public class GenerateTokenUseCase :
-        EndPointRequestNodeBase<
-            IGenerateTokenRequestContract,
-            IGenerateTokenResultContract,
-            IGenerateTokenSuccessResultContract,
-            IGenerateTokenErrorResultContract>
+    public class GenerateTokenUseCase : UseCaseEndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
-        public GenerateTokenUseCase(IBus bus) : base(bus) {}
+        private readonly IBus _bus;
+        public GenerateTokenUseCase(IBus bus) => _bus = bus;
+        public override async Task<UseCaseResponse<IGenerateTokenResultContract>> Ask(IGenerateTokenRequestContract input) => 
+            await new MasstransitUseCaseRequest<IGenerateTokenRequestContract, IGenerateTokenResultContract>(_bus, input)
+                .GetResponse();
     }
 }

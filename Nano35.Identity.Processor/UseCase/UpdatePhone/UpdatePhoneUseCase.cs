@@ -1,36 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Contracts.Identity.Models;
+using Nano35.Contracts.Instance.Artifacts;
 using Nano35.Identity.Processor.Models;
+using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdatePhone
 {
-    public class UpdatePhoneUseCase :
-        RailEndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneSuccessResultContract>
+    public class UpdatePhoneUseCase : UseCaseEndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
-        private readonly UserManager<User> _userManager;
-
-        public UpdatePhoneUseCase(
-            UserManager<User> userManager)
-        {
-            _userManager = userManager;
-        }
-
-        public override async Task<Either<string, IUpdatePhoneSuccessResultContract>> Ask(
+        private readonly ApplicationContext _context;
+        public UpdatePhoneUseCase(ApplicationContext context) => _context = context;
+        public override async Task<UseCaseResponse<IUpdatePhoneResultContract>> Ask(
             IUpdatePhoneRequestContract request,
             CancellationToken cancellationToken)
         {
-            var result = await (_userManager.Users.FirstOrDefaultAsync(a => Guid.Parse(a.Id) == request.UserId, cancellationToken));
-            
+            var result = await _context.Users.FirstAsync(a => a.Id == request.UserId.ToString(), cancellationToken);
             result.PhoneNumber = request.Phone;
-
-            return new UpdatePhoneSuccessResultContract();
+            return new UseCaseResponse<IUpdatePhoneResultContract>(new UpdatePhoneResultContract());
         }
     }
 }

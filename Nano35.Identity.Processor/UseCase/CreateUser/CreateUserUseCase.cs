@@ -1,37 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using Microsoft.AspNetCore.Identity;
 using Nano35.Contracts.Identity.Artifacts;
-using Nano35.Contracts.Identity.Models;
+using Nano35.Contracts.Instance.Artifacts;
 using Nano35.Identity.Processor.Models;
-using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.CreateUser
 {
-    public class CreateUserUseCase :
-        RailEndPointNodeBase<ICreateUserRequestContract, ICreateUserSuccessResultContract>
+    public class CreateUserUseCase : UseCaseEndPointNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
         private readonly UserManager<User> _userManager;
-        
-        public CreateUserUseCase(UserManager<User> userManager)
-        {
-            _userManager = userManager;
-        }
-
-        public override async Task<Either<string, ICreateUserSuccessResultContract>> Ask(
+        public CreateUserUseCase(UserManager<User> userManager) => _userManager = userManager;
+        public override async Task<UseCaseResponse<ICreateUserResultContract>> Ask(
             ICreateUserRequestContract request,
             CancellationToken cancellationToken)
         {
             if (_userManager.Users.Select(a => a.Id).Contains(request.NewId.ToString()))
-                return "Повторите попытку";
+                return new UseCaseResponse<ICreateUserResultContract>("Повторите попытку");
             if(await _userManager.FindByNameAsync(request.Phone) != null)
-                return "Данный номер телефона уже существует в системе";
+                return new UseCaseResponse<ICreateUserResultContract>("Данный номер телефона уже существует в системе");
             if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return "Данная электронная почта уже существует в системе";
+                return new UseCaseResponse<ICreateUserResultContract>("Данная электронная почта уже существует в системе");
             var worker = new User()
             {
                 Id = request.NewId.ToString(),
@@ -41,9 +31,9 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
                 Deleted = false,
                 EmailConfirmed = true
             };
-            if (!(await _userManager.CreateAsync(worker, request.Password)).Succeeded)
-                return "Пароли не совпадают";
-            return new CreateUserSuccessResultContract();
+            return !(await _userManager.CreateAsync(worker, request.Password)).Succeeded ? 
+                new UseCaseResponse<ICreateUserResultContract>("Пароли не совпадают") :
+                new UseCaseResponse<ICreateUserResultContract>(new CreateUserResultContract());
         }
     }
 }

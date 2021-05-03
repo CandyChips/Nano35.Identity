@@ -8,26 +8,19 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.CreateUser
 {
-    public class CreateUserConsumer : 
-        IConsumer<ICreateUserRequestContract>
+    public class CreateUserConsumer : IConsumer<ICreateUserRequestContract>
     {
-        private readonly IServiceProvider  _services;
-        
-        public CreateUserConsumer(IServiceProvider services) { _services = services; }
-
+        private readonly IServiceProvider _services;
+        public CreateUserConsumer(IServiceProvider services) => _services = services;
         public async Task Consume(ConsumeContext<ICreateUserRequestContract> context)
         {
             var result = 
-                await new LoggedRailPipeNode<ICreateUserRequestContract, ICreateUserSuccessResultContract>(
+                await new LoggedUseCasePipeNode<ICreateUserRequestContract, ICreateUserResultContract>(
                     _services.GetService(typeof(ILogger<ICreateUserRequestContract>)) as ILogger<ICreateUserRequestContract>,  
                     new CreateUserUseCase(
                         _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
                     .Ask(context.Message, context.CancellationToken);
-            await result.Match(
-                async r => 
-                    await context.RespondAsync(r),
-                async e => 
-                    await context.RespondAsync<ICreateUserErrorResultContract>(e));
+            await context.RespondAsync(result);
         }
     }
 }

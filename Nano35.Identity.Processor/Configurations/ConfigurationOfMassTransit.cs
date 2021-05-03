@@ -8,6 +8,10 @@ using Nano35.Identity.Processor.UseCase.GetAllUsers;
 using Nano35.Identity.Processor.UseCase.GetUserById;
 using Nano35.Identity.Processor.UseCase.GetUserByName;
 using Nano35.Identity.Processor.UseCase.Register;
+using Nano35.Identity.Processor.UseCase.UpdateEmail;
+using Nano35.Identity.Processor.UseCase.UpdateName;
+using Nano35.Identity.Processor.UseCase.UpdatePassword;
+using Nano35.Identity.Processor.UseCase.UpdatePhone;
 
 namespace Nano35.Identity.Processor.Configurations
 {
@@ -55,6 +59,22 @@ namespace Nano35.Identity.Processor.Configurations
                     {
                         e.Consumer<CreateUserConsumer>(provider);
                     });
+                    cfg.ReceiveEndpoint("IUpdateEmailRequestContract", e =>
+                    {
+                        e.Consumer<UpdateEmailConsumer>(provider);
+                    });
+                    cfg.ReceiveEndpoint("IUpdateNameRequestContract", e =>
+                    {
+                        e.Consumer<UpdateNameConsumer>(provider);
+                    });
+                    cfg.ReceiveEndpoint("IUpdatePasswordRequestContract", e =>
+                    {
+                        e.Consumer<UpdatePasswordConsumer>(provider);
+                    });
+                    cfg.ReceiveEndpoint("IUpdatePhoneRequestContract", e =>
+                    {
+                        e.Consumer<UpdatePhoneConsumer>(provider);
+                    });
                 }));
                 x.AddConsumer<GetAllUsersConsumer>();
                 x.AddConsumer<CreateUserConsumer>();
@@ -62,6 +82,10 @@ namespace Nano35.Identity.Processor.Configurations
                 x.AddConsumer<GetUserByNameConsumer>();
                 x.AddConsumer<RegisterConsumer>();
                 x.AddConsumer<GenerateTokenConsumer>();
+                x.AddConsumer<UpdateEmailConsumer>();
+                x.AddConsumer<UpdateNameConsumer>();
+                x.AddConsumer<UpdatePasswordConsumer>();
+                x.AddConsumer<UpdatePhoneConsumer>();
             });
             services.AddMassTransitHostedService();
         }

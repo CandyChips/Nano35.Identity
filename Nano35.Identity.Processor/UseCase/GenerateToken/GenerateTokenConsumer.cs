@@ -9,28 +9,21 @@ using Nano35.Identity.Processor.Services.Helpers;
 
 namespace Nano35.Identity.Processor.UseCase.GenerateToken
 {
-    public class GenerateTokenConsumer : 
-        IConsumer<IGenerateTokenRequestContract>
+    public class GenerateTokenConsumer : IConsumer<IGenerateTokenRequestContract>
     {
         private readonly IServiceProvider  _services;
-        
-        public GenerateTokenConsumer(IServiceProvider services) { _services = services; }
-
+        public GenerateTokenConsumer(IServiceProvider services) => _services = services;
         public async Task Consume(ConsumeContext<IGenerateTokenRequestContract> context)
         {
             var result = 
-                await new LoggedRailPipeNode<IGenerateTokenRequestContract, IGenerateTokenSuccessResultContract>(
+                await new LoggedUseCasePipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
                     _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,  
                     new GenerateTokenUseCase(
                         _services.GetService(typeof(UserManager<User>)) as UserManager<User>, 
                         _services.GetService(typeof(SignInManager<User>)) as SignInManager<User>, 
                         _services.GetService(typeof(IJwtGenerator)) as IJwtGenerator))
                     .Ask(context.Message, context.CancellationToken);
-            await result.Match(
-                async r => 
-                    await context.RespondAsync(r),
-                async e => 
-                    await context.RespondAsync<IGenerateTokenErrorResultContract>(e));
+            await context.RespondAsync(result);
         }
     }
 }
