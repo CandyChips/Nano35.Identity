@@ -57,7 +57,6 @@ namespace Nano35.Identity.Api.Controllers
                     new GetAllUsersUseCase(
                         _services.GetService((typeof(IBus))) as IBus))
                     .Ask(new GetAllUsersRequestContract());
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
@@ -75,7 +74,6 @@ namespace Nano35.Identity.Api.Controllers
                         _services.GetService((typeof(IBus))) as IBus, 
                         _services.GetService(typeof(ICustomAuthStateProvider)) as ICustomAuthStateProvider))
                 .Ask(new GetUserByIdRequestContract());
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
         
@@ -97,7 +95,6 @@ namespace Nano35.Identity.Api.Controllers
                      Password = body.Password,
                      PasswordConfirm = body.PasswordConfirm,
                      Phone = body.Phone});
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
         
@@ -115,7 +112,6 @@ namespace Nano35.Identity.Api.Controllers
                     new GenerateTokenUseCase(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new GenerateTokenRequestContract() {Login = body.Login, Password = body.Password});
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
@@ -132,7 +128,6 @@ namespace Nano35.Identity.Api.Controllers
                     new UpdatePhoneUseCase(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new UpdatePhoneRequestContract() { UserId = id , Phone = body.Phone });
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
@@ -149,7 +144,6 @@ namespace Nano35.Identity.Api.Controllers
                     new UpdatePasswordUseCase(
                         _services.GetService(typeof(IBus)) as IBus))
                 .Ask(new UpdatePasswordRequestContract() { UserId =  id, Password = body.Password });
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
@@ -166,7 +160,6 @@ namespace Nano35.Identity.Api.Controllers
                     new UpdateNameUseCase(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new UpdateNameRequestContract() { UserId = id, Name = body.Name });
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
 
@@ -183,7 +176,6 @@ namespace Nano35.Identity.Api.Controllers
                     new UpdateEmailUseCase(
                         _services.GetService(typeof(IBus)) as IBus))
                 .Ask(new UpdateEmailRequestContract() { UserId = id, Email = body.Email });
-            
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }
     }

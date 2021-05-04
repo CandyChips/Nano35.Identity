@@ -6,8 +6,7 @@ namespace Nano35.Identity.Processor.Configurations
     public class JWTGeneratorConfiguration : 
         IConfigurationOfService
     {
-        public void AddToServices(
-            IServiceCollection services)
+        public void AddToServices(IServiceCollection services)
         {
             services.AddTransient<IJwtGenerator, JwtGenerator>();
         }

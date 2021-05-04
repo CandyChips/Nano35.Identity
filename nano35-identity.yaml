@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nano35-identity-api
+  namespace: nano35
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nano35-identity-api
+  template:
+    metadata:
+      labels:
+        app: nano35-identity-api
+    spec:
+      containers:
+      - image: bushemi2021/nano35.identity.api:latest
+        name: nano35-identity-api
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
+      
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nano35-identity-processor
+  namespace: nano35
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nano35-identity-processor
+  template:
+    metadata:
+      labels:
+        app: nano35-identity-processor
+    spec:
+      containers:
+        - image: bushemi2021/nano35.identity.processor:latest
+          name: nano35-identity-processor
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+      
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: nano35
+  name: nano35-identity-api-svc
+spec:
+  type: NodePort
+  ports:
+    - port: 8000
+      targetPort: 80
+      nodePort: 30001
+  selector:
+    app: nano35-identity-api
