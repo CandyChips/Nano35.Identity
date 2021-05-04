@@ -21,7 +21,7 @@ namespace Nano35.Identity.Api.Requests
                 var starts = DateTime.Now;
                 var result = await DoNext(input);
                 var time = DateTime.Now - starts;
-                _logger.LogInformation(result.IsSuccess()
+                _logger.LogInformation(result != null && result.IsSuccess()
                     ? $"{typeof(TIn)} ends by: {time} with success."
                     : $"{typeof(TIn)} ends by: {time} with error: {result.Error}.");
                 return result;

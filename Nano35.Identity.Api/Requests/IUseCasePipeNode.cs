@@ -10,8 +10,7 @@ namespace Nano35.Identity.Api.Requests
         Task<UseCaseResponse<TOut>> Ask(TIn input);
     }
     
-    public abstract class UseCasePipeNodeBase<TIn, TOut> : 
-        IUseCasePipeNode<TIn, TOut>
+    public abstract class UseCasePipeNodeBase<TIn, TOut> : IUseCasePipeNode<TIn, TOut>
         where TIn : IRequest
         where TOut : IResult
     {
@@ -21,8 +20,7 @@ namespace Nano35.Identity.Api.Requests
         public abstract Task<UseCaseResponse<TOut>> Ask(TIn input);
     }
 
-    public abstract class UseCaseEndPointNodeBase<TIn, TOut> : 
-        IUseCasePipeNode<TIn, TOut>
+    public abstract class UseCaseEndPointNodeBase<TIn, TOut> : IUseCasePipeNode<TIn, TOut>
         where TIn : IRequest
         where TOut : IResult
     {
