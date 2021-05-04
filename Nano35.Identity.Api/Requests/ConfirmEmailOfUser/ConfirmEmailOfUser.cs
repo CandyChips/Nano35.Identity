@@ -5,13 +5,12 @@ using Nano35.Contracts.Instance.Artifacts;
 
 namespace Nano35.Identity.Api.Requests.ConfirmEmailOfUser
 {
-    public class ConfirmEmailOfUserUseCase :
-        UseCaseEndPointNodeBase<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>
+    public class ConfirmEmailOfUser :
+        EndPointNodeBase<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>
     {
         private readonly IBus _bus;
-        public ConfirmEmailOfUserUseCase(IBus bus) => _bus = bus;
+        public ConfirmEmailOfUser(IBus bus) => _bus = bus;
         public override async Task<UseCaseResponse<IConfirmEmailOfUserResultContract>> Ask(IConfirmEmailOfUserRequestContract input) => 
-            await new MasstransitUseCaseRequest<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>(_bus, input)
-                .GetResponse();
+            await new MasstransitRequest<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>(_bus, input).GetResponse();
     }
 }

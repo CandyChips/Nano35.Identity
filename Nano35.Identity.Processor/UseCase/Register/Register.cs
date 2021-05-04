@@ -8,10 +8,10 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.Register
 {
-    public class RegisterUseCase : UseCaseEndPointNodeBase<IRegisterRequestContract, IRegisterResultContract>
+    public class Register : EndPointNodeBase<IRegisterRequestContract, IRegisterResultContract>
     {
         private readonly UserManager<User> _userManager;
-        public RegisterUseCase(UserManager<User> userManager) => _userManager = userManager;
+        public Register(UserManager<User> userManager) => _userManager = userManager;
         public override async Task<UseCaseResponse<IRegisterResultContract>> Ask(
             IRegisterRequestContract input, 
             CancellationToken cancellationToken)

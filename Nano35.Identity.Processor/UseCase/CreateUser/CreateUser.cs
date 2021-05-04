@@ -8,10 +8,10 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.CreateUser
 {
-    public class CreateUserUseCase : UseCaseEndPointNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
+    public class CreateUser : EndPointNodeBase<ICreateUserRequestContract, ICreateUserResultContract>
     {
         private readonly UserManager<User> _userManager;
-        public CreateUserUseCase(UserManager<User> userManager) => _userManager = userManager;
+        public CreateUser(UserManager<User> userManager) => _userManager = userManager;
         public override async Task<UseCaseResponse<ICreateUserResultContract>> Ask(
             ICreateUserRequestContract request,
             CancellationToken cancellationToken)

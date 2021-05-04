@@ -7,12 +7,12 @@ using Nano35.Contracts.Instance.Artifacts;
 
 namespace Nano35.Identity.Processor.UseCase
 {
-    public class LoggedUseCasePipeNode<TIn, TOut> : UseCasePipeNodeBase<TIn, TOut>
+    public class LoggedPipeNode<TIn, TOut> : PipeNodeBase<TIn, TOut>
         where TIn : class, IRequest
         where TOut : class, IResult
     {
         private readonly ILogger<TIn> _logger;
-        public LoggedUseCasePipeNode(ILogger<TIn> logger, IUseCasePipeNode<TIn, TOut> next) : base(next) => _logger = logger;
+        public LoggedPipeNode(ILogger<TIn> logger, IPipeNode<TIn, TOut> next) : base(next) => _logger = logger;
         public override async Task<UseCaseResponse<TOut>> Ask(TIn input, CancellationToken cancellationToken)
         {
             try

@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Nano35.Contracts.Identity.Artifacts;
 using Nano35.Contracts.Identity.Models;
 using Nano35.Contracts.Instance.Artifacts;
+using Nano35.Identity.Processor.Models;
 using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.GetUserByName
 {
-    public class GetUserByNameUseCase : UseCaseEndPointNodeBase<IGetUserByNameRequestContract, IGetUserByNameResultContract>
+    public class GetUserByName : EndPointNodeBase<IGetUserByNameRequestContract, IGetUserByNameResultContract>
     {
         private readonly ApplicationContext _context;
-        public GetUserByNameUseCase(ApplicationContext context) => _context = context;
+        private readonly UserManager<User> _userManager;
+        public GetUserByName(ApplicationContext context, UserManager<User> userManager) { _context = context; _userManager = userManager; }
         public override async Task<UseCaseResponse<IGetUserByNameResultContract>> Ask(
             IGetUserByNameRequestContract request,
             CancellationToken cancellationToken)
@@ -28,7 +32,8 @@ namespace Nano35.Identity.Processor.UseCase.GetUserByName
                         Email = tmp.Email,
                         Id = Guid.Parse(tmp.Id),
                         Name = tmp.Name,
-                        Phone = tmp.PhoneNumber
+                        Phone = tmp.PhoneNumber,
+                        Role = _userManager.GetRolesAsync(tmp).Result.First()
                     }});
         }
     }

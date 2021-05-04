@@ -6,14 +6,13 @@ using Nano35.Identity.Api.Helpers;
 
 namespace Nano35.Identity.Api.Requests.UpdatePhone
 {
-    public class UpdatePhoneUseCase : UseCaseEndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
+    public class UpdatePhone : EndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
         private readonly IBus _bus;
 
-        public UpdatePhoneUseCase(IBus bus) => _bus = bus;
+        public UpdatePhone(IBus bus) => _bus = bus;
 
         public override async Task<UseCaseResponse<IUpdatePhoneResultContract>> Ask(IUpdatePhoneRequestContract input) => 
-            await new MasstransitUseCaseRequest<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(_bus, input)
-                .GetResponse();
+            await new MasstransitRequest<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(_bus, input).GetResponse();
     }
 }

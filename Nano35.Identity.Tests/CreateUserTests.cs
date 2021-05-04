@@ -95,7 +95,7 @@ namespace Nano35.Identity.Tests
             //Act
             var result = await
                 new LoggedRailPipeNode<ICreateUserRequestContract,ICreateUserSuccessResultContract>(logger,
-                new CreateUserUseCase(_db.UserManager)).Ask(input, context.CancellationToken);
+                new CreateUser(_db.UserManager)).Ask(input, context.CancellationToken);
 
             var res = _db.Context.Users.Select(a =>
                 new User()
@@ -157,7 +157,7 @@ namespace Nano35.Identity.Tests
 
             //Act
             var result = await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(logger, 
-                new RegisterUseCase(_db.UserManager)).Ask(input, context.CancellationToken);
+                new Register(_db.UserManager)).Ask(input, context.CancellationToken);
 
             var res = _db.Context.Users.Select(a =>
                 new User()
@@ -220,7 +220,7 @@ namespace Nano35.Identity.Tests
             };
             var createUserContext = Mock.Of<ConsumeContext<ICreateUserRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new CreateUserUseCase(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
+            await new CreateUser(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
 
             var testId2 = Guid.NewGuid();
             Id.Add(testId2);
@@ -235,13 +235,13 @@ namespace Nano35.Identity.Tests
             };
             var registerContext = Mock.Of<ConsumeContext<IRegisterRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new RegisterUseCase(_db.UserManager).Ask(input2, registerContext.CancellationToken);
+            await new Register(_db.UserManager).Ask(input2, registerContext.CancellationToken);
 
 
             var message = new GetAllUsersRequestContract() { };
             var result = await
                 new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(logger,
-                new GetAllUsersUseCase(_db.UserManager)).Ask(message, context.CancellationToken);
+                new GetAllUsers(_db.UserManager)).Ask(message, context.CancellationToken);
             
             _db.Dispose();
 
@@ -284,7 +284,7 @@ namespace Nano35.Identity.Tests
             };
             var createUserContext = Mock.Of<ConsumeContext<ICreateUserRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new CreateUserUseCase(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
+            await new CreateUser(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
 
             var testId2 = Guid.NewGuid();
             var input2 = new RegisterRequestContract()
@@ -298,7 +298,7 @@ namespace Nano35.Identity.Tests
             };
             var registerContext = Mock.Of<ConsumeContext<IRegisterRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new RegisterUseCase(_db.UserManager).Ask(input2, registerContext.CancellationToken);
+            await new Register(_db.UserManager).Ask(input2, registerContext.CancellationToken);
 
             var message = new GetUserByIdRequestContract()
             {
@@ -307,7 +307,7 @@ namespace Nano35.Identity.Tests
 
             var result = await
                 new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(logger,  
-                new GetUserByIdUseCase(_db.Context)).Ask(message, context.CancellationToken);
+                new GetUserById(_db.Context)).Ask(message, context.CancellationToken);
 
             _db.Dispose();
             
@@ -353,7 +353,7 @@ namespace Nano35.Identity.Tests
             };
             var createUserContext = Mock.Of<ConsumeContext<ICreateUserRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new CreateUserUseCase(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
+            await new CreateUser(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
 
             
             var message = new UpdateEmailRequestContract()
@@ -365,7 +365,7 @@ namespace Nano35.Identity.Tests
             var result = await
                 new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(logger,  
                     new TransactedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(_db.Context, 
-                        new UpdateEmailUseCase(_db.UserManager))).Ask(message, context.CancellationToken);
+                        new UpdateEmail(_db.UserManager))).Ask(message, context.CancellationToken);
 
             var res = _db.Context.Users.ToList();
             
@@ -398,7 +398,7 @@ namespace Nano35.Identity.Tests
             };
             var createUserContext = Mock.Of<ConsumeContext<ICreateUserRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new CreateUserUseCase(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
+            await new CreateUser(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
 
             
             var message = new UpdateNameRequestContract()
@@ -410,7 +410,7 @@ namespace Nano35.Identity.Tests
             var result = await
                 new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(logger, 
                     new TransactedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(_db.Context,
-                        new UpdateNameUseCase(_db.UserManager))).Ask(message, context.CancellationToken);
+                        new UpdateName(_db.UserManager))).Ask(message, context.CancellationToken);
 
             var res = _db.Context.Users.ToList();
             
@@ -443,7 +443,7 @@ namespace Nano35.Identity.Tests
             };
             var createUserContext = Mock.Of<ConsumeContext<ICreateUserRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new CreateUserUseCase(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
+            await new CreateUser(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
 
             
             var message = new UpdatePasswordRequestContract()
@@ -457,7 +457,7 @@ namespace Nano35.Identity.Tests
             var result = await 
                 new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(logger, 
                 new TransactedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(_db.Context,
-                    new UpdatePasswordUseCase(_db.UserManager))).Ask(message, context.CancellationToken);
+                    new UpdatePassword(_db.UserManager))).Ask(message, context.CancellationToken);
 
             await _db.Context.Entry(_db.Context.Users.FirstOrDefault()!).ReloadAsync();
             var res = _db.Context.Users.FirstOrDefault(a=> a.Id == testId.ToString())?.PasswordHash;
@@ -491,7 +491,7 @@ namespace Nano35.Identity.Tests
             };
             var createUserContext = Mock.Of<ConsumeContext<ICreateUserRequestContract>>(_ =>
                 _.CancellationToken == cancellationToken);
-            await new CreateUserUseCase(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
+            await new CreateUser(_db.UserManager).Ask(input1, createUserContext.CancellationToken);
 
             
             var message = new UpdatePhoneRequestContract()
@@ -503,7 +503,7 @@ namespace Nano35.Identity.Tests
             var result = await
                 new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(logger,  
                     new TransactedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(_db.Context,
-                            new UpdatePhoneUseCase(_db.UserManager))).Ask(message, context.CancellationToken);
+                            new UpdatePhone(_db.UserManager))).Ask(message, context.CancellationToken);
 
             var res = _db.Context.Users.ToList();
             

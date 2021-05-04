@@ -15,9 +15,9 @@ namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
         public async Task Consume(ConsumeContext<IConfirmEmailOfUserRequestContract> context)
         {
             var result = 
-                await new LoggedUseCasePipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>(
+                await new LoggedPipeNode<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>(
                     _services.GetService(typeof(ILogger<IConfirmEmailOfUserRequestContract>)) as ILogger<IConfirmEmailOfUserRequestContract>,  
-                    new ConfirmEmailOfUserUseCase(
+                    new ConfirmEmailOfUser(
                         _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
                     .Ask(context.Message, context.CancellationToken);
             await context.RespondAsync(result);

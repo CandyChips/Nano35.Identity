@@ -18,11 +18,11 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
         {
             var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
             var result = 
-                await new LoggedUseCasePipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
+                await new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
                     _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>)) as ILogger<IUpdateEmailRequestContract>,
-                    new TransactedUseCasePipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
+                    new TransactedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>(
                         dbContext,
-                        new UpdateEmailUseCase(dbContext)))
+                        new UpdateEmail(dbContext)))
                     .Ask(context.Message, context.CancellationToken);
             await context.RespondAsync(result);
         }

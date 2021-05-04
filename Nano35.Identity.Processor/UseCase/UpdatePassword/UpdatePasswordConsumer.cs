@@ -15,9 +15,9 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
         public async Task Consume(ConsumeContext<IUpdatePasswordRequestContract> context)
         {
             var result = 
-                await new LoggedUseCasePipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
+                await new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>)) as ILogger<IUpdatePasswordRequestContract>,
-                    new UpdatePasswordUseCase())
+                    new UpdatePassword())
                     .Ask(context.Message, context.CancellationToken);
             await context.RespondAsync(result);
         }

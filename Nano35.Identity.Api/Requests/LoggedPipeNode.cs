@@ -8,12 +8,12 @@ using Nano35.Contracts.Instance.Artifacts;
 
 namespace Nano35.Identity.Api.Requests
 {
-    public class LoggedUseCasePipeNode<TIn, TOut> : UseCasePipeNodeBase<TIn, TOut>
+    public class LoggedPipeNode<TIn, TOut> : PipeNodeBase<TIn, TOut>
         where TIn : IRequest
         where TOut : IResult
     {
         private readonly ILogger<TIn> _logger;
-        public LoggedUseCasePipeNode(ILogger<TIn> logger, IUseCasePipeNode<TIn, TOut> next) : base(next) => _logger = logger;
+        public LoggedPipeNode(ILogger<TIn> logger, IPipeNode<TIn, TOut> next) : base(next) => _logger = logger;
         public override async Task<UseCaseResponse<TOut>> Ask(TIn input)
         {
             try

@@ -18,11 +18,11 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
         {
             var dbContext = (ApplicationContext) _services.GetService(typeof(ApplicationContext));
             var result = 
-                await new LoggedUseCasePipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+                await new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
-                    new TransactedUseCasePipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+                    new TransactedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
                         dbContext,
-                        new UpdatePhoneUseCase(dbContext)))
+                        new UpdatePhone(dbContext)))
                     .Ask(context.Message, context.CancellationToken);
             await context.RespondAsync(result);
         }

@@ -11,10 +11,10 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.GetAllUsers
 {
-    public class GetAllUsersUseCase : UseCaseEndPointNodeBase<IGetAllUsersRequestContract, IGetAllUsersResultContract>
+    public class GetAllUsers : EndPointNodeBase<IGetAllUsersRequestContract, IGetAllUsersResultContract>
     {
         private readonly UserManager<User> _userManager;
-        public GetAllUsersUseCase(UserManager<User> userManager) => _userManager = userManager;
+        public GetAllUsers(UserManager<User> userManager) => _userManager = userManager;
         public override async Task<UseCaseResponse<IGetAllUsersResultContract>> Ask(
             IGetAllUsersRequestContract request,
             CancellationToken cancellationToken)
@@ -27,7 +27,8 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
                         Email = a.Email,
                         Id = Guid.Parse(a.Id),
                         Name = a.Name,
-                        Phone = a.PhoneNumber
+                        Phone = a.PhoneNumber,
+                        Role = _userManager.GetRolesAsync(a).Result.First()
                     })
                 .ToListAsync(cancellationToken: cancellationToken);
             

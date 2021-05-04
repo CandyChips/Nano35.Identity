@@ -9,10 +9,10 @@ using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdateEmail
 {
-    public class UpdateEmailUseCase : UseCaseEndPointNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
+    public class UpdateEmail : EndPointNodeBase<IUpdateEmailRequestContract, IUpdateEmailResultContract>
     {
         private readonly ApplicationContext _context;
-        public UpdateEmailUseCase(ApplicationContext context) => _context = context;
+        public UpdateEmail(ApplicationContext context) => _context = context;
         public override async Task<UseCaseResponse<IUpdateEmailResultContract>> Ask(
             IUpdateEmailRequestContract request,
             CancellationToken cancellationToken)

@@ -8,7 +8,7 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.UpdatePassword
 {
-    public class UpdatePasswordUseCase : UseCaseEndPointNodeBase<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
+    public class UpdatePassword : EndPointNodeBase<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>
     {
         public override async Task<UseCaseResponse<IUpdatePasswordResultContract>> Ask(
             IUpdatePasswordRequestContract request,

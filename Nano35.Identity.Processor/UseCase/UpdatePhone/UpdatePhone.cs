@@ -9,10 +9,10 @@ using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdatePhone
 {
-    public class UpdatePhoneUseCase : UseCaseEndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
+    public class UpdatePhone : EndPointNodeBase<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>
     {
         private readonly ApplicationContext _context;
-        public UpdatePhoneUseCase(ApplicationContext context) => _context = context;
+        public UpdatePhone(ApplicationContext context) => _context = context;
         public override async Task<UseCaseResponse<IUpdatePhoneResultContract>> Ask(
             IUpdatePhoneRequestContract request,
             CancellationToken cancellationToken)

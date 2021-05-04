@@ -7,10 +7,10 @@ using Nano35.Identity.Processor.Services.Contexts;
 
 namespace Nano35.Identity.Processor.UseCase.UpdateName
 {
-    public class UpdateNameUseCase : UseCaseEndPointNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
+    public class UpdateName : EndPointNodeBase<IUpdateNameRequestContract, IUpdateNameResultContract>
     {
         private readonly ApplicationContext _context;
-        public UpdateNameUseCase(ApplicationContext context) => _context = context;
+        public UpdateName(ApplicationContext context) => _context = context;
         public override async Task<UseCaseResponse<IUpdateNameResultContract>> Ask(
             IUpdateNameRequestContract request,
             CancellationToken cancellationToken)

@@ -15,9 +15,9 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
         public async Task Consume(ConsumeContext<ICreateUserRequestContract> context)
         {
             var result = 
-                await new LoggedUseCasePipeNode<ICreateUserRequestContract, ICreateUserResultContract>(
+                await new LoggedPipeNode<ICreateUserRequestContract, ICreateUserResultContract>(
                     _services.GetService(typeof(ILogger<ICreateUserRequestContract>)) as ILogger<ICreateUserRequestContract>,  
-                    new CreateUserUseCase(
+                    new CreateUser(
                         _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
                     .Ask(context.Message, context.CancellationToken);
             await context.RespondAsync(result);

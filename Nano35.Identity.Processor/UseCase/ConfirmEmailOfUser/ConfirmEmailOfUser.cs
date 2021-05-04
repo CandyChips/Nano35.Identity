@@ -7,10 +7,10 @@ using Nano35.Identity.Processor.Models;
 
 namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
 {
-    public class ConfirmEmailOfUserUseCase : UseCaseEndPointNodeBase<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>
+    public class ConfirmEmailOfUser : EndPointNodeBase<IConfirmEmailOfUserRequestContract, IConfirmEmailOfUserResultContract>
     {
         private readonly UserManager<User> _userManager;
-        public ConfirmEmailOfUserUseCase(UserManager<User> userManager) => _userManager = userManager;
+        public ConfirmEmailOfUser(UserManager<User> userManager) => _userManager = userManager;
         public override async Task<UseCaseResponse<IConfirmEmailOfUserResultContract>> Ask(
             IConfirmEmailOfUserRequestContract input, 
             CancellationToken cancellationToken)

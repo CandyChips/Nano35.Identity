@@ -15,9 +15,9 @@ namespace Nano35.Identity.Processor.UseCase.Register
         public async Task Consume(ConsumeContext<IRegisterRequestContract> context)
         {
             var result = 
-                await new LoggedUseCasePipeNode<IRegisterRequestContract, IRegisterResultContract>(
+                await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
                     _services.GetService(typeof(ILogger<IRegisterRequestContract>)) as ILogger<IRegisterRequestContract>,
-                    new RegisterUseCase(
+                    new Register(
                         _services.GetService(typeof(UserManager<User>)) as UserManager<User>))
                     .Ask(context.Message, context.CancellationToken);
             await context.RespondAsync(result);

@@ -35,9 +35,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var result =
-                await new LoggedUseCasePipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+                await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
                         _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
-                        new GetUserByIdUseCase(
+                        new GetUserById(
                             _services.GetService((typeof(IBus))) as IBus))
                     .Ask(new GetUserByIdRequestContract() {UserId = id});
             
@@ -52,9 +52,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var result = 
-                await new LoggedUseCasePipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
+                await new LoggedPipeNode<IGetAllUsersRequestContract, IGetAllUsersResultContract>(
                     _services.GetService(typeof(ILogger<IGetAllUsersRequestContract>)) as ILogger<IGetAllUsersRequestContract>,
-                    new GetAllUsersUseCase(
+                    new GetAllUsers(
                         _services.GetService((typeof(IBus))) as IBus))
                     .Ask(new GetAllUsersRequestContract());
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
@@ -68,9 +68,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> GetUserFromToken()
         {
             var result =
-                await new LoggedUseCasePipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
+                await new LoggedPipeNode<IGetUserByIdRequestContract, IGetUserByIdResultContract>(
                     _services.GetService(typeof(ILogger<IGetUserByIdRequestContract>)) as ILogger<IGetUserByIdRequestContract>,
-                    new GetUserByTokenUseCase(
+                    new GetUserByToken(
                         _services.GetService((typeof(IBus))) as IBus, 
                         _services.GetService(typeof(ICustomAuthStateProvider)) as ICustomAuthStateProvider))
                 .Ask(new GetUserByIdRequestContract());
@@ -85,9 +85,9 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] RegisterHttpBody body)
         {
             var result =
-                await new LoggedUseCasePipeNode<IRegisterRequestContract, IRegisterResultContract>(
+                await new LoggedPipeNode<IRegisterRequestContract, IRegisterResultContract>(
                     _services.GetService(typeof(ILogger<IRegisterRequestContract>)) as ILogger<IRegisterRequestContract>,
-                    new RegisterUseCase(
+                    new Register(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new RegisterRequestContract()
                     {Email = body.Email,
@@ -107,9 +107,9 @@ namespace Nano35.Identity.Api.Controllers
             [FromBody] GenerateUserTokenHttpBody body)
         {
             var result =
-                await new LoggedUseCasePipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
+                await new LoggedPipeNode<IGenerateTokenRequestContract, IGenerateTokenResultContract>(
                     _services.GetService(typeof(ILogger<IGenerateTokenRequestContract>)) as ILogger<IGenerateTokenRequestContract>,
-                    new GenerateTokenUseCase(
+                    new GenerateToken(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new GenerateTokenRequestContract() {Login = body.Login, Password = body.Password});
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
@@ -123,9 +123,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdatePhone([FromBody] UpdatePhoneHttpBody body, Guid id)
         {
             var result =
-                await new LoggedUseCasePipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
+                await new LoggedPipeNode<IUpdatePhoneRequestContract, IUpdatePhoneResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePhoneRequestContract>)) as ILogger<IUpdatePhoneRequestContract>,
-                    new UpdatePhoneUseCase(
+                    new UpdatePhone(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new UpdatePhoneRequestContract() { UserId = id , Phone = body.Phone });
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
@@ -139,9 +139,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordHttpBody body, Guid id)
         {
             var result =
-                await new LoggedUseCasePipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
+                await new LoggedPipeNode<IUpdatePasswordRequestContract, IUpdatePasswordResultContract>(
                     _services.GetService(typeof(ILogger<IUpdatePasswordRequestContract>)) as ILogger<IUpdatePasswordRequestContract>,
-                    new UpdatePasswordUseCase(
+                    new UpdatePassword(
                         _services.GetService(typeof(IBus)) as IBus))
                 .Ask(new UpdatePasswordRequestContract() { UserId =  id, Password = body.Password });
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
@@ -155,9 +155,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdateName([FromBody] UpdateNameHttpBody body, Guid id)
         {
             var result =
-                await new LoggedUseCasePipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
+                await new LoggedPipeNode<IUpdateNameRequestContract, IUpdateNameResultContract>(
                     _services.GetService(typeof(ILogger<IUpdateNameRequestContract>)) as ILogger<IUpdateNameRequestContract>,
-                    new UpdateNameUseCase(
+                    new UpdateName(
                         _services.GetService((typeof(IBus))) as IBus))
                 .Ask(new UpdateNameRequestContract() { UserId = id, Name = body.Name });
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
@@ -171,9 +171,9 @@ namespace Nano35.Identity.Api.Controllers
         public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailHttpBody body, Guid id)
         {
             var result =
-                await new LoggedUseCasePipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>( 
+                await new LoggedPipeNode<IUpdateEmailRequestContract, IUpdateEmailResultContract>( 
                     _services.GetService(typeof(ILogger<IUpdateEmailRequestContract>)) as ILogger<IUpdateEmailRequestContract>,
-                    new UpdateEmailUseCase(
+                    new UpdateEmail(
                         _services.GetService(typeof(IBus)) as IBus))
                 .Ask(new UpdateEmailRequestContract() { UserId = id, Email = body.Email });
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);

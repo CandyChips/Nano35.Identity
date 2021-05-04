@@ -8,12 +8,12 @@ using Nano35.Identity.Processor.Services.Helpers;
 
 namespace Nano35.Identity.Processor.UseCase.GenerateToken
 {
-    public class GenerateTokenUseCase : UseCaseEndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
+    public class GenerateToken : EndPointNodeBase<IGenerateTokenRequestContract, IGenerateTokenResultContract>
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtGenerator _jwtGenerator;
-        public GenerateTokenUseCase(UserManager<User> userManager, SignInManager<User> signInManager, IJwtGenerator jwtGenerator)
+        public GenerateToken(UserManager<User> userManager, SignInManager<User> signInManager, IJwtGenerator jwtGenerator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
