@@ -14,7 +14,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePassword
             IUpdatePasswordRequestContract request,
             CancellationToken cancellationToken)
         {                
-            return new("Не работает в текущей версии");
+            return Pass("Не работает в текущей версии");
 
         }
     }

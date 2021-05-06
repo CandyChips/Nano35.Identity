@@ -24,15 +24,14 @@ namespace Nano35.Identity.Processor.UseCase.GenerateToken
             CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByNameAsync(request.Login);
-            if (user == null)
-                return new UseCaseResponse<IGenerateTokenResultContract>("Пользователь не найден");
+            if (user == null) return Pass("Пользователь не найден");
             var checkPasswordSignInAsyncResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!checkPasswordSignInAsyncResult.Succeeded)
-                return new UseCaseResponse<IGenerateTokenResultContract>("Неверный пароль");
+                return Pass("Неверный пароль");
             var isEmailConfirmedAsyncResult = await _userManager.IsEmailConfirmedAsync(user);
             return !isEmailConfirmedAsyncResult ?
-                new UseCaseResponse<IGenerateTokenResultContract>("Подтвердите почту") : 
-                new UseCaseResponse<IGenerateTokenResultContract>(new GenerateTokenResultContract() {Token = _jwtGenerator.CreateToken(user)});
+                Pass("Подтвердите почту") : 
+                Pass(new GenerateTokenResultContract() {Token = _jwtGenerator.CreateToken(user)});
         }
     }
 }

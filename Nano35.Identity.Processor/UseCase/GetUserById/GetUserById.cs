@@ -23,8 +23,8 @@ namespace Nano35.Identity.Processor.UseCase.GetUserById
         {
             var result = await _context.Users.FirstOrDefaultAsync(f => f.Id == request.UserId.ToString(), cancellationToken: cancellationToken);
             return result == null ?
-                new UseCaseResponse<IGetUserByIdResultContract>("Пользователь не найден") :
-                new UseCaseResponse<IGetUserByIdResultContract>(new GetUserByIdResultContract()
+                Pass("Пользователь не найден") :
+                Pass(new GetUserByIdResultContract()
                 {
                     Data =
                         new UserViewModel()

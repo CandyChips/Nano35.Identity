@@ -30,11 +30,11 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
                         Phone = a.PhoneNumber,
                         Role = _userManager.GetRolesAsync(a).Result.First()
                     })
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ToListAsync(cancellationToken);
             
             return result.Count == 0 ?
-                new UseCaseResponse<IGetAllUsersResultContract>("Не найдено ни одной записи") : 
-                new UseCaseResponse<IGetAllUsersResultContract>(new GetAllUsersResultContract() {Users = result});
+                Pass("Не найдено ни одной записи") : 
+                Pass(new GetAllUsersResultContract() {Users = result});
         }
     }
 }

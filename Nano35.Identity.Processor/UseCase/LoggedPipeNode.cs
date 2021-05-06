@@ -20,15 +20,13 @@ namespace Nano35.Identity.Processor.UseCase
                 var starts = DateTime.Now;
                 var result = await DoNext(input, cancellationToken);
                 var time = DateTime.Now - starts;
-                _logger.LogInformation(result.IsSuccess()
-                    ? $"{typeof(TIn)} ends by: {time} with success."
-                    : $"{typeof(TIn)} ends by: {time} with error: {result.Error}.");
+                _logger.LogInformation(result.IsSuccess() ? $"ends by: {time} with success." : $"ends by: {time} with error: {result.Error}.");
                 return result;
             }
             catch (Exception e)
             {
-                _logger.LogInformation($"{typeof(TIn)} ends by: {DateTime.Now} with exception!!!");
-                return new UseCaseResponse<TOut>($"{typeof(TIn)} ends by: {DateTime.Now} with exception!!!");
+                _logger.LogInformation($"ends by: {DateTime.Now} with exception!!!");
+                return Pass($"ends by: {DateTime.Now} with exception!!!");
             }
         }
     }

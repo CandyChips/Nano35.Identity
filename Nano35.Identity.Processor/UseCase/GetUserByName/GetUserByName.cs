@@ -25,8 +25,8 @@ namespace Nano35.Identity.Processor.UseCase.GetUserByName
                 .Users
                 .FirstAsync(f => f.UserName == request.UserName, cancellationToken: cancellationToken);
             return tmp == null ?
-                new UseCaseResponse<IGetUserByNameResultContract>("Пользователь не найден") :
-                new UseCaseResponse<IGetUserByNameResultContract>(new GetUserByNameResultContract() { Data = 
+                Pass("Пользователь не найден") :
+                Pass(new GetUserByNameResultContract() { Data = 
                     new UserViewModel()
                     {
                         Email = tmp.Email,

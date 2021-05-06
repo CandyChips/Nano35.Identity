@@ -16,12 +16,9 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
             ICreateUserRequestContract request,
             CancellationToken cancellationToken)
         {
-            if (_userManager.Users.Select(a => a.Id).Contains(request.NewId.ToString()))
-                return new UseCaseResponse<ICreateUserResultContract>("Повторите попытку");
-            if(await _userManager.FindByNameAsync(request.Phone) != null)
-                return new UseCaseResponse<ICreateUserResultContract>("Данный номер телефона уже существует в системе");
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return new UseCaseResponse<ICreateUserResultContract>("Данная электронная почта уже существует в системе");
+            if (_userManager.Users.Select(a => a.Id).Contains(request.NewId.ToString())) return Pass("Повторите попытку");
+            if(await _userManager.FindByNameAsync(request.Phone) != null) return Pass("Данный номер телефона уже существует в системе");
+            if (await _userManager.FindByEmailAsync(request.Email) != null) return Pass("Данная электронная почта уже существует в системе");
             var worker = new User()
             {
                 Id = request.NewId.ToString(),
@@ -32,8 +29,8 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
                 EmailConfirmed = true
             };
             return !(await _userManager.CreateAsync(worker, request.Password)).Succeeded ? 
-                new UseCaseResponse<ICreateUserResultContract>("Пароли не совпадают") :
-                new UseCaseResponse<ICreateUserResultContract>(new CreateUserResultContract());
+                Pass("Пароли не совпадают") :
+                Pass(new CreateUserResultContract());
         }
     }
 }

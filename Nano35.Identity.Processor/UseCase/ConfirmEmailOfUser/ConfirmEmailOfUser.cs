@@ -17,7 +17,7 @@ namespace Nano35.Identity.Processor.UseCase.ConfirmEmailOfUser
         {
             var user = await _userManager.FindByIdAsync(input.UserId.ToString());
             await _userManager.ConfirmEmailAsync(user, input.Key);
-            return new UseCaseResponse<IConfirmEmailOfUserResultContract>(new ConfirmEmailOfUserResultContract());
+            return Pass(new ConfirmEmailOfUserResultContract());
         }
     }
 }

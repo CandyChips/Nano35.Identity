@@ -19,7 +19,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdatePhone
         {
             var result = await _context.Users.FirstAsync(a => a.Id == request.UserId.ToString(), cancellationToken);
             result.PhoneNumber = request.Phone;
-            return new UseCaseResponse<IUpdatePhoneResultContract>(new UpdatePhoneResultContract());
+            return Pass(new UpdatePhoneResultContract());
         }
     }
 }

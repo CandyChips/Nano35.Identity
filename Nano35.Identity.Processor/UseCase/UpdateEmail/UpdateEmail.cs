@@ -19,7 +19,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdateEmail
         {
             var result = await _context.Users.FirstAsync(a => a.Id == request.UserId.ToString(), cancellationToken);
             result.Email = request.Email;
-            return new UseCaseResponse<IUpdateEmailResultContract>(new UpdateEmailResultContract());
+            return Pass(new UpdateEmailResultContract());
         }
     }
 }

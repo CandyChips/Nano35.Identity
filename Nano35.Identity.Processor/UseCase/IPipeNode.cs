@@ -22,7 +22,9 @@ namespace Nano35.Identity.Processor.UseCase
         private readonly IPipeNode<TIn, TOut> _next;
         protected PipeNodeBase(IPipeNode<TIn, TOut> next) => _next = next;
         protected Task<UseCaseResponse<TOut>> DoNext(TIn input, CancellationToken cancellationToken) => _next.Ask(input, cancellationToken);
-        public abstract Task<UseCaseResponse<TOut>> Ask(TIn input, CancellationToken cancellationToken);
+        public abstract Task<UseCaseResponse<TOut>> Ask(TIn input, CancellationToken cancellationToken);       
+        protected UseCaseResponse<TOut> Pass(string error) => new(error);
+        protected UseCaseResponse<TOut> Pass(TOut success) => new(success);
     }
 
     public abstract class EndPointNodeBase<TIn, TOut> : 
@@ -31,6 +33,8 @@ namespace Nano35.Identity.Processor.UseCase
         where TOut : IResult
     {
         public abstract Task<UseCaseResponse<TOut>> Ask(TIn input, CancellationToken cancellationToken);
+        protected UseCaseResponse<TOut> Pass(string error) => new(error);
+        protected UseCaseResponse<TOut> Pass(TOut success) => new(success);
     }
     
     public class MasstransitUseCaseRequest<TIn, TOut> 

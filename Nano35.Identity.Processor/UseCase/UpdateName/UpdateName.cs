@@ -17,7 +17,7 @@ namespace Nano35.Identity.Processor.UseCase.UpdateName
         {
             var result = await _context.Users.FirstAsync(a => a.Id == request.UserId.ToString(), cancellationToken);
             result.Name = request.Name;
-            return new UseCaseResponse<IUpdateNameResultContract>(new UpdateNameResultContract());
+            return Pass(new UpdateNameResultContract());
         }
     }
 }

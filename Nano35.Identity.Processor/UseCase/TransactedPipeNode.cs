@@ -30,7 +30,7 @@ namespace Nano35.Identity.Processor.UseCase
             catch
             {
                 await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
-                return new UseCaseResponse<TOut>($"{typeof(TIn)} transaction refused.");
+                return Pass($"transaction refused.");
             }
         }
     }

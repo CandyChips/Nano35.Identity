@@ -17,16 +17,12 @@ namespace Nano35.Identity.Processor.UseCase.Register
             CancellationToken cancellationToken)
         {
             var isUsersPasswordCorrect = input.Password != input.PasswordConfirm;
-            if (isUsersPasswordCorrect)
-                return new UseCaseResponse<IRegisterResultContract>("Пароли не совпадают");
-            if (_userManager.Users.Select(a => a.Id).Contains(input.NewUserId.ToString()))
-                return new UseCaseResponse<IRegisterResultContract>("Повторите попытку");
+            if (isUsersPasswordCorrect) return Pass("Пароли не совпадают");
+            if (_userManager.Users.Select(a => a.Id).Contains(input.NewUserId.ToString())) return Pass("Повторите попытку");
             var isUsersPhoneExist = await _userManager.FindByNameAsync(input.Phone);
-            if (isUsersPhoneExist != null)
-                return new UseCaseResponse<IRegisterResultContract>("Данный номер телефона уже существует в системе");
+            if (isUsersPhoneExist != null) return Pass("Данный номер телефона уже существует в системе");
             var isUsersEmailExist = await _userManager.FindByEmailAsync(input.Email);
-            if (isUsersEmailExist != null)
-                return new UseCaseResponse<IRegisterResultContract>("Данная электронная почта уже существует в системе");
+            if (isUsersEmailExist != null) return Pass("Данная электронная почта уже существует в системе");
             var worker =
                 new User()
                     {Id = input.NewUserId.ToString(),
@@ -37,8 +33,8 @@ namespace Nano35.Identity.Processor.UseCase.Register
                      EmailConfirmed = true};
             var createAsyncResult = await _userManager.CreateAsync(worker, input.Password);
             return !createAsyncResult.Succeeded ?
-                new UseCaseResponse<IRegisterResultContract>("Пароли не совпадают") : 
-                new UseCaseResponse<IRegisterResultContract>(new RegisterResultContract());
+                Pass("Пароли не совпадают") : 
+                Pass(new RegisterResultContract());
 
             //var client = _bus.CreateRequestClient<IConfirmEmailOfUserRequestContract>(TimeSpan.FromSeconds(10));
             //var response = await client
