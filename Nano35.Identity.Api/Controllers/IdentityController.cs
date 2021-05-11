@@ -93,7 +93,6 @@ namespace Nano35.Identity.Api.Controllers
                     {Email = body.Email,
                      NewUserId = body.NewId,
                      Password = body.Password,
-                     PasswordConfirm = body.PasswordConfirm,
                      Phone = body.Phone});
             return result.IsSuccess() ? (IActionResult) Ok(result.Success) : BadRequest(result.Error);
         }

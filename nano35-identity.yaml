@@ -28,7 +28,7 @@ metadata:
   name: nano35-identity-processor
   namespace: nano35
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: nano35-identity-processor

@@ -23,13 +23,10 @@ namespace Nano35.Identity.Processor.UseCase.GetAllUsers
                 .Users
                 .Select(a =>
                     new UserViewModel()
-                    {
-                        Email = a.Email,
-                        Id = Guid.Parse(a.Id),
-                        Name = a.Name,
-                        Phone = a.PhoneNumber,
-                        Role = _userManager.GetRolesAsync(a).Result.First()
-                    })
+                        {Email = a.Email,
+                         Id = Guid.Parse(a.Id),
+                         Name = a.Name,
+                         Phone = a.UserName})
                 .ToListAsync(cancellationToken);
             
             return result.Count == 0 ?

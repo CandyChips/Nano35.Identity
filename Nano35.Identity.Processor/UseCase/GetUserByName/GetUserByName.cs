@@ -32,8 +32,7 @@ namespace Nano35.Identity.Processor.UseCase.GetUserByName
                         Email = tmp.Email,
                         Id = Guid.Parse(tmp.Id),
                         Name = tmp.Name,
-                        Phone = tmp.PhoneNumber,
-                        Role = _userManager.GetRolesAsync(tmp).Result.First()
+                        Phone = tmp.PhoneNumber
                     }});
         }
     }

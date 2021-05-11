@@ -16,8 +16,6 @@ namespace Nano35.Identity.Processor.UseCase.Register
             IRegisterRequestContract input, 
             CancellationToken cancellationToken)
         {
-            var isUsersPasswordCorrect = input.Password != input.PasswordConfirm;
-            if (isUsersPasswordCorrect) return Pass("Пароли не совпадают");
             if (_userManager.Users.Select(a => a.Id).Contains(input.NewUserId.ToString())) return Pass("Повторите попытку");
             var isUsersPhoneExist = await _userManager.FindByNameAsync(input.Phone);
             if (isUsersPhoneExist != null) return Pass("Данный номер телефона уже существует в системе");
