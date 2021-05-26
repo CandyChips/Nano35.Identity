@@ -6,7 +6,9 @@ using Nano35.Identity.Processor.UseCase.CreateUser;
 using Nano35.Identity.Processor.UseCase.GenerateToken;
 using Nano35.Identity.Processor.UseCase.GetAllUsers;
 using Nano35.Identity.Processor.UseCase.GetUserById;
+using Nano35.Identity.Processor.UseCase.GetUserByLogin;
 using Nano35.Identity.Processor.UseCase.GetUserByName;
+using Nano35.Identity.Processor.UseCase.GetUserClaimsByLogin;
 using Nano35.Identity.Processor.UseCase.Register;
 using Nano35.Identity.Processor.UseCase.UpdateEmail;
 using Nano35.Identity.Processor.UseCase.UpdateName;
@@ -75,7 +77,17 @@ namespace Nano35.Identity.Processor.Configurations
                     {
                         e.Consumer<UpdatePhoneConsumer>(provider);
                     });
+                    cfg.ReceiveEndpoint("IGetUserClaimsByLoginRequestContract", e =>
+                    {
+                        e.Consumer<GetUserClaimsByLoginConsumer>(provider);
+                    });
+                    cfg.ReceiveEndpoint("IGetUserByLoginRequestContract", e =>
+                    {
+                        e.Consumer<GetUserByLoginConsumer>(provider);
+                    });
                 }));
+                x.AddConsumer<GetUserByLoginConsumer>();
+                x.AddConsumer<GetUserClaimsByLoginConsumer>();
                 x.AddConsumer<GetAllUsersConsumer>();
                 x.AddConsumer<CreateUserConsumer>();
                 x.AddConsumer<GetUserByIdConsumer>();

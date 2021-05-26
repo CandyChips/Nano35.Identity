@@ -26,12 +26,8 @@ namespace Nano35.Identity.Processor.Services.Helpers
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id)
             };
-            var secret = new SigningCredentials(
-                AuthOptions.GetSymmetricSecurityKey(), 
-                SecurityAlgorithms.HmacSha256);
-            var jwt = new JwtSecurityToken(
-                claims: claims,
-                signingCredentials: secret);
+            var secret = new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
+            var jwt = new JwtSecurityToken(claims: claims, signingCredentials: secret);
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return encodedJwt;
         }
