@@ -29,7 +29,7 @@ namespace Nano35.Identity.Processor.UseCase.CreateUser
                 EmailConfirmed = true
             };
             return !(await _userManager.CreateAsync(worker, request.Password)).Succeeded ? 
-                Pass("Пароли не совпадают") :
+                Pass("Ошибка при создании") :
                 Pass(new CreateUserResultContract());
         }
     }
